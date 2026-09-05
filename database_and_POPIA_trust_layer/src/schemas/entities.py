@@ -90,8 +90,8 @@ class EvidenceBase(BaseModel):
 
 
 class EvidenceCreate(EvidenceBase):
-    client_id: int
-    case_id: int
+    client_id: Optional[int] = None
+    case_id: Optional[int] = None
 
 
 class EvidenceResponse(EvidenceBase):
@@ -124,7 +124,7 @@ class FormSubmissionBase(BaseModel):
 
 
 class FormSubmissionCreate(FormSubmissionBase):
-    client_id: int
+    client_id: Optional[int] = None
     case_id: int
 
 

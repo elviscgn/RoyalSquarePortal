@@ -14,7 +14,20 @@ engine_kwargs = {"echo": False}
 if "sqlite" in DATABASE_URL:
     engine_kwargs["connect_args"] = {"check_same_thread": False}
 
-engine = create_engine(DATABASE_URL, **engine_kwargs)
+# Attempt connection to Postgres; if unavailable and no custom DATABASE_URL was explicitly set, fallback to SQLite
+try:
+    engine = create_engine(DATABASE_URL, **engine_kwargs)
+    with engine.connect() as conn:
+        pass
+except Exception:
+    if "sqlite" not in DATABASE_URL and "DATABASE_URL" not in os.environ:
+        sqlite_path = os.path.abspath(
+            os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "royal_square.db")
+        )
+        DATABASE_URL = f"sqlite:///{sqlite_path}"
+        engine_kwargs["connect_args"] = {"check_same_thread": False}
+        engine = create_engine(DATABASE_URL, **engine_kwargs)
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

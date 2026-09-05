@@ -85,5 +85,7 @@ Thumbs.db
 *.db
 *.sqlite3
 
-# --- Logs ---
+# --- Logs & generated files ---
 *.log
+storage/
+*.pdf

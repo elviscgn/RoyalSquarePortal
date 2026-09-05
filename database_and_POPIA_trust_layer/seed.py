@@ -38,15 +38,18 @@ def seed_database():
     db = SessionLocal()
     try:
         print("--- Clearing and resetting database tables ---")
-        # In PostgreSQL, TRUNCATE ... RESTART IDENTITY CASCADE cleanly resets auto-increment sequences to 1
-        db.execute(
-            text(
-                "TRUNCATE TABLE advisers, clients, goals, cases, workflow_steps, "
-                "evidence, form_definitions, form_submissions, audit_events, compliance_states "
-                "RESTART IDENTITY CASCADE;"
+        if engine.dialect.name == "sqlite":
+            Base.metadata.drop_all(bind=engine)
+            Base.metadata.create_all(bind=engine)
+        else:
+            db.execute(
+                text(
+                    "TRUNCATE TABLE advisers, clients, goals, cases, workflow_steps, "
+                    "evidence, form_definitions, form_submissions, audit_events, compliance_states "
+                    "RESTART IDENTITY CASCADE;"
+                )
             )
-        )
-        db.commit()
+            db.commit()
 
         print("--- Seeding FormDefinitions ---")
         form_definitions = [
@@ -122,6 +125,53 @@ def seed_database():
                 ],
                 validation_rules={"statutory_notice_acknowledged": True},
                 profile_mappings={"adviser_name": "adviser.name"},
+            ),
+            FormDefinition(
+                id="service-level-agreement",
+                title="Client Service Level Agreement & Advisory Mandate",
+                version="v1.0",
+                fields=[
+                    {"key": "client_name", "type": "text", "label": "Client Full Name", "source": "client.name", "read_only": True},
+                    {"key": "id_number", "type": "text", "label": "ID Number", "source": "client.id_number", "read_only": True},
+                    {"key": "adviser_name", "type": "text", "label": "Appointed Adviser", "source": "adviser.name", "read_only": True},
+                    {
+                        "key": "selected_services",
+                        "type": "multiselect",
+                        "label": "Selected Advisory Services",
+                        "options": [
+                            "Life Cover & Risk Assurance",
+                            "Short-Term Insurance (Personal & Commercial)",
+                            "Investment Planning & Unit Trusts",
+                            "Retirement Annuities & Pension Preservation",
+                            "Estate Planning & Wills",
+                            "Business Assurance"
+                        ],
+                        "required": True
+                    },
+                    {"key": "review_frequency", "type": "select", "label": "Review Frequency", "options": ["Annual (Standard)", "Bi-Annual", "Quarterly"], "default": "Annual (Standard)"},
+                    {"key": "advisory_fee_rate", "type": "text", "label": "Agreed Hourly Consultation Rate", "default": "R1,500.00 excluding VAT", "read_only": True},
+                    {"key": "client_acknowledgement", "type": "checkbox", "label": "I agree to the terms of the Royal Square Service Level Agreement", "required": True},
+                    {"key": "signature", "type": "signature", "label": "Client Signature", "required": True},
+                    {"key": "date", "type": "date", "label": "Date", "required": True}
+                ],
+                validation_rules={"mandate_agreed": True, "statutory_sla_compliant": True},
+                profile_mappings={"client_name": "name", "id_number": "id_number", "adviser_name": "adviser.name"}
+            ),
+            FormDefinition(
+                id="confidentiality-agreement",
+                title="Mutual Confidentiality & Non-Disclosure Agreement",
+                version="v1.0",
+                fields=[
+                    {"key": "client_name", "type": "text", "label": "Disclosing / Receiving Party", "source": "client.name", "read_only": True},
+                    {"key": "id_number", "type": "text", "label": "ID Number", "source": "client.id_number", "read_only": True},
+                    {"key": "fsp_name", "type": "text", "label": "Financial Services Provider", "default": "Royal Square Financial Services (Pty) Ltd", "read_only": True},
+                    {"key": "scope", "type": "text", "label": "Scope of Protection", "default": "All confidential financial, portfolio, tax, identification, and business proprietary data", "read_only": True},
+                    {"key": "terms_accepted", "type": "checkbox", "label": "I acknowledge and agree to mutual non-disclosure obligations", "required": True},
+                    {"key": "signature", "type": "signature", "label": "Authorized Signature", "required": True},
+                    {"key": "date", "type": "date", "label": "Date Signed", "required": True}
+                ],
+                validation_rules={"confidentiality_binding": True},
+                profile_mappings={"client_name": "name", "id_number": "id_number"}
             ),
         ]
         db.add_all(form_definitions)

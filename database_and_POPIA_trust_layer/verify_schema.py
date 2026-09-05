@@ -4,6 +4,8 @@ import sys
 import os
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+if sys.platform == "win32" and hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 from src.database.config import SessionLocal
 from src.database.enums import CaseType, WorkflowStepOwner, EvidenceType

@@ -142,6 +142,20 @@ def sync_accident_mode(payload: AccidentSyncPayload, db: Session = Depends(get_d
         )
         evidence_items.append(voice_ev)
 
+    # Other Driver Details Evidence
+    if payload.other_driver_details:
+        driver_ev = Evidence(
+            client_id=client.id,
+            case_id=case.id,
+            type=EvidenceType.OTHER,
+            file="json://other-driver-details",
+            extracted_data={"other_driver": payload.other_driver_details},
+            validation_state="valid",
+            timestamp=captured_at,
+            location=location_str,
+        )
+        evidence_items.append(driver_ev)
+
     # Witnesses
     has_witnesses = bool(payload.witnesses and len(payload.witnesses) > 0)
     if has_witnesses:

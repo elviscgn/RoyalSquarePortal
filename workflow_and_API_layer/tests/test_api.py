@@ -1,5 +1,11 @@
+import os
+import sys
 import pytest
 from fastapi.testclient import TestClient
+
+# Ensure database layer is accessible for src.main import
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "database_and_POPIA_trust_layer")))
+
 from src.main import app
 
 client = TestClient(app)
