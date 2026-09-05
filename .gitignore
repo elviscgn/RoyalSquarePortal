@@ -45,3 +45,45 @@ htmlcov/
 .DS_Store
 .AppleDouble
 .LSOverride
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# --- Virtual environments ---
+venv/
+.venv/
+env/
+ENV/
+
+# --- Packaging / build artifacts ---
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --- Testing / coverage ---
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# --- Environment / secrets ---
+.env
+.env.*
+!.env.example
+
+# --- Editor / OS junk ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Alembic (keep migration scripts, ignore local sqlite if ever used for quick testing) ---
+*.db
+*.sqlite3
+
+# --- Logs ---
+*.log
