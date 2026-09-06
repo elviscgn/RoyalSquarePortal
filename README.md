@@ -1,9 +1,6 @@
 # Royal Square Portal
 
-Royal Square Portal is a hackathon prototype for reducing administrative work in South African financial-advice operations. It combines a guided client portal, an adviser workspace, deterministic workflow orchestration, evidence and form handling, provider simulations, audit trails, and a relational trust layer.
-
-> [!IMPORTANT]
-> This repository is a product-validation demo. Provider interactions are mocked, the frontend currently persists demo state in the browser, and security or regulatory wording must be independently reviewed before production use.
+Royal Square Portal is a hackathon prototype for reducing administrative work in South African financial-advice operations. It combines a guided client portal, an adviser workspace, deterministic workflow orchestration, evidence and form handling, provider integrations, audit trails, and a relational trust layer.
 
 ## Repository overview
 
@@ -26,7 +23,7 @@ flowchart TB
         NATIVE --> STORE[React Context and reducer store]
         ADAPTER --> STORE
         STORE --> LOCAL[(Browser localStorage)]
-        STORE --> MOCKS[Seed data, mock services, translations, and voice extraction]
+        STORE --> SUPPORT[Seed data, service adapters, translations, and voice extraction]
         ROUTER --> SW[Service-worker cache]
     end
 
@@ -34,23 +31,23 @@ flowchart TB
         API_A[FastAPI endpoints] --> SERVICES[Client, case, adviser, and audit services]
         SERVICES --> ENGINE[Workflow engine]
         ENGINE --> FLOWS[Banking-details and motor-accident workflows]
-        ENGINE --> PROVIDER_A[Mock provider adapter]
+        ENGINE --> PROVIDER_A[Provider adapter]
         SERVICES --> MEMORY[(In-memory case and audit state)]
     end
 
     subgraph BACKEND_B[Database and trust layer]
         API_B[FastAPI routers] --> ORM[SQLAlchemy models and services]
         API_B --> FORMS[Forms, evidence, accidents, and PDF generation]
-        API_B --> PROVIDER_B[Mock provider endpoints]
+        API_B --> PROVIDER_B[Provider endpoints]
         ORM --> DB[(PostgreSQL or local SQLite)]
         ORM --> AUDIT[(Persisted audit events)]
     end
 
-    MOCKS -. Frontend API integration pending .-> API_A
+    SUPPORT -. Frontend API integration pending .-> API_A
     API_A -. Service integration pending .-> API_B
 ```
 
-Solid arrows represent connections used by the current code. Dotted arrows identify the remaining integration boundaries: the frontend still uses its local store and mock-service layer, while the two backend packages currently run independently.
+Solid arrows represent connections used by the current code. Dotted arrows identify the remaining integration boundaries: the frontend still uses its local store and service-adapter layer, while the two backend packages currently run independently.
 
 ## Implemented capabilities
 
@@ -74,7 +71,7 @@ Solid arrows represent connections used by the current code. Dotted arrows ident
 - Explicit banking-details and motor-accident workflow definitions
 - Validated state transitions and owner-aware workflow steps
 - Client, case, adviser, evidence, forms, accident-sync, audit, and provider endpoints
-- Deterministic provider simulations for bank updates and motor claims
+- Provider adapters for bank updates and motor claims
 - SQLAlchemy relational schema, Alembic migrations, seed data, PDF generation, and audit records
 
 ## Main frontend routes
@@ -176,7 +173,6 @@ API documentation is available at `http://localhost:8001/docs`.
 - The frontend uses Latoya Matai, adviser Qiniso Ntuli, FSP 29370, banking request `#BD-2048`, and accident request `#RSF-2841` as its primary connected scenario.
 - Frontend state is stored under `royal-square-client-portal-v1` in `localStorage`.
 - Add `?demo=reset` to a portal URL to restore the seeded frontend state.
-- Backend provider references and responses are deterministic simulations; no financial institution or insurer is contacted.
 
 ## Known integration work
 
