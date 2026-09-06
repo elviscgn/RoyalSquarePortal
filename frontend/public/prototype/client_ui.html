@@ -1,0 +1,1949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Royal Square — Client Portal</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons CDN -->
+  <script src="./lucide-local.js"></script>
+
+  <style>
+    /* ==========================================================================
+       1. SYSTEM TOKENS (ORGANIC, BORDERLESS LUXURY FINTECH)
+       ========================================================================== */
+    :root {
+      --bg-page: #F4F3EE;                 /* Warm creamy neutral canvas */
+      --bg-card: #FFFFFF;                 /* Crisp white surface */
+      --bg-card-subtle: #FAF9F5;          /* Tone-on-tone sub-card surface */
+      --bg-card-hover: #F6F4EE;
+      
+      --text-primary: #171615;            /* Deep near-black */
+      --text-secondary: #87837C;          /* Warm muted neutral */
+      --text-subtle: #ABA69E;             /* Light caption neutral */
+      
+      --accent-coral: #E85D3F;            /* Signature terracotta coral */
+      --accent-coral-hover: #D84F31;
+      --accent-coral-soft: #FDF0ED;       /* Pale coral pill tint */
+      --accent-coral-glow: rgba(232, 93, 63, 0.20);
+      
+      --status-green: #2B7A48;
+      --status-green-soft: #EDF7F1;
+      
+      --radius-card: 26px;
+      --radius-subcard: 16px;
+      --radius-pill: 9999px;
+      
+      /* Pure multi-layered ambient shadows (No harsh grey borders!) */
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.016), 0 1px 3px rgba(0, 0, 0, 0.01);
+      --shadow-hover: 0 12px 34px rgba(0, 0, 0, 0.038), 0 2px 6px rgba(0, 0, 0, 0.018);
+      --shadow-button: 0 2px 8px rgba(0, 0, 0, 0.025);
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px 38px 36px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    button, input {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    .app-viewport {
+      width: 100%;
+      max-width: 1420px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ==========================================================================
+       2. TOP HEADER (LATOYA MATAI AT TOP RIGHT, CLEAN CENTER SEARCH)
+       ========================================================================== */
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      height: 46px;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .btn-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-button);
+      transition: all 0.15s ease;
+    }
+
+    .btn-circle:hover {
+      background: #FAF9F6;
+      transform: scale(1.03);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .brand-logo-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      background: #FFFFFF;
+      overflow: hidden;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: -0.5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
+
+    .brand-logo-mark img { transform: scale(1.6); }
+
+    .brand-titles {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .brand-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    /* Centered Search Pill */
+    .header-center-search {
+      flex: 1;
+      max-width: 320px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-center-search input {
+      width: 100%;
+      height: 40px;
+      background: var(--bg-card);
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 0 18px 0 42px;
+      font-size: 11.5px;
+      color: var(--text-primary);
+      outline: none;
+      box-shadow: var(--shadow-button);
+      transition: all 0.2s ease;
+    }
+
+    .header-center-search input::placeholder {
+      color: var(--text-subtle);
+    }
+
+    .header-center-search input:focus {
+      box-shadow: 0 4px 16px var(--accent-coral-glow);
+    }
+
+    .header-center-search .search-icon {
+      position: absolute;
+      left: 15px;
+      right: auto;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px;
+      height: 15px;
+      color: var(--text-subtle);
+      pointer-events: none;
+    }
+
+    /* Right Controls & Profile Cluster */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    /* Clean View Control (Simple Mode) - No Cheesy Sparkles! */
+    .mode-toggle-pill {
+      height: 40px;
+      background: var(--bg-card);
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 3px 12px 3px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-button);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-toggle-pill:hover {
+      background: #FAF8F4;
+    }
+
+    .mode-toggle-pill.active {
+      background: var(--accent-coral-soft);
+    }
+
+    .mode-icon {
+      color: var(--text-secondary);
+      transition: color 0.15s;
+    }
+
+    .mode-toggle-pill.active .mode-icon {
+      color: var(--accent-coral);
+    }
+
+    .mode-label-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .toggle-switch-track {
+      width: 24px;
+      height: 14px;
+      border-radius: var(--radius-pill);
+      background: #E5E1D7;
+      position: relative;
+      transition: background 0.2s ease;
+    }
+
+    .mode-toggle-pill.active .toggle-switch-track {
+      background: var(--accent-coral);
+    }
+
+    .toggle-switch-thumb {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .mode-toggle-pill.active .toggle-switch-thumb {
+      transform: translateX(10px);
+    }
+
+    .btn-lang {
+      height: 40px;
+      padding: 0 13px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card);
+      border: none;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: var(--shadow-button);
+      transition: background 0.15s;
+    }
+
+    .btn-lang:hover {
+      background: #FAF9F6;
+    }
+
+    .notif-btn {
+      position: relative;
+    }
+
+    .notif-dot {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-coral);
+      border: 1.5px solid #FFFFFF;
+    }
+
+    /* LATOYA MATAI TOP RIGHT PROFILE PILL */
+    .profile-pill-topright {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-card);
+      border: none;
+      padding: 4px 14px 4px 5px;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-button);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .profile-pill-topright:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .client-avatar-wrapper {
+      position: relative;
+    }
+
+    .client-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .avatar-status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #2E7D4C;
+      border: 2px solid #FFFFFF;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+
+    .client-meta {
+      line-height: 1.2;
+      text-align: left;
+    }
+
+    .client-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .client-role {
+      font-size: 9.5px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tier-badge {
+      font-size: 8px;
+      font-weight: 800;
+      background: #181716;
+      color: #FFFFFF;
+      padding: 1px 5px;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ==========================================================================
+       3. SECOND ROW: DATE + LIVE TIME & FREE-FLOATING HERO
+       ========================================================================== */
+    .second-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 56px;
+      padding: 2px 0;
+    }
+
+    .date-action-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* DATE + TIME BADGE */
+    .date-badge {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-card);
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 4px 18px 4px 5px;
+      box-shadow: var(--shadow-button);
+      transition: transform 0.15s ease;
+    }
+
+    .date-badge:hover {
+      transform: translateY(-1px);
+    }
+
+    .date-number-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-card-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .date-labels {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .date-weekday {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .date-month {
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+
+    /* Vertical Soft Divider inside pill */
+    .time-soft-divider {
+      width: 1px;
+      height: 24px;
+      background: #ECE7DE;
+      margin: 0 2px;
+    }
+
+    /* Time Cluster */
+    .time-cluster {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .time-digits {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    .time-zone-sub {
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--accent-coral);
+      letter-spacing: 0.3px;
+    }
+
+    .btn-coral-tasks {
+      height: 48px;
+      padding: 0 18px 0 22px;
+      border-radius: var(--radius-pill);
+      background-color: var(--accent-coral);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px var(--accent-coral-glow);
+      transition: all 0.15s ease;
+    }
+
+    .btn-coral-tasks:hover {
+      background-color: var(--accent-coral-hover);
+      transform: translateY(-1px);
+    }
+
+    .tasks-pill-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.28);
+      font-size: 11px;
+      font-weight: 700;
+      color: #FFFFFF;
+    }
+
+    .calendar-circle {
+      width: 48px;
+      height: 48px;
+    }
+
+    /* Hero Typography */
+    .hero-free-floating {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero-text-block {
+      text-align: right;
+      line-height: 1.2;
+    }
+
+    .hero-heading {
+      font-size: 27px;
+      font-weight: 400;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      transition: all 0.2s;
+    }
+
+    .hero-subheading-clean {
+      font-size: 21px;
+      font-weight: 300;
+      color: var(--text-subtle);
+      letter-spacing: -0.3px;
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+
+    .cursor-bar {
+      color: var(--accent-coral);
+      font-weight: 300;
+      animation: blink 1.2s infinite;
+    }
+
+    .calm-dot {
+      color: var(--status-green);
+      font-size: 14px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .mic-button {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-card);
+      transition: all 0.15s ease;
+    }
+
+    .mic-button:hover {
+      background: #FAF9F6;
+      transform: scale(1.04);
+      box-shadow: var(--shadow-hover);
+    }
+
+    /* ==========================================================================
+       4. ASYMMETRIC BENTO GRID (BORDERLESS)
+       ========================================================================== */
+    .bento-container {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      border: none; /* Nuked grey border! */
+      box-shadow: var(--shadow-card);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-kicker {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      color: var(--text-primary);
+      text-transform: uppercase;
+    }
+
+    .pill-dropdown {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--text-primary);
+      background: var(--bg-card-subtle);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* --------------------------------------------------------------------------
+       TOP BENTO ROW: 4 Clean Columns
+       -------------------------------------------------------------------------- */
+    .bento-top-row {
+      display: grid;
+      grid-template-columns: 320px 225px 285px 1fr;
+      gap: 18px;
+      height: 252px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* 1. Left: Portfolio + Vertical Capsule */
+    .portfolio-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 100%;
+    }
+
+    .floating-capsule {
+      width: 36px;
+      height: 96px;
+      background: var(--bg-card);
+      border: none;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-button);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      padding: 6px 0;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    .capsule-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: color 0.15s;
+    }
+
+    .capsule-action:hover {
+      color: var(--accent-coral);
+    }
+
+    .portfolio-card {
+      flex: 1;
+      height: 100%;
+      padding: 20px 22px;
+    }
+
+    .portfolio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .portfolio-body {
+      margin-top: 4px;
+    }
+
+    .portfolio-sub {
+      font-size: 10.5px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chip-indicator {
+      width: 14px;
+      height: 10px;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #E2B755, #C4922A);
+      display: inline-block;
+    }
+
+    .portfolio-acc {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 4px 0 12px;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .portfolio-pills {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-dark-pill {
+      background: #181716;
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      transition: all 0.15s;
+    }
+
+    .btn-dark-pill:hover {
+      background: #2E2D2B;
+    }
+
+    .btn-light-pill {
+      background: var(--bg-card-subtle);
+      color: var(--text-primary);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      border: none;
+      transition: all 0.15s;
+    }
+
+    .portfolio-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-top: 10px;
+    }
+
+    .fee-label {
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+
+    .fee-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent-coral);
+    }
+
+    .portfolio-edit-link {
+      font-size: 10.5px;
+      color: var(--accent-coral);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      text-decoration: none;
+    }
+
+    /* 2. Center Stack: Investments & Retirement */
+    .center-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      height: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .stack-card {
+      flex: 1;
+      padding: 14px 18px;
+    }
+
+    .stack-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stack-title-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      color: var(--text-primary);
+    }
+
+    .stack-label {
+      font-size: 10px;
+      color: var(--text-secondary);
+      margin-top: 3px;
+    }
+
+    .stack-value {
+      font-size: 17.5px;
+      font-weight: 700;
+      color: var(--accent-coral);
+      letter-spacing: -0.2px;
+      margin-top: 1px;
+    }
+
+    .stack-link {
+      font-size: 10px;
+      color: var(--accent-coral);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-weight: 600;
+      text-decoration: none;
+      margin-top: 2px;
+    }
+
+    /* 3. EMERGENCY CLAIM / REPORT AN ACCIDENT (Top Row Hero) */
+    .accident-top-card {
+      height: 100%;
+      padding: 18px 20px;
+      background: #FFFFFF;
+      box-shadow: 0 6px 24px rgba(232, 93, 63, 0.07);
+    }
+
+    .accident-header-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .badge-offline {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .ping-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent-coral);
+      animation: blink 1.5s infinite;
+    }
+
+    .accident-content-block {
+      margin: 6px 0 8px;
+    }
+
+    .accident-icon-lead {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--accent-coral-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-coral);
+      margin-bottom: 8px;
+    }
+
+    .accident-h-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    .accident-p-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin-top: 4px;
+    }
+
+    .btn-accident-action {
+      height: 36px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-coral);
+      color: #FFFFFF;
+      font-size: 11.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 12px var(--accent-coral-glow);
+      transition: all 0.15s ease;
+    }
+
+    .btn-accident-action:hover {
+      background-color: var(--accent-coral-hover);
+      transform: translateY(-1px);
+    }
+
+    /* 4. Right Graph Card: Net Worth */
+    .networth-card {
+      height: 100%;
+      padding: 18px 22px;
+    }
+
+    .networth-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .networth-left-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .networth-amount {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .sparkline-container {
+      margin: 4px 0 2px;
+      height: 74px;
+      width: 100%;
+    }
+
+    .sparkline-axis {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--text-subtle);
+      padding: 0 4px;
+      margin-top: -3px;
+    }
+
+    .networth-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-top: 4px;
+    }
+
+    .networth-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .networth-sub {
+      font-size: 10.5px;
+      color: var(--text-secondary);
+    }
+
+    .badge-growth {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2.5px 9px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* --------------------------------------------------------------------------
+       BOTTOM BENTO ROW: 3 Uncluttered, Borderless Columns
+       -------------------------------------------------------------------------- */
+    .bento-bottom-row {
+      display: grid;
+      grid-template-columns: 250px 1fr 275px;
+      gap: 18px;
+      height: 286px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* 1. Left: Vault & Notices */
+    .vault-card {
+      height: 100%;
+      padding: 18px 20px 16px;
+      transition: all 0.3s ease;
+    }
+
+    .vault-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .vault-row-item {
+      background: var(--bg-card-subtle);
+      border: none; /* Nuked border */
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.15s;
+    }
+
+    .vault-row-item:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .vault-item-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .vault-item-left i {
+      color: var(--accent-coral);
+    }
+
+    .vault-item-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .vault-item-sub {
+      font-size: 9px;
+      color: var(--text-secondary);
+    }
+
+    .vault-tag-pill {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2.5px 8px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+    }
+
+    .vault-tag-pill.pending {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+    }
+
+    .vault-tag-pill.success {
+      background: var(--status-green-soft);
+      color: var(--status-green);
+    }
+
+    .vault-tag-pill.neutral {
+      background: #EAE6DD;
+      color: var(--text-primary);
+    }
+
+    /* 2. Center: FINANCIAL GOALS & HORIZON (Borderless Harmony) */
+    .goals-master-card {
+      height: 100%;
+      padding: 18px 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .goals-master-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .goals-title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-add-goal {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-coral);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-coral-soft);
+      transition: all 0.15s;
+    }
+
+    .btn-add-goal:hover {
+      background: #FCE5DF;
+    }
+
+    .goals-master-body {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      gap: 28px; /* Natural whitespace instead of grey divider */
+      align-items: center;
+      height: calc(100% - 34px);
+    }
+
+    .goals-art-side {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      text-align: center;
+    }
+
+    .goals-art-info {
+      line-height: 1.25;
+      margin-bottom: 2px;
+    }
+
+    .goals-art-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .goals-art-amount {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-coral);
+    }
+
+    .goals-art-sub {
+      color: var(--text-secondary);
+      font-weight: 400;
+      font-size: 9.5px;
+    }
+
+    .concentric-art-box {
+      width: 100%;
+      height: 125px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    /* Right half of Goals: Progress Bars */
+    .goals-progress-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      height: 100%;
+      padding: 4px 0;
+    }
+
+    .goal-track-item {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .goal-track-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .goal-track-name {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .goal-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .goal-track-val {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .goal-track-val strong {
+      color: var(--text-primary);
+    }
+
+    .goal-bar-bg {
+      width: 100%;
+      height: 7px;
+      background: #EFECE6;
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+
+    .goal-bar-fill {
+      height: 100%;
+      border-radius: var(--radius-pill);
+      transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .goal-track-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9.5px;
+      color: var(--text-subtle);
+    }
+
+    .status-tag {
+      font-weight: 600;
+      font-size: 9.5px;
+    }
+
+    .status-tag.ontrack {
+      color: var(--accent-coral);
+    }
+
+    .status-tag.complete {
+      color: var(--status-green);
+    }
+
+    /* 3. Right: Your Adviser Card */
+    .adviser-card {
+      height: 100%;
+      padding: 18px 20px 16px;
+    }
+
+    .adviser-profile-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 4px 0;
+    }
+
+    .adviser-avatar-wrap {
+      position: relative;
+    }
+
+    .adviser-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .adviser-online-ping {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #2E7D4C;
+      border: 2px solid #FFFFFF;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+
+    .adviser-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .adviser-badge {
+      font-size: 10px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .fsp-tag {
+      font-size: 8px;
+      font-weight: 600;
+      background: #EAE6DD;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    .adviser-meta-tiles {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 4px 0;
+    }
+
+    .adviser-tile {
+      background: var(--bg-card-subtle);
+      border: none; /* Nuked border */
+      border-radius: 11px;
+      padding: 8px 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10.5px;
+    }
+
+    .adviser-tile-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+    }
+
+    .adviser-tile-left i {
+      color: var(--accent-coral);
+    }
+
+    .adviser-tile-val {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .adviser-actions-row {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 7px;
+    }
+
+    .btn-adviser-subtle {
+      height: 32px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card-subtle);
+      border: none;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+
+    .btn-adviser-subtle:hover {
+      background: #EDE8DE;
+    }
+
+    .btn-adviser-action {
+      height: 32px;
+      border-radius: var(--radius-pill);
+      background: var(--text-primary);
+      color: #FFFFFF;
+      font-size: 10.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+
+    .btn-adviser-action:hover {
+      opacity: 0.88;
+    }
+
+    /* ==========================================================================
+       5. "SIMPLE MODE" ACTIVE STATE (SEAMLESS DECLUTTERING)
+       ========================================================================== */
+    body.simple-mode .bento-top-row {
+      grid-template-columns: 340px 300px 1fr;
+    }
+
+    body.simple-mode .center-stack {
+      display: none !important;
+    }
+
+    body.simple-mode .bento-bottom-row {
+      grid-template-columns: 1fr 310px;
+    }
+
+    body.simple-mode .vault-card {
+      display: none !important;
+    }
+
+    body.simple-mode .header-center-search {
+      opacity: 0.4;
+    }
+
+    body.simple-mode .portfolio-pills,
+    body.simple-mode .pill-dropdown {
+      display: none !important;
+    }
+
+    /* Toast Pill */
+    .toast-pill {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #181716;
+      color: #FFFFFF;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 11.5px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast-pill.active {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-viewport">
+
+    <!-- ====================================================================
+         1. TOP HEADER (SEARCH IN CENTER, LATOYA MATAI AT TOP RIGHT)
+         ==================================================================== -->
+    <header class="top-header">
+      <!-- Left: Logo Cluster -->
+      <div class="brand-cluster">
+        <button class="btn-circle" aria-label="Menu" onclick="alert('Menu drawer opened.')">
+          <i data-lucide="menu" style="width: 16px; height: 16px;"></i>
+        </button>
+        <div class="brand-logo-mark"><img src="./royal-square-logo.png" alt="Royal Square" style="width: 100%; height: 100%; display: block; object-fit: cover;" /></div>
+        <div class="brand-titles">
+          <span class="brand-title">Royal Square</span>
+          <span class="brand-subtitle">Client Portal</span>
+        </div>
+      </div>
+
+      <!-- Center: Clean Search Bar -->
+      <div class="header-center-search">
+        <input type="text" placeholder="Start searching here..." />
+        <i data-lucide="search" class="search-icon"></i>
+      </div>
+
+      <!-- Right: View Mode Toggle + Notifications + Lang + Latoya Matai Profile -->
+      <div class="header-right">
+        <!-- Sleek View Control (No Cheesy Sparkles) -->
+        <button class="mode-toggle-pill" id="simpleModeToggle" onclick="toggleSimpleMode()" title="Toggle Simple Mode">
+          <i data-lucide="sliders-horizontal" class="mode-icon" style="width: 13px; height: 13px;"></i>
+          <span class="mode-label-text" id="modeToggleLabel">Simple Mode</span>
+          <div class="toggle-switch-track">
+            <div class="toggle-switch-thumb"></div>
+          </div>
+        </button>
+
+        <button class="btn-circle notif-btn" aria-label="Notifications" onclick="alert('Latoya, you have 2 pending verification tasks.')">
+          <i data-lucide="bell" style="width: 15px; height: 15px;"></i>
+          <span class="notif-dot"></span>
+        </button>
+
+        <button class="btn-lang" id="lang-btn">
+          <span>EN</span>
+          <i data-lucide="chevron-down" style="width: 10px; height: 10px;"></i>
+        </button>
+
+        <!-- LATOYA MATAI PROFILE CARD -->
+        <div class="profile-pill-topright" onclick="alert('Viewing profile & security settings for Latoya Matai...')">
+          <div class="client-avatar-wrapper">
+            <img src="/latoya-matai.png" alt="Latoya Matai" class="client-avatar" />
+            <span class="avatar-status-dot" title="Authenticated Profile"></span>
+          </div>
+          <div class="client-meta">
+            <div class="client-name">Latoya Matai</div>
+            <div class="client-role">
+              <span>Private Client</span>
+              <span class="tier-badge">PREMIER</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         2. SECOND ROW: DATE + LIVE TIME CLUSTER & FREE-FLOATING HERO
+         ==================================================================== -->
+    <div class="second-row">
+      <!-- Left: Date + Live Time + Tasks -->
+      <div class="date-action-cluster">
+        <!-- Integrated Date & Live Clock Pill -->
+        <div class="date-badge">
+          <div class="date-number-circle">05</div>
+          <div class="date-labels">
+            <span class="date-weekday">Sat,</span>
+            <span class="date-month">September</span>
+          </div>
+          <div class="time-soft-divider"></div>
+          <div class="time-cluster">
+            <span class="time-digits" id="liveClockDisplay">14:12</span>
+            <span class="time-zone-sub">SAST</span>
+          </div>
+        </div>
+
+        <button class="btn-coral-tasks" onclick="alert('Showing 2 pending tasks for Latoya Matai:\n1. Stamped Proof of Bank Account\n2. Beneficiary Form Signing')">
+          <span>Show my Tasks</span>
+          <span class="tasks-pill-count">2</span>
+          <i data-lucide="arrow-right" style="width: 13px; height: 13px;"></i>
+        </button>
+
+        <button class="btn-circle calendar-circle" aria-label="Calendar" onclick="alert('Next Consultation: Friday, 18 September 2026 @ 10:30 SAST.')">
+          <i data-lucide="calendar" style="width: 16px; height: 16px; color: var(--text-secondary);"></i>
+          <span class="notif-dot" style="top: 11px; right: 11px;"></span>
+        </button>
+      </div>
+
+      <!-- Right: Free-Floating Hero Typography -->
+      <div class="hero-free-floating">
+        <div class="hero-text-block">
+          <div class="hero-heading" id="heroHeading">Hey, Latoya. Need help?</div>
+          <div class="hero-subheading-clean" id="heroSubheading">
+            <span class="cursor-bar">|</span>
+            <span>Just ask me anything!</span>
+          </div>
+        </div>
+
+        <button class="mic-button" aria-label="Voice Query" onclick="alert('Voice search listening: What can we help you with, Latoya?')">
+          <i data-lucide="mic" style="width: 24px; height: 24px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+         3. MAIN ASYMMETRIC BENTO GRID (PURE BORDERLESS CARDS)
+         ==================================================================== -->
+    <main class="bento-container">
+
+      <!-- TOP BENTO ROW: 4 Clean Columns -->
+      <div class="bento-top-row">
+
+        <!-- 1. Left: Client Portfolio + Capsule -->
+        <div class="portfolio-wrapper">
+          <div class="floating-capsule">
+            <button class="capsule-action" title="Quick Add" onclick="alert('Add asset or portfolio allocation...')"><i data-lucide="plus" style="width: 13px; height: 13px;"></i></button>
+            <button class="capsule-action" title="Share Portfolio" onclick="alert('Portfolio share link created.')"><i data-lucide="share-2" style="width: 12px; height: 12px;"></i></button>
+          </div>
+
+          <div class="card portfolio-card">
+            <div class="portfolio-header">
+              <span class="card-kicker">Client Portfolio</span>
+              <span class="pill-dropdown">Direct Debits <i data-lucide="chevron-down" style="width: 9px; height: 9px;"></i></span>
+            </div>
+
+            <div class="portfolio-body">
+              <div class="portfolio-sub">
+                <span class="chip-indicator"></span>
+                <span>Main investment relationship</span>
+              </div>
+              <div class="portfolio-acc">•••• 2719</div>
+              <div class="portfolio-pills">
+                <button class="btn-dark-pill" onclick="alert('Opening Full Portfolio Holdings...')">View</button>
+                <button class="btn-light-pill" onclick="alert('Viewing Documents & Vault...')">Documents</button>
+              </div>
+            </div>
+
+            <div class="portfolio-footer">
+              <div>
+                <div class="fee-label">Monthly contribution</div>
+                <div class="fee-value">R 8,500.00</div>
+              </div>
+              <a href="#banking" class="portfolio-edit-link" onclick="alert('Opening Change Banking Details workflow...')">
+                <i data-lucide="edit-3" style="width: 11px; height: 11px;"></i> Change details
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Center Stack: Investments & Retirement -->
+        <div class="center-stack" id="centerInvestStack">
+          <!-- Top Card: Investments -->
+          <div class="card stack-card">
+            <div class="stack-header">
+              <span class="stack-title-tag">Investments</span>
+              <span class="pill-dropdown" style="font-size: 9.5px; padding: 2px 7px;">Yearly <i data-lucide="chevron-down" style="width: 8px; height: 8px;"></i></span>
+            </div>
+            <div>
+              <div class="stack-label">Total invested</div>
+              <div class="stack-value">R 1,428,500</div>
+            </div>
+            <a href="#portfolio" class="stack-link" onclick="alert('Opening investments breakdown...')">
+              View portfolio <i data-lucide="arrow-right" style="width: 10px; height: 10px;"></i>
+            </a>
+          </div>
+
+          <!-- Bottom Card: Retirement -->
+          <div class="card stack-card">
+            <div class="stack-header">
+              <span class="stack-title-tag">Retirement</span>
+              <span class="pill-dropdown" style="font-size: 9.5px; padding: 2px 7px;">Yearly <i data-lucide="chevron-down" style="width: 8px; height: 8px;"></i></span>
+            </div>
+            <div>
+              <div class="stack-label">Retirement annuity</div>
+              <div class="stack-value">R 814,520</div>
+            </div>
+            <a href="#breakdown" class="stack-link" onclick="alert('Opening Section 10C / Reg 28 schedule...')">
+              View breakdown <i data-lucide="arrow-right" style="width: 10px; height: 10px;"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- 3. EMERGENCY CLAIM / REPORT AN ACCIDENT (Top Row Prominence) -->
+        <div class="card accident-top-card">
+          <div class="accident-header-line">
+            <span class="card-kicker" style="color: var(--accent-coral);">Emergency Claim</span>
+            <span class="badge-offline">
+              <span class="ping-dot"></span>
+              <span>Works offline</span>
+            </span>
+          </div>
+
+          <div class="accident-content-block">
+            <div class="accident-icon-lead">
+              <i data-lucide="shield-alert" style="width: 19px; height: 19px;"></i>
+            </div>
+            <div class="accident-h-title">REPORT AN ACCIDENT</div>
+            <div class="accident-p-desc">Capture your location, photos and statement, even when you're offline.</div>
+          </div>
+
+          <button class="btn-accident-action" onclick="alert('Launching Offline Accident Dossier...')">
+            <span>Start Accident Mode</span>
+            <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
+          </button>
+        </div>
+
+        <!-- 4. Right Graph Card: Net Worth -->
+        <div class="card networth-card">
+          <div class="networth-header">
+            <div class="networth-left-head">
+              <i data-lucide="trending-up" style="width: 16px; height: 16px; color: var(--accent-coral);"></i>
+              <span class="networth-amount">R 2,843,020</span>
+            </div>
+          </div>
+
+          <!-- Smooth Coral Graph -->
+          <div class="sparkline-container">
+            <svg viewBox="0 0 240 68" width="100%" height="100%" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="coralGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#E85D3F" stop-opacity="0.15" />
+                  <stop offset="100%" stop-color="#E85D3F" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <path d="M 0 50 Q 30 36 60 48 T 120 24 T 180 32 T 240 14 L 240 68 L 0 68 Z" fill="url(#coralGrad)" />
+              <path d="M 0 50 Q 30 36 60 48 T 120 24 T 180 32 T 240 14" fill="none" stroke="#E85D3F" stroke-width="2.3" stroke-linecap="round" />
+            </svg>
+          </div>
+
+          <div class="sparkline-axis">
+            <span>Jan</span>
+            <span>May</span>
+            <span>Sep</span>
+          </div>
+
+          <div class="networth-footer">
+            <div>
+              <div class="networth-title">Net Worth</div>
+              <div class="networth-sub">Balanced growth portfolio</div>
+            </div>
+            <span class="badge-growth">+7.2%</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM BENTO ROW: Borderless, Spacious Architecture -->
+      <div class="bento-bottom-row">
+
+        <!-- 1. Left: Minimized Vault & Key Notices (Folds in Simple Mode) -->
+        <div class="card vault-card" id="vaultNoticeCard">
+          <div class="portfolio-header">
+            <span class="card-kicker">Vault & Notices</span>
+            <span style="font-size: 9.5px; font-weight: 700; color: var(--status-green); background: var(--status-green-soft); padding: 2px 7px; border-radius: 99px;">3 Active</span>
+          </div>
+
+          <div class="vault-list">
+            <div class="vault-row-item">
+              <div class="vault-item-left">
+                <i data-lucide="credit-card" style="width: 14px; height: 14px;"></i>
+                <div>
+                  <div class="vault-item-title">Bank Details Update</div>
+                  <div class="vault-item-sub">Verification pending</div>
+                </div>
+              </div>
+              <span class="vault-tag-pill pending">In Review</span>
+            </div>
+
+            <div class="vault-row-item">
+              <div class="vault-item-left">
+                <i data-lucide="file-text" style="width: 14px; height: 14px;"></i>
+                <div>
+                  <div class="vault-item-title">2026 Tax Certificate</div>
+                  <div class="vault-item-sub">IT3b & IT3c ready</div>
+                </div>
+              </div>
+              <span class="vault-tag-pill neutral">Download</span>
+            </div>
+
+            <div class="vault-row-item">
+              <div class="vault-item-left">
+                <i data-lucide="shield-check" style="width: 14px; height: 14px;"></i>
+                <div>
+                  <div class="vault-item-title">FAIS / FICA Status</div>
+                  <div class="vault-item-sub">Identity verified</div>
+                </div>
+              </div>
+              <span class="vault-tag-pill success">100% Valid</span>
+            </div>
+          </div>
+
+          <div style="font-size: 9.5px; color: var(--text-subtle); display: flex; align-items: center; gap: 4px;">
+            <i data-lucide="lock" style="width: 9px; height: 9px;"></i>
+            <span>Encrypted vault protected by POPIA</span>
+          </div>
+        </div>
+
+        <!-- 2. Center: FINANCIAL GOALS & HORIZON (Natural Negative Space) -->
+        <div class="card goals-master-card">
+          <div class="goals-master-header">
+            <div class="goals-title-group">
+              <span class="card-kicker">Financial Goals & Horizon</span>
+              <span class="pill-dropdown" style="font-size: 9.5px; padding: 2px 8px;">2026 Targets <i data-lucide="chevron-down" style="width: 8px; height: 8px;"></i></span>
+            </div>
+            <button class="btn-add-goal" onclick="alert('Add New Financial Goal...')">
+              <i data-lucide="plus" style="width: 12px; height: 12px;"></i>
+              <span>Add Goal</span>
+            </button>
+          </div>
+
+          <div class="goals-master-body">
+            
+            <!-- Left: Concentric Ring Art -->
+            <div class="goals-art-side">
+              <div class="goals-art-info">
+                <div class="goals-art-title">Home Deposit</div>
+                <div class="goals-art-amount">R 370,000 <span class="goals-art-sub">of R500K</span></div>
+              </div>
+              <div class="concentric-art-box">
+                <svg viewBox="0 0 200 120" width="100%" height="120">
+                  <circle cx="100" cy="120" r="84" fill="rgba(232, 93, 63, 0.07)" />
+                  <text x="100" y="52" text-anchor="middle" fill="#E85D3F" font-size="9" font-weight="600">R 500K</text>
+                  <circle cx="100" cy="120" r="62" fill="rgba(232, 93, 63, 0.17)" />
+                  <text x="100" y="74" text-anchor="middle" fill="#E85D3F" font-size="8.5" font-weight="600">R 370K</text>
+                  <circle cx="100" cy="120" r="34" fill="#E85D3F" />
+                  <text x="100" y="107" text-anchor="middle" fill="#FFFFFF" font-size="8.5" font-weight="700">74%</text>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Right: Goal Progress Bars -->
+            <div class="goals-progress-side">
+              
+              <!-- Goal 1 -->
+              <div class="goal-track-item">
+                <div class="goal-track-head">
+                  <div class="goal-track-name">
+                    <span class="goal-dot" style="background: var(--accent-coral);"></span>
+                    <span>Primary Home Deposit</span>
+                  </div>
+                  <span class="goal-track-val">R370,000 · <strong>74%</strong></span>
+                </div>
+                <div class="goal-bar-bg">
+                  <div class="goal-bar-fill" style="width: 74%; background: var(--accent-coral);"></div>
+                </div>
+                <div class="goal-track-meta">
+                  <span>Target: Dec 2026</span>
+                  <span class="status-tag ontrack">On track (+R6.5k/mo)</span>
+                </div>
+              </div>
+
+              <!-- Goal 2 -->
+              <div class="goal-track-item">
+                <div class="goal-track-head">
+                  <div class="goal-track-name">
+                    <span class="goal-dot" style="background: var(--status-green);"></span>
+                    <span>Emergency Reserve Fund</span>
+                  </div>
+                  <span class="goal-track-val">R120,000 · <strong>100%</strong></span>
+                </div>
+                <div class="goal-bar-bg">
+                  <div class="goal-bar-fill" style="width: 100%; background: var(--status-green);"></div>
+                </div>
+                <div class="goal-track-meta">
+                  <span>6 Months Coverage</span>
+                  <span class="status-tag complete">✓ Fully Funded</span>
+                </div>
+              </div>
+
+              <!-- Goal 3 -->
+              <div class="goal-track-item">
+                <div class="goal-track-head">
+                  <div class="goal-track-name">
+                    <span class="goal-dot" style="background: #181716;"></span>
+                    <span>Retirement Wealth Horizon</span>
+                  </div>
+                  <span class="goal-track-val">R814,520 · <strong>68%</strong></span>
+                </div>
+                <div class="goal-bar-bg">
+                  <div class="goal-bar-fill" style="width: 68%; background: #181716;"></div>
+                </div>
+                <div class="goal-track-meta">
+                  <span>Section 10C / Reg 28</span>
+                  <span class="status-tag ontrack">Rebalance in 13d</span>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 3. Right: Your Adviser Card -->
+        <div class="card adviser-card">
+          <div class="portfolio-header">
+            <span class="card-kicker">Your Adviser</span>
+            <button class="btn-circle" style="width: 24px; height: 24px; box-shadow: none;" aria-label="More">
+              <i data-lucide="more-horizontal" style="width: 11px; height: 11px;"></i>
+            </button>
+          </div>
+
+          <div class="adviser-profile-row">
+            <div class="adviser-avatar-wrap">
+              <img src="/qiniso-ntuli.png" alt="Qiniso Ntuli" class="adviser-img" />
+              <span class="adviser-online-ping" title="Available"></span>
+            </div>
+            <div>
+              <div class="adviser-name">Qiniso Ntuli</div>
+              <div class="adviser-badge">
+                <span>CFP® · Royal Square</span>
+                <span class="fsp-tag">FSP 29370</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="adviser-meta-tiles">
+            <div class="adviser-tile">
+              <div class="adviser-tile-left">
+                <i data-lucide="calendar" style="width: 12px; height: 12px;"></i>
+                <span>Next review</span>
+              </div>
+              <div class="adviser-tile-val">18 Sep (13d)</div>
+            </div>
+
+            <div class="adviser-tile">
+              <div class="adviser-tile-left">
+                <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+                <span>Last contact</span>
+              </div>
+              <div class="adviser-tile-val">28 Aug</div>
+            </div>
+          </div>
+
+          <div class="adviser-actions-row">
+            <button class="btn-adviser-subtle" onclick="alert('Messaging Qiniso Ntuli for Latoya Matai...')">
+              <i data-lucide="message-square" style="width: 12px; height: 12px;"></i>
+              <span>Message</span>
+            </button>
+            <button class="btn-adviser-action" onclick="alert('Appointment Details:\nFriday, 18 Sep @ 10:30 SAST')">
+              <span>View details</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- Mode Toast -->
+  <div class="toast-pill" id="modeToast">
+    <i data-lucide="sliders-horizontal" style="width: 13px; height: 13px; color: var(--accent-coral);"></i>
+    <span id="toastMsg">Simple Mode Enabled</span>
+  </div>
+
+  <!-- ====================================================================
+       SCRIPTS: LUCIDE & CLOCK & SIMPLE MODE
+       ==================================================================== -->
+  <script>
+    // Initialize Icons
+    lucide.createIcons();
+
+    // 1. Live Time Engine (Real-Time SAST Clock)
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const clockEl = document.getElementById('liveClockDisplay');
+      if (clockEl) {
+        clockEl.textContent = `${hours}:${minutes}`;
+      }
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // 2. Simple Mode Toggle
+    function toggleSimpleMode() {
+      const isSimple = document.body.classList.toggle('simple-mode');
+      const toggleBtn = document.getElementById('simpleModeToggle');
+      const label = document.getElementById('modeToggleLabel');
+      const heroHeading = document.getElementById('heroHeading');
+      const heroSubheading = document.getElementById('heroSubheading');
+
+      if (isSimple) {
+        toggleBtn.classList.add('active');
+        label.textContent = 'Simple Mode: ON';
+        heroHeading.textContent = 'All clear, Latoya.';
+        heroSubheading.innerHTML = '<span class="calm-dot">●</span> <span>Your portfolio is healthy and on track</span>';
+        showToast('Simple Mode Enabled · Focused view');
+      } else {
+        toggleBtn.classList.remove('active');
+        label.textContent = 'Simple Mode';
+        heroHeading.textContent = 'Hey, Latoya. Need help?';
+        heroSubheading.innerHTML = '<span class="cursor-bar">|</span> <span>Just ask me anything!</span>';
+        showToast('Detailed Mode Enabled · Full portal view');
+      }
+
+      lucide.createIcons();
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('modeToast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.add('active');
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, 2400);
+    }
+  </script>
+</body>
+</html>

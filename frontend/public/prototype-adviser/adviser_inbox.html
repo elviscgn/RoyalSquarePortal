@@ -1,0 +1,2400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Royal Square Workspace — Intelligent Intake & Triage</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ==========================================================================
+       1. SYSTEM TOKENS (WARM CREAM, LUXURY FINTECH, ADVISER DENSITY)
+       ========================================================================== */
+    :root {
+      --bg-page: #F4F3EE;                 /* Signature warm creamy canvas */
+      --bg-card: #FFFFFF;                 /* Crisp surface */
+      --bg-card-subtle: #FAF9F5;          /* Tone-on-tone surface */
+      --bg-card-hover: #F6F4EE;
+
+      --text-primary: #171615;            /* Deep near-black */
+      --text-secondary: #7D7972;          /* Warm muted neutral */
+      --text-subtle: #ABA69E;             /* Light caption neutral */
+
+      --accent-coral: #E85D3F;            /* Royal Square terracotta coral */
+      --accent-coral-hover: #D84F31;
+      --accent-coral-soft: #FDF0ED;
+      --accent-coral-glow: rgba(232, 93, 63, 0.16);
+
+      --status-green: #2B7A48;
+      --status-green-soft: #EDF7F1;
+
+      --status-urgent: #C83E2B;
+      --status-urgent-soft: #FCEDE9;
+
+      --status-waiting: #8A641A;
+      --status-waiting-soft: #FAF4E8;
+
+      --status-info: #5B616E;
+      --status-info-soft: #F1F3F6;
+
+      --radius-card: 20px;
+      --radius-subcard: 14px;
+      --radius-pill: 9999px;
+
+      --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.015);
+      --shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.045), 0 2px 6px rgba(0, 0, 0, 0.02);
+      --shadow-button: 0 2px 8px rgba(0, 0, 0, 0.03);
+      --shadow-drawer: -14px 0 44px rgba(23, 22, 21, 0.1);
+
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    button, input, select {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    /* ==========================================================================
+       2. WORKSPACE SIDEBAR
+       ========================================================================== */
+    .adviser-sidebar {
+      width: 240px;
+      background: var(--bg-card);
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 22px 16px 20px;
+      border-right: 1px solid rgba(23, 22, 21, 0.04);
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 20;
+    }
+
+    .sidebar-brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 2px 8px 18px;
+      border-bottom: 1px solid rgba(23, 22, 21, 0.04);
+    }
+
+    .brand-logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 11px;
+      background: #171615;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.2px;
+      line-height: 1.15;
+    }
+
+    .brand-subtitle {
+      font-size: 10.5px;
+      color: var(--text-secondary);
+    }
+
+    .sidebar-section-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 16px;
+    }
+
+    .nav-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-subtle);
+      padding: 6px 10px 2px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .nav-link-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-link:hover {
+      background: var(--bg-card-subtle);
+      color: var(--text-primary);
+    }
+
+    .nav-link.active {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+    }
+
+    .nav-badge-count {
+      font-size: 10.5px;
+      font-weight: 700;
+      background: var(--accent-coral);
+      color: #FFFFFF;
+      padding: 1px 7px;
+      border-radius: var(--radius-pill);
+    }
+
+    .sidebar-lower {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(23, 22, 21, 0.04);
+    }
+
+    .adviser-foot-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 8px 4px;
+      border-top: 1px solid rgba(23, 22, 21, 0.04);
+      margin-top: 12px;
+    }
+
+    .adviser-avatar-wrap {
+      position: relative;
+    }
+
+    .adviser-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      border: 1.5px solid #FFFFFF;
+    }
+
+    .adviser-online-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--status-green);
+      border: 1.5px solid #FFFFFF;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+
+    .adviser-foot-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .adviser-foot-role {
+      font-size: 10px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .fsp-badge {
+      font-size: 8px;
+      font-weight: 700;
+      background: #EAE6DC;
+      padding: 0 4px;
+      border-radius: 3px;
+      color: var(--text-primary);
+    }
+
+    /* ==========================================================================
+       3. MAIN VIEWPORT
+       ========================================================================== */
+    .workspace-viewport {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 22px 32px 40px;
+      gap: 18px;
+      max-width: 1440px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Top Search & Channel Sync */
+    .top-meta-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .search-triage-wrap {
+      flex: 1;
+      max-width: 440px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-triage-wrap input {
+      width: 100%;
+      height: 38px;
+      background: var(--bg-card);
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 0 38px 0 16px;
+      font-size: 11.5px;
+      color: var(--text-primary);
+      outline: none;
+      box-shadow: var(--shadow-button);
+      transition: box-shadow 0.2s;
+    }
+
+    .search-triage-wrap input:focus {
+      box-shadow: 0 4px 16px var(--accent-coral-glow);
+    }
+
+    .search-triage-wrap .search-icon {
+      position: absolute;
+      right: 14px;
+      width: 13px;
+      height: 13px;
+      color: var(--text-subtle);
+      pointer-events: none;
+    }
+
+    .header-quick-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pill-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      box-shadow: var(--shadow-button);
+    }
+
+    .ping-green {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--status-green);
+    }
+
+    /* Page Intro Cluster */
+    .page-intro-cluster {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .eyebrow-tag {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: var(--accent-coral);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 3px;
+    }
+
+    .page-title {
+      font-size: 25px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .page-subhead {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      line-height: 1.4;
+      max-width: 720px;
+    }
+
+    .intro-right-stats {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .stat-pill-hero {
+      background: var(--bg-card);
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-button);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stat-pill-hero.needs-qiniso {
+      background: var(--accent-coral);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px var(--accent-coral-glow);
+    }
+
+    .stat-pill-hero.needs-qiniso .stat-pill-val,
+    .stat-pill-hero.needs-qiniso .stat-pill-lbl {
+      color: #FFFFFF;
+    }
+
+    .stat-pill-val {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: var(--text-primary);
+    }
+
+    .stat-pill-lbl {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* ==========================================================================
+       4. ASYMMETRIC TRIAGE SUMMARY STRIP (NO HORIZONTAL CUTOFFS)
+       ========================================================================== */
+    .triage-summary-strip {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1.1fr 1fr 1fr;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      min-width: 0;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .kpi-card.hero-needs-me {
+      background: linear-gradient(145deg, #FFFFFF 20%, var(--accent-coral-soft) 100%);
+      border: 1px solid rgba(232, 93, 63, 0.25);
+    }
+
+    .kpi-top-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .kpi-hero-title {
+      color: var(--accent-coral);
+    }
+
+    .kpi-val-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin: 4px 0 3px;
+    }
+
+    .kpi-num {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .kpi-num.coral {
+      color: var(--accent-coral);
+    }
+
+    .kpi-num.urgent {
+      color: var(--status-urgent);
+    }
+
+    .kpi-subtext {
+      font-size: 10.5px;
+      color: var(--text-secondary);
+      line-height: 1.35;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .kpi-mini-bar-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(23, 22, 21, 0.06);
+      border-radius: var(--radius-pill);
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .kpi-mini-bar-fill {
+      height: 100%;
+      border-radius: var(--radius-pill);
+    }
+
+    /* ==========================================================================
+       5. CONTENT SPLIT: OPERATIONAL STREAM + INTELLIGENCE RAIL
+       ========================================================================== */
+    .triage-content-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .stream-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    /* Filters Bar */
+    .stream-filters-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pills-cluster {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      background: var(--bg-card);
+      border-radius: var(--radius-pill);
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      box-shadow: var(--shadow-button);
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-pill:hover {
+      color: var(--text-primary);
+      background: #FAF8F4;
+    }
+
+    .filter-pill.active {
+      background: #171615;
+      color: #FFFFFF;
+    }
+
+    .filter-pill.active .pill-counter {
+      background: rgba(255, 255, 255, 0.22);
+      color: #FFFFFF;
+    }
+
+    .pill-counter {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card-subtle);
+      color: var(--text-secondary);
+    }
+
+    .filter-pill.urgent-filter.active {
+      background: var(--status-urgent);
+      color: #FFFFFF;
+    }
+
+    .secondary-filter-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-quiet-toggle {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 5px 9px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+
+    .btn-quiet-toggle:hover {
+      background: rgba(23, 22, 21, 0.05);
+      color: var(--text-primary);
+    }
+
+    /* ==========================================================================
+       6. BULLETPROOF TRIAGE ROW CARD (CLEAN 3-TIER ARCHITECTURE)
+       No collapsed grid columns! Everything has dedicated breathing space.
+       ========================================================================== */
+    .stream-card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .triage-row-card {
+      background: var(--bg-card);
+      border-radius: 18px;
+      padding: 16px 18px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      border-left: 4px solid transparent;
+    }
+
+    .triage-row-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-1px);
+    }
+
+    .triage-row-card.is-needs-you {
+      border-left-color: var(--accent-coral);
+    }
+
+    .triage-row-card.is-urgent {
+      border-left-color: var(--status-urgent);
+      background: #FFFAF9;
+    }
+
+    .triage-row-card.is-automated {
+      border-left-color: transparent;
+    }
+
+    .triage-row-card.is-informational {
+      background: #FAF9F6;
+      opacity: 0.92;
+    }
+
+    /* Row Tier 1: Header (Source, Sender, Case Badge, Classification, Time) */
+    .card-meta-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .meta-left-group {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .source-avatar-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .source-avatar-icon.client {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+    }
+
+    .source-avatar-icon.provider {
+      background: #EBF2FA;
+      color: #2D68C4;
+    }
+
+    .source-avatar-icon.system {
+      background: #EBF7EE;
+      color: var(--status-green);
+    }
+
+    .source-avatar-icon.urgent {
+      background: var(--status-urgent-soft);
+      color: var(--status-urgent);
+    }
+
+    .sender-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .channel-source-tag {
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 1.5px 6px;
+      border-radius: 4px;
+      background: rgba(23, 22, 21, 0.05);
+      color: var(--text-secondary);
+    }
+
+    .linked-case-pill {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-card-subtle);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .meta-right-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .class-badge {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .class-badge.needs-you {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+    }
+
+    .class-badge.urgent {
+      background: var(--status-urgent-soft);
+      color: var(--status-urgent);
+    }
+
+    .class-badge.automated {
+      background: var(--status-green-soft);
+      color: var(--status-green);
+    }
+
+    .class-badge.waiting {
+      background: var(--status-waiting-soft);
+      color: var(--status-waiting);
+    }
+
+    .class-badge.informational {
+      background: var(--status-info-soft);
+      color: var(--status-info);
+    }
+
+    .class-badge.review-class {
+      background: #F4EEFB;
+      color: #783DB8;
+    }
+
+    .row-time-text {
+      font-size: 10.5px;
+      color: var(--text-subtle);
+      font-weight: 500;
+    }
+
+    /* Row Tier 2: Body (Subject & Smart Summary) */
+    .card-body-content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-left: 37px;
+    }
+
+    .subject-headline {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+
+    .summary-description {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    /* Row Tier 3: Operational Footer (Next Action + CTA) */
+    .card-operational-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-left: 37px;
+      margin-top: 2px;
+      border-top: 1px solid rgba(23, 22, 21, 0.04);
+      padding-top: 8px;
+    }
+
+    .next-action-statement {
+      font-size: 11px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .next-action-statement strong {
+      color: var(--text-primary);
+    }
+
+    .btn-action-trigger {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 13px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card-subtle);
+      color: var(--text-primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.15s;
+    }
+
+    .triage-row-card:hover .btn-action-trigger {
+      background: #171615;
+      color: #FFFFFF;
+    }
+
+    .triage-row-card.is-needs-you .btn-action-trigger {
+      background: var(--accent-coral);
+      color: #FFFFFF;
+      box-shadow: 0 2px 8px var(--accent-coral-glow);
+    }
+
+    .triage-row-card.is-needs-you:hover .btn-action-trigger {
+      background: var(--accent-coral-hover);
+    }
+
+    /* Catch-Up Empty State */
+    .caught-up-card {
+      display: none;
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      padding: 44px 28px;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .caught-up-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--status-green-soft);
+      color: var(--status-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2px;
+    }
+
+    .caught-up-title {
+      font-size: 16.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .caught-up-sub {
+      font-size: 12px;
+      color: var(--text-secondary);
+      max-width: 380px;
+      line-height: 1.4;
+    }
+
+    /* ==========================================================================
+       7. RIGHT INTELLIGENCE RAIL
+       ========================================================================== */
+    .intelligence-rail {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .rail-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .rail-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .rail-title {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--text-primary);
+    }
+
+    .rail-metric-pill {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      background: var(--status-green-soft);
+      color: var(--status-green);
+    }
+
+    .auto-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .auto-stat-item {
+      background: var(--bg-card-subtle);
+      border-radius: 12px;
+      padding: 9px 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .auto-stat-num {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .auto-stat-lbl {
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+
+    .btn-rail-link {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-coral);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-decoration: none;
+      transition: gap 0.15s;
+    }
+
+    .btn-rail-link:hover {
+      gap: 7px;
+    }
+
+    .waiting-list {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 10px;
+    }
+
+    .waiting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 11px;
+      border-radius: 10px;
+      background: var(--bg-card-subtle);
+      font-size: 11px;
+    }
+
+    .waiting-left {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--text-secondary);
+    }
+
+    .waiting-val {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .waiting-footnote {
+      font-size: 10px;
+      color: var(--text-subtle);
+      line-height: 1.35;
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+    }
+
+    /* ==========================================================================
+       8. SLIDE-OUT DETAIL & ADVISER ACTION DRAWER
+       ========================================================================== */
+    .drawer-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(23, 22, 21, 0.28);
+      backdrop-filter: blur(2px);
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .detail-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 500px;
+      height: 100vh;
+      background: #FFFFFF;
+      box-shadow: var(--shadow-drawer);
+      z-index: 101;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transform: translateX(100%);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow-y: auto;
+    }
+
+    .detail-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid rgba(23, 22, 21, 0.05);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      position: sticky;
+      top: 0;
+      background: #FFFFFF;
+      z-index: 5;
+    }
+
+    .drawer-client-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .drawer-case-tag {
+      font-size: 11px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 3px;
+    }
+
+    .btn-drawer-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--bg-card-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+    }
+
+    .btn-drawer-close:hover {
+      background: #ECE7DE;
+      color: var(--text-primary);
+    }
+
+    .drawer-body {
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .drawer-section-card {
+      background: var(--bg-card-subtle);
+      border-radius: var(--radius-subcard);
+      padding: 13px 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .drawer-section-title {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .message-bubble-quote {
+      font-size: 11.5px;
+      color: var(--text-primary);
+      line-height: 1.5;
+      font-style: italic;
+      background: #FFFFFF;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border-left: 3px solid var(--accent-coral);
+    }
+
+    .ai-evidence-box {
+      background: #FFFFFF;
+      border-radius: 10px;
+      padding: 11px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .ai-metric-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+
+    .confidence-badge {
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      background: var(--status-green-soft);
+      color: var(--status-green);
+    }
+
+    .evidence-tags-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 2px;
+    }
+
+    .signal-chip {
+      font-size: 9.5px;
+      font-weight: 600;
+      background: var(--bg-card-subtle);
+      color: var(--text-secondary);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .prep-steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .prep-step-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10.5px;
+      padding: 6px 9px;
+      background: #FFFFFF;
+      border-radius: 7px;
+      font-weight: 600;
+    }
+
+    .prep-step-item.verified {
+      color: var(--status-green);
+    }
+
+    .prep-step-item.pending {
+      color: var(--status-waiting);
+    }
+
+    .reclassify-selector {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 3px;
+    }
+
+    .reclassify-select {
+      flex: 1;
+      height: 30px;
+      border-radius: var(--radius-pill);
+      background: #FFFFFF;
+      border: 1px solid rgba(23, 22, 21, 0.09);
+      padding: 0 10px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    .btn-apply-reclass {
+      height: 30px;
+      padding: 0 12px;
+      border-radius: var(--radius-pill);
+      background: #171615;
+      color: #FFFFFF;
+      font-size: 10.5px;
+      font-weight: 600;
+    }
+
+    .drawer-footer {
+      padding: 16px 24px 22px;
+      border-top: 1px solid rgba(23, 22, 21, 0.05);
+      background: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: sticky;
+      bottom: 0;
+      z-index: 5;
+    }
+
+    .drawer-primary-btn {
+      height: 42px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-coral);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      box-shadow: 0 4px 14px var(--accent-coral-glow);
+      transition: all 0.15s;
+    }
+
+    .drawer-primary-btn:hover {
+      background: var(--accent-coral-hover);
+    }
+
+    .drawer-secondary-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+
+    .drawer-subtle-btn {
+      height: 34px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card-subtle);
+      color: var(--text-primary);
+      font-size: 10.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: background 0.15s;
+    }
+
+    .drawer-subtle-btn:hover {
+      background: #EDE8DE;
+    }
+
+    /* Toast Notification */
+    .toast-pill {
+      position: fixed;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #181716;
+      color: #FFFFFF;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast-pill.active {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 1200px) {
+      .triage-summary-strip {
+        grid-template-columns: 1fr 1fr;
+      }
+      .triage-content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ====================================================================
+       1. ADVISER SIDEBAR
+       ==================================================================== -->
+  <aside class="adviser-sidebar">
+    <div>
+      <div class="sidebar-brand-cluster">
+        <div class="brand-logo-mark" style="overflow: hidden; background: #fff;"><img src="/royal-square-logo.png" alt="Royal Square" style="width: 100%; height: 100%; display: block; object-fit: cover; transform: scale(1.6);" /></div>
+        <div>
+          <div class="brand-title">Royal Square</div>
+          <div class="brand-subtitle">Adviser Workspace</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-section-nav">
+        <span class="nav-label">Workspace</span>
+
+        <a href="#home" class="nav-link" onclick="showToast('Navigating to Command Centre...')">
+          <div class="nav-link-left">
+            <i data-lucide="layout-dashboard" style="width: 15px; height: 15px;"></i>
+            <span>Home</span>
+          </div>
+        </a>
+
+        <a href="#inbox" class="nav-link active">
+          <div class="nav-link-left">
+            <i data-lucide="inbox" style="width: 15px; height: 15px;"></i>
+            <span>Inbox</span>
+          </div>
+          <span class="nav-badge-count">6</span>
+        </a>
+
+        <a href="#clients" class="nav-link" onclick="showToast('Opening Client Relationship Directory...')">
+          <div class="nav-link-left">
+            <i data-lucide="users" style="width: 15px; height: 15px;"></i>
+            <span>Clients</span>
+          </div>
+        </a>
+
+        <a href="#cases" class="nav-link" onclick="showToast('Opening Active Cases...')">
+          <div class="nav-link-left">
+            <i data-lucide="briefcase" style="width: 15px; height: 15px;"></i>
+            <span>Cases</span>
+          </div>
+        </a>
+
+        <a href="#reviews" class="nav-link" onclick="showToast('Opening Reviews...')">
+          <div class="nav-link-left">
+            <i data-lucide="calendar-check" style="width: 15px; height: 15px;"></i>
+            <span>Reviews</span>
+          </div>
+        </a>
+
+        <a href="#documents" class="nav-link" onclick="showToast('Opening Documents Vault...')">
+          <div class="nav-link-left">
+            <i data-lucide="folder-lock" style="width: 15px; height: 15px;"></i>
+            <span>Documents</span>
+          </div>
+        </a>
+      </nav>
+    </div>
+
+    <div>
+      <div class="sidebar-lower">
+        <span class="nav-label">Governance</span>
+        <a href="#compliance" class="nav-link" onclick="showToast('Viewing Compliance Governance...')">
+          <div class="nav-link-left">
+            <i data-lucide="shield-check" style="width: 15px; height: 15px;"></i>
+            <span>Compliance</span>
+          </div>
+        </a>
+
+        <a href="#integrations" class="nav-link" onclick="showToast('Viewing Provider EDI Feeds...')">
+          <div class="nav-link-left">
+            <i data-lucide="plug-zap" style="width: 15px; height: 15px;"></i>
+            <span>Integrations</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="adviser-foot-profile">
+        <div class="adviser-avatar-wrap">
+          <img src="/qiniso-ntuli.png" alt="Qiniso Ntuli" class="adviser-avatar" />
+          <span class="adviser-online-dot"></span>
+        </div>
+        <div>
+          <div class="adviser-foot-name">Qiniso Ntuli</div>
+          <div class="adviser-foot-role">
+            <span>CFP® Adviser</span>
+            <span class="fsp-badge">FSP 48192</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====================================================================
+       2. MAIN VIEWPORT
+       ==================================================================== -->
+  <main class="workspace-viewport">
+
+    <!-- Top Utility Header -->
+    <header class="top-meta-header">
+      <div class="search-triage-wrap">
+        <input type="text" id="streamSearchInput" placeholder="Search messages, clients or cases (e.g. Latoya, Sanlam, #BD-2048)..." oninput="handleSearch(this.value)" />
+        <i data-lucide="search" class="search-icon"></i>
+      </div>
+
+      <div class="header-quick-cluster">
+        <div class="pill-indicator">
+          <span class="ping-green"></span>
+          <span>Intake Feeds Live (Santam · Sanlam · Momentum · Astute)</span>
+        </div>
+
+        <button class="filter-pill" onclick="showToast('Synced 108 messages across all channels.')" title="Refresh Intake Queue">
+          <i data-lucide="rotate-cw" style="width: 12px; height: 12px;"></i>
+          <span>Sync</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Intro & Value Banner -->
+    <section class="page-intro-cluster">
+      <div>
+        <div class="eyebrow-tag">
+          <i data-lucide="sparkles" style="width: 13px; height: 13px;"></i>
+          <span>Intelligent Intake & Triage</span>
+        </div>
+        <h1 class="page-title">Everything that came in, already sorted.</h1>
+        <p class="page-subhead">Client messages, provider updates and workflow events are organised before they reach you. Read the exceptions, not every message.</p>
+      </div>
+
+      <div class="intro-right-stats">
+        <div class="stat-pill-hero">
+          <span class="stat-pill-val" id="totalIncomingCount">108</span>
+          <span class="stat-pill-lbl">today</span>
+        </div>
+        <div class="stat-pill-hero needs-qiniso" title="Only 6 items require your immediate professional decision">
+          <span class="stat-pill-val">6</span>
+          <span class="stat-pill-lbl">need you</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         3. ASYMMETRIC TRIAGE SUMMARY (PROPORTIONATE, NO CUTOFFS)
+         ==================================================================== -->
+    <section class="triage-summary-strip">
+
+      <!-- 1. Hero: NEEDS ME -->
+      <div class="kpi-card hero-needs-me" onclick="setFilter('needs-me')">
+        <div class="kpi-top-line">
+          <span class="kpi-hero-title">Needs Me</span>
+          <span style="font-size: 9px; font-weight: 800; background: var(--accent-coral); color:#FFF; padding: 2px 7px; border-radius:99px;">Action Required</span>
+        </div>
+        <div>
+          <div class="kpi-val-row">
+            <span class="kpi-num coral">16</span>
+            <span style="font-size: 11px; font-weight: 700; color: var(--accent-coral);">(6 immediate)</span>
+          </div>
+          <p class="kpi-subtext">Regulated sign-offs & consultations.</p>
+        </div>
+        <div class="kpi-mini-bar-track">
+          <div class="kpi-mini-bar-fill" style="width: 45%; background: var(--accent-coral);"></div>
+        </div>
+      </div>
+
+      <!-- 2. Urgent Exceptions -->
+      <div class="kpi-card" onclick="setFilter('urgent')">
+        <div class="kpi-top-line">
+          <span>Urgent</span>
+          <i data-lucide="alert-triangle" style="width: 12px; height: 12px; color: var(--status-urgent);"></i>
+        </div>
+        <div>
+          <div class="kpi-val-row">
+            <span class="kpi-num urgent">7</span>
+          </div>
+          <p class="kpi-subtext">Overdue SLAs & blockages.</p>
+        </div>
+        <div class="kpi-mini-bar-track">
+          <div class="kpi-mini-bar-fill" style="width: 25%; background: var(--status-urgent);"></div>
+        </div>
+      </div>
+
+      <!-- 3. Waiting on Client -->
+      <div class="kpi-card" onclick="setFilter('waiting')">
+        <div class="kpi-top-line">
+          <span>Waiting on Client</span>
+          <i data-lucide="hourglass" style="width: 12px; height: 12px; color: var(--status-waiting);"></i>
+        </div>
+        <div>
+          <div class="kpi-val-row">
+            <span class="kpi-num">31</span>
+          </div>
+          <p class="kpi-subtext">DocuSign & bank uploads.</p>
+        </div>
+        <div class="kpi-mini-bar-track">
+          <div class="kpi-mini-bar-fill" style="width: 60%; background: var(--status-waiting);"></div>
+        </div>
+      </div>
+
+      <!-- 4. Informational -->
+      <div class="kpi-card" onclick="setFilter('informational')">
+        <div class="kpi-top-line">
+          <span>Informational</span>
+          <i data-lucide="file-check-2" style="width: 12px; height: 12px; color: var(--status-info);"></i>
+        </div>
+        <div>
+          <div class="kpi-val-row">
+            <span class="kpi-num">42</span>
+          </div>
+          <p class="kpi-subtext">Routine statements & receipts.</p>
+        </div>
+        <div class="kpi-mini-bar-track">
+          <div class="kpi-mini-bar-fill" style="width: 78%; background: var(--status-info);"></div>
+        </div>
+      </div>
+
+      <!-- 5. Automatically Routed -->
+      <div class="kpi-card" onclick="setFilter('automated')">
+        <div class="kpi-top-line">
+          <span>Auto-Routed</span>
+          <i data-lucide="zap" style="width: 12px; height: 12px; color: var(--status-green);"></i>
+        </div>
+        <div>
+          <div class="kpi-val-row">
+            <span class="kpi-num" style="color: var(--status-green);">12</span>
+          </div>
+          <p class="kpi-subtext">Classified & drafted via rules.</p>
+        </div>
+        <div class="kpi-mini-bar-track">
+          <div class="kpi-mini-bar-fill" style="width: 32%; background: var(--status-green);"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ====================================================================
+         4. OPERATIONAL STREAM + INTELLIGENCE RAIL
+         ==================================================================== -->
+    <div class="triage-content-grid">
+
+      <!-- Left Stream -->
+      <div class="stream-container">
+
+        <!-- Filters Bar -->
+        <div class="stream-filters-bar">
+          <div class="filter-pills-cluster">
+            <button class="filter-pill active" id="pillAll" onclick="setFilter('all')">
+              <span>All</span>
+              <span class="pill-counter">108</span>
+            </button>
+
+            <button class="filter-pill" id="pillNeedsMe" onclick="setFilter('needs-me')">
+              <span>Needs me</span>
+              <span class="pill-counter" style="background: var(--accent-coral-soft); color: var(--accent-coral);">6</span>
+            </button>
+
+            <button class="filter-pill urgent-filter" id="pillUrgent" onclick="setFilter('urgent')">
+              <span>Urgent</span>
+              <span class="pill-counter">7</span>
+            </button>
+
+            <button class="filter-pill" id="pillClients" onclick="setFilter('client')">
+              <span>Clients</span>
+              <span class="pill-counter">44</span>
+            </button>
+
+            <button class="filter-pill" id="pillProviders" onclick="setFilter('provider')">
+              <span>Providers</span>
+              <span class="pill-counter">38</span>
+            </button>
+
+            <button class="filter-pill" id="pillAutomated" onclick="setFilter('automated')">
+              <span>Automated</span>
+              <span class="pill-counter">12</span>
+            </button>
+
+            <button class="filter-pill" id="pillInformational" onclick="setFilter('informational')">
+              <span>Informational</span>
+              <span class="pill-counter">42</span>
+            </button>
+          </div>
+
+          <div class="secondary-filter-toggle">
+            <button class="btn-quiet-toggle" onclick="showToast('Filtered to unread signals only.')">
+              <i data-lucide="check" style="width: 11px; height: 11px;"></i>
+              <span>Unread</span>
+            </button>
+            <button class="btn-quiet-toggle" onclick="showToast('Today intake stream.')">
+              <span>Today</span>
+              <i data-lucide="chevron-down" style="width: 10px; height: 10px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- TRIAGE STREAM LIST (BULLETPROOF CARDS) -->
+        <div class="stream-card-list" id="streamCardList">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Professional Empty State -->
+        <div class="caught-up-card" id="caughtUpCard">
+          <div class="caught-up-icon">
+            <i data-lucide="check-check" style="width: 22px; height: 22px;"></i>
+          </div>
+          <div class="caught-up-title">You're caught up.</div>
+          <div class="caught-up-sub">Everything else is waiting on clients, providers or being processed automatically.</div>
+          <button class="btn-rail-link" style="margin-top: 6px;" onclick="setFilter('all')">
+            <span>View all background items</span>
+            <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Right Intelligence Rail -->
+      <aside class="intelligence-rail">
+
+        <!-- Module 1: Handled Automatically Today -->
+        <div class="rail-card">
+          <div class="rail-header">
+            <span class="rail-title">Handled Automatically Today</span>
+            <span class="rail-metric-pill">Active</span>
+          </div>
+
+          <div class="auto-stats-grid">
+            <div class="auto-stat-item">
+              <span class="auto-stat-num">12</span>
+              <span class="auto-stat-lbl">routed to cases</span>
+            </div>
+            <div class="auto-stat-item">
+              <span class="auto-stat-num">8</span>
+              <span class="auto-stat-lbl">documents filed</span>
+            </div>
+            <div class="auto-stat-item">
+              <span class="auto-stat-num">6</span>
+              <span class="auto-stat-lbl">reminders sent</span>
+            </div>
+            <div class="auto-stat-item">
+              <span class="auto-stat-num">4</span>
+              <span class="auto-stat-lbl">cases advanced</span>
+            </div>
+          </div>
+
+          <a href="#automation-log" class="btn-rail-link" onclick="showToast('Opening Automation Audit Log...')">
+            <span>View automation log</span>
+            <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
+          </a>
+        </div>
+
+        <!-- Module 2: Waiting On Others -->
+        <div class="rail-card">
+          <div class="rail-header">
+            <span class="rail-title">Waiting On Others</span>
+            <i data-lucide="clock" style="width: 12px; height: 12px; color: var(--text-secondary);"></i>
+          </div>
+
+          <div class="waiting-list">
+            <div class="waiting-row">
+              <div class="waiting-left">
+                <i data-lucide="user-check" style="width: 12px; height: 12px; color: var(--status-waiting);"></i>
+                <span>Clients</span>
+              </div>
+              <span class="waiting-val">31</span>
+            </div>
+
+            <div class="waiting-row">
+              <div class="waiting-left">
+                <i data-lucide="building" style="width: 12px; height: 12px; color: var(--status-info);"></i>
+                <span>Providers (Sanlam, Santam)</span>
+              </div>
+              <span class="waiting-val">7</span>
+            </div>
+
+            <div class="waiting-row">
+              <div class="waiting-left">
+                <i data-lucide="file-search" style="width: 12px; height: 12px; color: var(--text-secondary);"></i>
+                <span>Doc Verification</span>
+              </div>
+              <span class="waiting-val">4</span>
+            </div>
+          </div>
+
+          <div class="waiting-footnote">
+            <i data-lucide="info" style="width: 12px; height: 12px; color: var(--accent-coral); flex-shrink: 0; margin-top: 1px;"></i>
+            <span>These items return to your queue only when client or provider action completes.</span>
+          </div>
+        </div>
+
+        <!-- Module 3: Triage Quality Guardrails -->
+        <div class="rail-card" style="background: var(--bg-card-subtle);">
+          <div class="rail-header">
+            <span class="rail-title" style="font-size: 9.5px;">Classification Confidence</span>
+            <span style="font-size: 10px; font-weight: 800; color: var(--status-green);">94.2%</span>
+          </div>
+          <p style="font-size: 10.5px; color: var(--text-secondary); line-height: 1.4;">
+            Regulated advice decisions and bank updates require explicit human sign-off under FAIS compliance guidelines.
+          </p>
+          <div style="margin-top: 8px; display: flex; align-items: center; gap: 5px; font-size: 9.5px; color: var(--text-subtle);">
+            <i data-lucide="shield-alert" style="width: 11px; height: 11px;"></i>
+            <span>Audited against POPIA & FAIS Section 7</span>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+  <!-- ====================================================================
+       5. SLIDE-OUT DETAIL & ADVISER ACTION DRAWER
+       ==================================================================== -->
+  <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+
+  <aside class="detail-drawer" id="detailDrawer">
+    <div class="drawer-header">
+      <div>
+        <div class="drawer-client-name" id="drawerClientName">Latoya Matai</div>
+        <div class="drawer-case-tag">
+          <span id="drawerChannel">Channel: Email</span>
+          <span>·</span>
+          <span id="drawerCaseId">Case #BD-2048</span>
+        </div>
+      </div>
+      <button class="btn-drawer-close" onclick="closeDrawer()" title="Close Drawer">
+        <i data-lucide="x" style="width: 15px; height: 15px;"></i>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+
+      <!-- Section: Original Message -->
+      <div class="drawer-section-card">
+        <div class="drawer-section-title">
+          <span>Original Incoming Message</span>
+          <span id="drawerReceivedTime" style="font-weight: 500; text-transform: none; color: var(--text-subtle);">Today · 09:14</span>
+        </div>
+        <div class="message-bubble-quote" id="drawerOriginalMessage">
+          "Hi Qiniso, I've recently changed banks from FNB to Standard Bank. Please update the debit order for my Sanlam investment."
+        </div>
+      </div>
+
+      <!-- Section: AI Intake Summary -->
+      <div class="drawer-section-card">
+        <div class="drawer-section-title">
+          <span>Intelligent Intake Summary</span>
+          <span class="confidence-badge" id="drawerConfidenceBadge">96% Confidence</span>
+        </div>
+        <p style="font-size: 11.5px; color: var(--text-primary); line-height: 1.45;" id="drawerSystemSummary">
+          Latoya wants to update the debit-order account linked to her Sanlam investment. System identified banking update intent and initiated document requests.
+        </p>
+
+        <!-- AI Transparency Signals -->
+        <div class="ai-evidence-box">
+          <div class="ai-metric-row">
+            <span style="font-weight: 700; color: var(--text-secondary);">Detected Intent</span>
+            <span style="font-weight: 700; color: var(--accent-coral);" id="drawerDetectedIntent">Banking details change</span>
+          </div>
+          <div>
+            <div style="font-size: 9.5px; color: var(--text-subtle); margin-bottom: 2px;">Key Signals Detected:</div>
+            <div class="evidence-tags-list" id="drawerSignalsList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: System Preparation & Checklist -->
+      <div class="drawer-section-card">
+        <div class="drawer-section-title">
+          <span id="drawerPrepHeading">Workflow Preparation</span>
+          <span style="color: var(--status-green); font-size: 9px;">Automated Prior to Review</span>
+        </div>
+        <div class="prep-steps-list" id="drawerPrepSteps"></div>
+      </div>
+
+      <!-- Section: Change Classification -->
+      <div class="drawer-section-card">
+        <div class="drawer-section-title">
+          <span>Review or Adjust Classification</span>
+          <i data-lucide="sliders" style="width: 11px; height: 11px;"></i>
+        </div>
+        <div class="reclassify-selector">
+          <select class="reclassify-select" id="reclassifySelect">
+            <option value="Banking details change">Banking details change</option>
+            <option value="Motor claim exception">Motor claim exception</option>
+            <option value="Annual review">Annual review</option>
+            <option value="Beneficiary update">Beneficiary update</option>
+            <option value="Circumstances change">Circumstances change</option>
+            <option value="Document upload">Document upload</option>
+            <option value="Adviser consultation">Adviser consultation</option>
+          </select>
+          <button class="btn-apply-reclass" onclick="applyReclassification()">Update</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="drawer-footer">
+      <button class="drawer-primary-btn" id="drawerPrimaryActionBtn" onclick="handlePrimaryDrawerAction()">
+        <span id="drawerPrimaryBtnText">Review Instruction</span>
+        <i data-lucide="arrow-right" style="width: 13px; height: 13px;"></i>
+      </button>
+
+      <div class="drawer-secondary-row">
+        <button class="drawer-subtle-btn" onclick="handleOpenCase()">
+          <i data-lucide="briefcase" style="width: 11px; height: 11px;"></i>
+          <span>Open Case</span>
+        </button>
+        <button class="drawer-subtle-btn" onclick="handleViewClient()">
+          <i data-lucide="user" style="width: 11px; height: 11px;"></i>
+          <span>View Client</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Toast Notification -->
+  <div class="toast-pill" id="actionToast">
+    <i data-lucide="check-circle" style="width: 13px; height: 13px; color: var(--accent-coral);"></i>
+    <span id="toastMsg">Routing updated</span>
+  </div>
+
+  <!-- ====================================================================
+       6. JAVASCRIPT: DATA & INTERACTIONS
+       ==================================================================== -->
+  <script>
+    const TRIAGE_ITEMS = [
+      {
+        id: 1,
+        source: 'system',
+        sourceType: 'system',
+        sender: 'System Sentinel',
+        channel: 'System Workflow Event',
+        clientName: 'Latoya Matai',
+        caseId: '#BD-2048',
+        caseName: 'Banking Details Update',
+        subject: 'Banking instruction completed & ready for review',
+        summary: 'Bank statement verified via OCR. Client details matched. Instruction signed. Evidence package complete.',
+        intent: 'Banking Details Sign-off',
+        confidence: '98%',
+        signals: ['"statement verified"', '"identity matched"', '"instruction signed"'],
+        classification: 'NEEDS YOU',
+        statusKey: 'needs-you',
+        time: '12m ago',
+        isImmediate: true,
+        nextAction: 'Review banking instruction & authorize provider submission',
+        ctaText: 'Review →',
+        messageQuote: 'System Event: Latoya Matai has submitted verified 3-month bank statement from Standard Bank. Document OCR confirms account holder name and account number match. Regulated sign-off required.',
+        checklist: [
+          { text: 'Bank statement verified via OCR', verified: true },
+          { text: 'Client identity and FICA active', verified: true },
+          { text: 'Electronic instruction signed', verified: true },
+          { text: 'Adviser regulated sign-off', verified: false, pendingText: 'Required from Qiniso' }
+        ]
+      },
+      {
+        id: 2,
+        source: 'provider',
+        sourceType: 'provider',
+        sender: 'Santam Claims EDI',
+        channel: 'Provider EDI Feed',
+        clientName: 'Latoya Matai',
+        caseId: '#RSF-2841',
+        caseName: 'Motor Accident Claim',
+        subject: 'Motor claim assessment SLA overdue by 2 days',
+        summary: 'No assessment response received within SLA. Claims handler assigned: Thabo Mokoena.',
+        intent: 'Motor Claim Exception',
+        confidence: '92%',
+        signals: ['"assessment overdue"', '"SLA +48h"', '"claim RSF-2841"'],
+        classification: 'URGENT',
+        statusKey: 'urgent',
+        time: '38m ago',
+        isImmediate: true,
+        nextAction: 'Follow up with claims handler Thabo Mokoena',
+        ctaText: 'Open claim →',
+        messageQuote: 'Notification from Santam Broker Desk: Claim #RSF-2841 has passed the 48-hour assessment schedule without assessor report. Automatic escalation trigger logged.',
+        checklist: [
+          { text: 'Accident dossier uploaded', verified: true },
+          { text: 'Client statement filed', verified: true },
+          { text: 'Provider assessor report', verified: false, pendingText: '2 days overdue' }
+        ]
+      },
+      {
+        id: 3,
+        source: 'client',
+        sourceType: 'client',
+        sender: 'Sipho Dlamini',
+        channel: 'Client Portal',
+        clientName: 'Sipho Dlamini',
+        caseId: '#REV-2026-09',
+        caseName: 'Annual Financial Review',
+        subject: 'Annual review questionnaire completed',
+        summary: '"I\'ve filled in the review information you asked for." Financial circumstances updated.',
+        intent: 'Annual Financial Review',
+        confidence: '94%',
+        signals: ['"filled review"', '"salary increase"', '"added beneficiary"'],
+        classification: 'NEEDS YOU',
+        statusKey: 'needs-you',
+        time: '1h ago',
+        isImmediate: true,
+        nextAction: 'Review updated circumstances & prepare consultation pack',
+        ctaText: 'Open review →',
+        messageQuote: '"Hi Qiniso, I completed the digital questionnaire this morning. Got a promotion at work and want to see if we should boost the retirement annuity."',
+        checklist: [
+          { text: 'Digital questionnaire submitted', verified: true },
+          { text: 'Income shift flagged (+12%)', verified: true },
+          { text: 'Section 10C tax limit check', verified: true },
+          { text: 'Adviser consultation notes', verified: false, pendingText: 'Qiniso review needed' }
+        ]
+      },
+      {
+        id: 4,
+        source: 'client',
+        sourceType: 'client',
+        sender: 'Naledi Mokoena',
+        channel: 'Email',
+        clientName: 'Naledi Mokoena',
+        caseId: 'Unlinked',
+        caseName: 'Needs Workflow Creation',
+        subject: 'Query on policy continuation if employment changes',
+        summary: '"Can we talk about what happens to my policy if I leave my job?" AI confidence: 78%.',
+        intent: 'Possible Circumstances Change',
+        confidence: '78%',
+        signals: ['"leave my job"', '"policy continuation"', '"consultation"'],
+        classification: 'REVIEW CLASSIFICATION',
+        statusKey: 'needs-you',
+        time: '2h ago',
+        isImmediate: true,
+        nextAction: 'Confirm classification & initiate consultation case',
+        ctaText: 'Confirm routing →',
+        messageQuote: '"Dear Qiniso, I am considering leaving my corporate position in October to consult. What happens to my group life and disability benefits? Can we set up 15 mins?"',
+        checklist: [
+          { text: 'Sender matched to active client', verified: true },
+          { text: 'Group scheme policy identified', verified: true },
+          { text: 'Workflow case assigned', verified: false, pendingText: 'Pending Qiniso confirmation' }
+        ]
+      },
+      {
+        id: 5,
+        source: 'client',
+        sourceType: 'client',
+        sender: 'Latoya Matai',
+        channel: 'Email',
+        clientName: 'Latoya Matai',
+        caseId: '#BD-2048',
+        caseName: 'Banking Details Update',
+        subject: 'New banking account (Request initiated)',
+        summary: 'Latoya has changed banks and wants debit order on Sanlam investment updated. Automated intake workflow running.',
+        intent: 'Banking Details Change',
+        confidence: '96%',
+        signals: ['"changed banks"', '"new debit order"', '"account details"'],
+        classification: 'AUTOMATED',
+        statusKey: 'automated',
+        time: '3h ago',
+        isImmediate: false,
+        nextAction: 'Waiting for client document upload (Self-service active)',
+        ctaText: 'View case →',
+        messageQuote: '"Hi Qiniso, changed my account from FNB to Standard Bank. Let me know what paperwork you need to adjust the Sanlam debit order."',
+        checklist: [
+          { text: 'Request classified automatically', verified: true },
+          { text: 'Case #BD-2048 created', verified: true },
+          { text: 'Upload link sent to Latoya', verified: true },
+          { text: 'Client bank statement upload', verified: true },
+          { text: 'Instruction generation', verified: true }
+        ]
+      },
+      {
+        id: 6,
+        source: 'provider',
+        sourceType: 'provider',
+        sender: 'Momentum Wealth',
+        channel: 'Provider EDI Feed',
+        clientName: 'Latoya Matai',
+        caseId: '#DOC-9021',
+        caseName: 'Vault Statement Filing',
+        subject: 'Monthly investment statement — Matai Family Trust',
+        summary: 'Routine provider confirmation received and attached to client record. No adviser action required.',
+        intent: 'Routine Valuation Statement',
+        confidence: '99%',
+        signals: ['"monthly statement"', '"valuation"', '"attached"'],
+        classification: 'INFORMATIONAL',
+        statusKey: 'informational',
+        time: '4h ago',
+        isImmediate: false,
+        nextAction: 'Filed automatically to Vault',
+        ctaText: 'View record',
+        messageQuote: 'Automated notification: Momentum Wealth monthly investment breakdown for August 2026 received via B2B secure stream. Matched to client portfolio #2719.',
+        checklist: [
+          { text: 'Document decrypted & indexed', verified: true },
+          { text: 'Portfolio balance updated (+1.4%)', verified: true },
+          { text: 'Filed in Client Vault', verified: true }
+        ]
+      },
+      {
+        id: 7,
+        source: 'client',
+        sourceType: 'client',
+        sender: 'Bongani Khumalo',
+        channel: 'Client Portal',
+        clientName: 'Bongani Khumalo',
+        caseId: '#RET-4190',
+        caseName: 'Retirement Advisory Request',
+        subject: 'Two-pot retirement system savings withdrawal enquiry',
+        summary: 'Query regarding withdrawal from savings pot. Automated tax simulation prepped.',
+        intent: 'Retirement Savings Withdrawal',
+        confidence: '88%',
+        signals: ['"two pot"', '"savings withdrawal"', '"tax rate"'],
+        classification: 'NEEDS YOU',
+        statusKey: 'needs-you',
+        time: '4h ago',
+        isImmediate: true,
+        nextAction: 'Advise on marginal tax bracket penalty impact',
+        ctaText: 'Open case →',
+        messageQuote: '"Can I draw R30,000 from my savings component before December? What tax will SARS take?"',
+        checklist: [
+          { text: 'Savings pot balance calculated', verified: true },
+          { text: 'SARS tax simulation prepped', verified: true },
+          { text: 'Adviser consultation needed', verified: false, pendingText: 'High tax penalty warning' }
+        ]
+      },
+      {
+        id: 8,
+        source: 'provider',
+        sourceType: 'provider',
+        sender: 'Old Mutual Corporate',
+        channel: 'Provider EDI Feed',
+        clientName: 'Karabo Pillay',
+        caseId: '#BEN-3104',
+        caseName: 'Beneficiary Nomination Update',
+        subject: 'Beneficiary nomination form pending signature',
+        summary: 'Form dispatched to client; waiting on digital signature before filing with provider.',
+        intent: 'Beneficiary Designation',
+        confidence: '95%',
+        signals: ['"beneficiary form"', '"pending signature"'],
+        classification: 'WAITING',
+        statusKey: 'waiting',
+        time: '5h ago',
+        isImmediate: false,
+        nextAction: 'Waiting on client digital signature',
+        ctaText: 'Check status',
+        messageQuote: 'Old Mutual Group Life: Beneficiary nomination document link accessed by client, pending final signature.',
+        checklist: [
+          { text: 'Form generated by system', verified: true },
+          { text: 'Dispatched via DocuSign', verified: true },
+          { text: 'Client signature', verified: false, pendingText: 'Waiting on client' }
+        ]
+      },
+      {
+        id: 9,
+        source: 'system',
+        sourceType: 'system',
+        sender: 'Compliance Sentinel',
+        channel: 'System Compliance Daemon',
+        clientName: 'Devan Naidoo',
+        caseId: '#CMP-1049',
+        caseName: 'Statutory FICA Refresh',
+        subject: 'FICA Address validation refresh required',
+        summary: 'Automated proof of residence upload link dispatched. 5 days remaining before restriction.',
+        intent: 'FICA Compliance Refresh',
+        confidence: '99%',
+        signals: ['"FICA"', '"proof of address"', '"schedule"'],
+        classification: 'AUTOMATED',
+        statusKey: 'automated',
+        time: '6h ago',
+        isImmediate: false,
+        nextAction: 'Auto-escalation in 48 hours',
+        ctaText: 'View timeline',
+        messageQuote: 'FICA Sentinel: Proof of residence is 11 months old. Client dispatched self-service upload token via secure SMS.',
+        checklist: [
+          { text: 'FICA expiry detected', verified: true },
+          { text: 'Tokenized upload link sent', verified: true },
+          { text: 'Document upload', verified: false, pendingText: '5 days remaining' }
+        ]
+      }
+    ];
+
+    let currentFilter = 'all';
+    let activeDrawerItem = null;
+
+    function renderStream(filter = 'all', searchQuery = '') {
+      currentFilter = filter;
+      const listEl = document.getElementById('streamCardList');
+      const caughtUpCard = document.getElementById('caughtUpCard');
+      listEl.innerHTML = '';
+
+      const query = searchQuery.trim().toLowerCase();
+
+      const filtered = TRIAGE_ITEMS.filter(item => {
+        let matchesFilter = true;
+        if (filter === 'needs-me') {
+          matchesFilter = (item.statusKey === 'needs-you' && item.isImmediate);
+        } else if (filter === 'urgent') {
+          matchesFilter = (item.statusKey === 'urgent');
+        } else if (filter === 'client') {
+          matchesFilter = (item.sourceType === 'client');
+        } else if (filter === 'provider') {
+          matchesFilter = (item.sourceType === 'provider');
+        } else if (filter === 'automated') {
+          matchesFilter = (item.statusKey === 'automated');
+        } else if (filter === 'informational') {
+          matchesFilter = (item.statusKey === 'informational');
+        } else if (filter === 'waiting') {
+          matchesFilter = (item.statusKey === 'waiting');
+        }
+
+        let matchesSearch = true;
+        if (query) {
+          matchesSearch = (
+            item.sender.toLowerCase().includes(query) ||
+            item.clientName.toLowerCase().includes(query) ||
+            item.subject.toLowerCase().includes(query) ||
+            item.caseId.toLowerCase().includes(query) ||
+            item.intent.toLowerCase().includes(query)
+          );
+        }
+
+        return matchesFilter && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        caughtUpCard.style.display = 'flex';
+      } else {
+        caughtUpCard.style.display = 'none';
+      }
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = `triage-row-card ${getRowModifier(item)}`;
+        card.onclick = () => openItemDetail(item.id);
+
+        card.innerHTML = `
+          <!-- Tier 1: Header Line -->
+          <div class="card-meta-header">
+            <div class="meta-left-group">
+              <div class="source-avatar-icon ${getSourceIconClass(item)}">
+                <i data-lucide="${getSourceLucideIcon(item)}" style="width: 14px; height: 14px;"></i>
+              </div>
+              <span class="sender-title">${item.sender}</span>
+              <span class="channel-source-tag">${item.sourceType}</span>
+              <span class="linked-case-pill">
+                <i data-lucide="briefcase" style="width: 9px; height: 9px;"></i>
+                <span>${item.caseId} · ${item.clientName}</span>
+              </span>
+            </div>
+
+            <div class="meta-right-group">
+              <span class="class-badge ${getClassBadgeModifier(item)}">
+                ${getClassBadgeIcon(item)}
+                <span>${item.classification}</span>
+              </span>
+              <span class="row-time-text">${item.time}</span>
+            </div>
+          </div>
+
+          <!-- Tier 2: Subject & Summary -->
+          <div class="card-body-content">
+            <div class="subject-headline">${item.subject}</div>
+            <div class="summary-description">${item.summary}</div>
+          </div>
+
+          <!-- Tier 3: Operational Footer -->
+          <div class="card-operational-footer">
+            <div class="next-action-statement">
+              <i data-lucide="corner-down-right" style="width: 11px; height: 11px; color: var(--accent-coral);"></i>
+              <span>Next: <strong>${item.nextAction}</strong></span>
+            </div>
+
+            <button class="btn-action-trigger" onclick="event.stopPropagation(); openItemDetail(${item.id})">
+              <span>${item.ctaText}</span>
+            </button>
+          </div>
+        `;
+
+        listEl.appendChild(card);
+      });
+
+      lucide.createIcons();
+    }
+
+    function getRowModifier(item) {
+      if (item.statusKey === 'urgent') return 'is-urgent';
+      if (item.statusKey === 'needs-you') return 'is-needs-you';
+      if (item.statusKey === 'automated') return 'is-automated';
+      if (item.statusKey === 'informational') return 'is-informational';
+      return '';
+    }
+
+    function getSourceIconClass(item) {
+      if (item.statusKey === 'urgent') return 'urgent';
+      if (item.sourceType === 'client') return 'client';
+      if (item.sourceType === 'provider') return 'provider';
+      if (item.sourceType === 'system') return 'system';
+      return '';
+    }
+
+    function getSourceLucideIcon(item) {
+      if (item.statusKey === 'urgent') return 'alert-circle';
+      if (item.sourceType === 'client') return 'user';
+      if (item.sourceType === 'provider') return 'building-2';
+      if (item.sourceType === 'system') return 'cpu';
+      return 'mail';
+    }
+
+    function getClassBadgeModifier(item) {
+      if (item.statusKey === 'urgent') return 'urgent';
+      if (item.statusKey === 'needs-you') {
+        return item.classification === 'REVIEW CLASSIFICATION' ? 'review-class' : 'needs-you';
+      }
+      if (item.statusKey === 'automated') return 'automated';
+      if (item.statusKey === 'waiting') return 'waiting';
+      return 'informational';
+    }
+
+    function getClassBadgeIcon(item) {
+      if (item.statusKey === 'urgent') return '<i data-lucide="flame" style="width: 10px; height: 10px;"></i>';
+      if (item.statusKey === 'needs-you') return '<i data-lucide="user-check" style="width: 10px; height: 10px;"></i>';
+      if (item.statusKey === 'automated') return '<i data-lucide="zap" style="width: 10px; height: 10px;"></i>';
+      if (item.statusKey === 'waiting') return '<i data-lucide="hourglass" style="width: 10px; height: 10px;"></i>';
+      return '<i data-lucide="check" style="width: 10px; height: 10px;"></i>';
+    }
+
+    function setFilter(filterType) {
+      const pills = document.querySelectorAll('.filter-pill');
+      pills.forEach(p => p.classList.remove('active'));
+
+      if (filterType === 'all') document.getElementById('pillAll')?.classList.add('active');
+      else if (filterType === 'needs-me') document.getElementById('pillNeedsMe')?.classList.add('active');
+      else if (filterType === 'urgent') document.getElementById('pillUrgent')?.classList.add('active');
+      else if (filterType === 'client') document.getElementById('pillClients')?.classList.add('active');
+      else if (filterType === 'provider') document.getElementById('pillProviders')?.classList.add('active');
+      else if (filterType === 'automated') document.getElementById('pillAutomated')?.classList.add('active');
+      else if (filterType === 'informational') document.getElementById('pillInformational')?.classList.add('active');
+
+      const searchVal = document.getElementById('streamSearchInput').value;
+      renderStream(filterType, searchVal);
+
+      if (filterType === 'needs-me') {
+        showToast('Filtered to 6 items requiring immediate adviser attention.');
+      }
+    }
+
+    function handleSearch(val) {
+      renderStream(currentFilter, val);
+    }
+
+    function openItemDetail(itemId) {
+      const item = TRIAGE_ITEMS.find(i => i.id === itemId);
+      if (!item) return;
+      activeDrawerItem = item;
+
+      document.getElementById('drawerClientName').textContent = item.clientName;
+      document.getElementById('drawerChannel').textContent = `Channel: ${item.channel}`;
+      document.getElementById('drawerCaseId').textContent = `Case: ${item.caseId} (${item.caseName})`;
+      document.getElementById('drawerReceivedTime').textContent = item.time;
+      document.getElementById('drawerOriginalMessage').textContent = item.messageQuote;
+      document.getElementById('drawerSystemSummary').textContent = item.summary;
+      document.getElementById('drawerDetectedIntent').textContent = item.intent;
+      document.getElementById('drawerConfidenceBadge').textContent = `${item.confidence} Confidence`;
+
+      const signalsEl = document.getElementById('drawerSignalsList');
+      signalsEl.innerHTML = '';
+      item.signals.forEach(sig => {
+        const chip = document.createElement('span');
+        chip.className = 'signal-chip';
+        chip.textContent = sig;
+        signalsEl.appendChild(chip);
+      });
+
+      const stepsEl = document.getElementById('drawerPrepSteps');
+      stepsEl.innerHTML = '';
+      item.checklist.forEach(chk => {
+        const row = document.createElement('div');
+        row.className = `prep-step-item ${chk.verified ? 'verified' : 'pending'}`;
+        row.innerHTML = `
+          <span>${chk.text}</span>
+          <span>${chk.verified ? '✓ Complete' : '● ' + chk.pendingText}</span>
+        `;
+        stepsEl.appendChild(row);
+      });
+
+      if (item.statusKey === 'needs-you') {
+        document.getElementById('drawerPrepHeading').textContent = 'Why This Needs Qiniso';
+        document.getElementById('drawerPrimaryBtnText').textContent = item.classification === 'REVIEW CLASSIFICATION' ? 'Confirm Routing & Create Case' : 'Review in Case Detail';
+      } else if (item.statusKey === 'urgent') {
+        document.getElementById('drawerPrepHeading').textContent = 'Urgent Exception Block';
+        document.getElementById('drawerPrimaryBtnText').textContent = 'Open Claim Dossier';
+      } else {
+        document.getElementById('drawerPrepHeading').textContent = 'System Automation History';
+        document.getElementById('drawerPrimaryBtnText').textContent = 'Open Case Dossier';
+      }
+
+      document.getElementById('reclassifySelect').value = item.intent;
+
+      document.getElementById('drawerBackdrop').classList.add('open');
+      document.getElementById('detailDrawer').classList.add('open');
+      lucide.createIcons();
+    }
+
+    function closeDrawer() {
+      document.getElementById('drawerBackdrop').classList.remove('open');
+      document.getElementById('detailDrawer').classList.remove('open');
+      activeDrawerItem = null;
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDrawer();
+    });
+
+    function applyReclassification() {
+      if (!activeDrawerItem) return;
+      const selectVal = document.getElementById('reclassifySelect').value;
+      activeDrawerItem.intent = selectVal;
+      activeDrawerItem.classification = 'NEEDS YOU';
+      activeDrawerItem.statusKey = 'needs-you';
+      activeDrawerItem.isImmediate = true;
+      activeDrawerItem.summary = `Reclassified by Qiniso to ${selectVal}. Case workflow re-routed.`;
+
+      showToast(`Routing updated: Assigned to ${selectVal}`);
+      closeDrawer();
+      renderStream(currentFilter);
+    }
+
+    function handlePrimaryDrawerAction() {
+      if (!activeDrawerItem) return;
+
+      if (activeDrawerItem.classification === 'REVIEW CLASSIFICATION') {
+        activeDrawerItem.classification = 'NEEDS YOU';
+        activeDrawerItem.caseId = '#CR-2051';
+        activeDrawerItem.caseName = 'Circumstances Change Consultation';
+        activeDrawerItem.summary = 'Case #CR-2051 created. Consultation slot prepared for Naledi Mokoena.';
+        activeDrawerItem.nextAction = 'Review consultation agenda';
+        showToast('Case #CR-2051 created · Workflow initiated');
+        closeDrawer();
+        renderStream(currentFilter);
+        return;
+      }
+
+      showToast(`Opening Case Detail for ${activeDrawerItem.caseId}...`);
+      setTimeout(() => {
+        closeDrawer();
+      }, 500);
+    }
+
+    function handleOpenCase() {
+      if (!activeDrawerItem) return;
+      showToast(`Navigating to Case ${activeDrawerItem.caseId}...`);
+    }
+
+    function handleViewClient() {
+      if (!activeDrawerItem) return;
+      showToast(`Opening Client 360 Record for ${activeDrawerItem.clientName}...`);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('actionToast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.add('active');
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, 2400);
+    }
+
+    renderStream('all');
+  </script>
+</body>
+</html>

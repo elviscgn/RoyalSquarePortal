@@ -1,0 +1,31 @@
+{
+  "name": "royal-square-client-portal",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": { "node": ">=20.17.0" },
+  "scripts": {
+    "icons": "node scripts/build-prototype-icons.mjs",
+    "dev": "npm run icons && node node_modules/vite/bin/vite.js",
+    "build": "npm run icons && node node_modules/typescript/bin/tsc -b && node node_modules/vite/bin/vite.js build",
+    "test": "node node_modules/vitest/vitest.mjs run",
+    "test:watch": "node node_modules/vitest/vitest.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "latest"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "latest",
+    "@testing-library/react": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@vitejs/plugin-react": "latest",
+    "jsdom": "latest",
+    "typescript": "~5.8.3",
+    "vite": "latest",
+    "vitest": "latest"
+  }
+}

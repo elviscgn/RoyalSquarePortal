@@ -1,0 +1,4143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Royal Square — Documents, Forms & Secure Vault</title>
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Lucide Icons CDN -->
+    <script src="./lucide-local.js"></script>
+
+    <style>
+      /* ==========================================================================
+       1. SYSTEM TOKENS (ORGANIC, BORDERLESS LUXURY FINTECH)
+       ========================================================================== */
+      :root {
+        --bg-page: #f4f3ee; /* Warm creamy neutral canvas */
+        --bg-card: #ffffff; /* Crisp white surface */
+        --bg-card-subtle: #faf9f5; /* Tone-on-tone sub-card surface */
+        --bg-card-hover: #f6f4ee;
+
+        --text-primary: #171615; /* Deep near-black */
+        --text-secondary: #87837c; /* Warm muted neutral */
+        --text-subtle: #aba69e; /* Light caption neutral */
+
+        --accent-coral: #e85d3f; /* Signature terracotta coral */
+        --accent-coral-hover: #d84f31;
+        --accent-coral-soft: #fdf0ed; /* Pale coral pill tint */
+        --accent-coral-glow: rgba(232, 93, 63, 0.2);
+
+        --status-green: #2b7a48;
+        --status-green-soft: #edf7f1;
+        --status-amber: #b87314;
+        --status-amber-soft: #fef6ec;
+
+        --radius-card: 26px;
+        --radius-subcard: 16px;
+        --radius-pill: 9999px;
+
+        --shadow-card:
+          0 4px 24px rgba(0, 0, 0, 0.016), 0 1px 3px rgba(0, 0, 0, 0.01);
+        --shadow-hover:
+          0 12px 34px rgba(0, 0, 0, 0.038), 0 2px 6px rgba(0, 0, 0, 0.018);
+        --shadow-button: 0 2px 8px rgba(0, 0, 0, 0.025);
+        --shadow-drawer:
+          0 20px 50px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+        --shadow-detail:
+          -16px 0 48px rgba(0, 0, 0, 0.09), -4px 0 16px rgba(0, 0, 0, 0.03);
+        --shadow-modal:
+          0 24px 64px rgba(0, 0, 0, 0.16), 0 4px 16px rgba(0, 0, 0, 0.05);
+
+        --font-main:
+          "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-page);
+        color: var(--text-primary);
+        font-family: var(--font-main);
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 24px 38px 48px;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      body.drawer-locked {
+        overflow: hidden;
+      }
+
+      button,
+      input,
+      a,
+      select {
+        font-family: inherit;
+      }
+
+      button {
+        cursor: pointer;
+        border: none;
+        background: transparent;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .app-viewport {
+        width: 100%;
+        max-width: 1420px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        position: relative;
+        z-index: 1;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      /* ==========================================================================
+       2. TOP HEADER (IDENTICAL APPROVED BRAND FOUNDATION)
+       ========================================================================== */
+      .top-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        height: 46px;
+      }
+
+      .brand-cluster {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+
+      .btn-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--bg-card);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-primary);
+        box-shadow: var(--shadow-button);
+        transition: all 0.15s ease;
+      }
+
+      .btn-circle:hover {
+        background: #faf9f6;
+        transform: scale(1.03);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .brand-logo-mark {
+        width: 40px;
+        height: 40px;
+        border-radius: 13px;
+        background: #FFFFFF;
+        overflow: hidden;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 13px;
+        letter-spacing: -0.5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+      }
+
+      .brand-logo-mark img { transform: scale(1.6); }
+
+      .brand-titles {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+      }
+
+      .brand-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--text-primary);
+        letter-spacing: -0.2px;
+      }
+
+      .brand-subtitle {
+        font-size: 11px;
+        color: var(--text-secondary);
+      }
+
+      .header-center-search {
+        flex: 1;
+        max-width: 320px;
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .header-center-search input {
+        width: 100%;
+        height: 40px;
+        background: var(--bg-card);
+        border: none;
+        border-radius: var(--radius-pill);
+        padding: 0 18px 0 42px;
+        font-size: 11.5px;
+        color: var(--text-primary);
+        outline: none;
+        box-shadow: var(--shadow-button);
+        transition: all 0.2s ease;
+      }
+
+      .header-center-search input::placeholder {
+        color: var(--text-subtle);
+      }
+
+      .header-center-search input:focus {
+        box-shadow: 0 4px 16px var(--accent-coral-glow);
+      }
+
+      .header-center-search .search-icon {
+        position: absolute;
+        left: 15px;
+        right: auto;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 15px;
+        height: 15px;
+        color: var(--text-subtle);
+        pointer-events: none;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+
+      .mode-toggle-pill {
+        height: 40px;
+        background: var(--bg-card);
+        border: none;
+        border-radius: var(--radius-pill);
+        padding: 3px 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: var(--shadow-button);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .mode-toggle-pill:hover {
+        background: #faf8f4;
+      }
+
+      .mode-toggle-pill.active {
+        background: var(--accent-coral-soft);
+      }
+
+      .mode-icon {
+        color: var(--text-secondary);
+        transition: color 0.15s;
+      }
+
+      .mode-toggle-pill.active .mode-icon {
+        color: var(--accent-coral);
+      }
+
+      .mode-label-text {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .toggle-switch-track {
+        width: 24px;
+        height: 14px;
+        border-radius: var(--radius-pill);
+        background: #e5e1d7;
+        position: relative;
+        transition: background 0.2s ease;
+      }
+
+      .mode-toggle-pill.active .toggle-switch-track {
+        background: var(--accent-coral);
+      }
+
+      .toggle-switch-thumb {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #ffffff;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      .mode-toggle-pill.active .toggle-switch-thumb {
+        transform: translateX(10px);
+      }
+
+      .btn-lang {
+        height: 40px;
+        padding: 0 13px;
+        border-radius: var(--radius-pill);
+        background: var(--bg-card);
+        border: none;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        box-shadow: var(--shadow-button);
+        transition: background 0.15s;
+      }
+
+      .notif-btn {
+        position: relative;
+      }
+
+      .notif-dot {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent-coral);
+        border: 1.5px solid #ffffff;
+      }
+
+      .profile-pill-topright {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--bg-card);
+        border: none;
+        padding: 4px 14px 4px 5px;
+        border-radius: var(--radius-pill);
+        box-shadow: var(--shadow-button);
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .profile-pill-topright:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .client-avatar-wrapper {
+        position: relative;
+      }
+
+      .client-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      }
+
+      .avatar-status-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #2e7d4c;
+        border: 2px solid #ffffff;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+      }
+
+      .client-meta {
+        line-height: 1.2;
+        text-align: left;
+      }
+
+      .client-name {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .client-role {
+        font-size: 9.5px;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .tier-badge {
+        font-size: 8px;
+        font-weight: 800;
+        background: #181716;
+        color: #ffffff;
+        padding: 1px 5px;
+        border-radius: 4px;
+        letter-spacing: 0.3px;
+      }
+
+      /* ==========================================================================
+       3. PAGE INTRO & PRIMARY UPLOAD CTA
+       ========================================================================== */
+      .page-intro-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 6px 4px 2px;
+      }
+
+      .intro-title-block {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .intro-eyebrow {
+        font-size: 10.5px;
+        font-weight: 800;
+        letter-spacing: 0.8px;
+        color: var(--accent-coral);
+        text-transform: uppercase;
+      }
+
+      .intro-headline {
+        font-size: 29px;
+        font-weight: 400;
+        letter-spacing: -0.6px;
+        color: var(--text-primary);
+        line-height: 1.15;
+      }
+
+      .intro-headline strong {
+        font-weight: 700;
+      }
+
+      .intro-supporting {
+        font-size: 13.5px;
+        color: var(--text-secondary);
+        font-weight: 400;
+      }
+
+      .intro-right-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+
+      .intro-stats-cluster {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .stat-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--bg-card);
+        padding: 7px 15px;
+        border-radius: var(--radius-pill);
+        box-shadow: var(--shadow-button);
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .stat-pill.attention {
+        background: var(--accent-coral-soft);
+        color: var(--accent-coral);
+        font-weight: 700;
+      }
+
+      .stat-indicator-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #2e7d4c;
+      }
+
+      .stat-indicator-dot.pulsing {
+        background: var(--accent-coral);
+        box-shadow: 0 0 0 3px rgba(232, 93, 63, 0.18);
+        animation: pulse-ring 1.8s infinite;
+      }
+
+      @keyframes pulse-ring {
+        0% {
+          box-shadow: 0 0 0 0 rgba(232, 93, 63, 0.35);
+        }
+        70% {
+          box-shadow: 0 0 0 6px rgba(232, 93, 63, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(232, 93, 63, 0);
+        }
+      }
+
+      .btn-coral-upload {
+        height: 42px;
+        padding: 0 18px 0 20px;
+        border-radius: var(--radius-pill);
+        background: var(--accent-coral);
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 14px var(--accent-coral-glow);
+        transition: all 0.15s ease;
+      }
+
+      .btn-coral-upload:hover {
+        background: var(--accent-coral-hover);
+        transform: translateY(-1px);
+      }
+
+      /* ==========================================================================
+       4. SECTION HEADERS & CARD BASICS
+       ========================================================================== */
+      .section-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .section-eyebrow-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 4px;
+      }
+
+      .section-label-tag {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.7px;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .section-label-tag.urgent {
+        color: var(--accent-coral);
+      }
+
+      /* Restrained Status Pills */
+      .pill-state {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 3.5px 10px;
+        border-radius: var(--radius-pill);
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        letter-spacing: 0.2px;
+        white-space: nowrap;
+      }
+
+      .pill-state.coral {
+        background: var(--accent-coral-soft);
+        color: var(--accent-coral);
+      }
+
+      .pill-state.green {
+        background: var(--status-green-soft);
+        color: var(--status-green);
+      }
+
+      .pill-state.neutral {
+        background: #efece6;
+        color: var(--text-secondary);
+      }
+
+      .pill-state.dark {
+        background: #181716;
+        color: #ffffff;
+      }
+
+      .state-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      /* ==========================================================================
+       5. TOP PRIORITY: NEEDS YOUR ATTENTION (3 CARDS)
+       ========================================================================== */
+      .attention-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+
+      .attention-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        padding: 22px 22px 20px;
+        box-shadow: var(--shadow-card);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 16px;
+        cursor: pointer;
+        transition: all 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+        overflow: hidden;
+      }
+
+      .attention-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--accent-coral);
+      }
+
+      .attention-card:hover {
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-2px);
+      }
+
+      .attention-card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .attention-icon-box {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: var(--accent-coral-soft);
+        color: var(--accent-coral);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .attention-title-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-top: 4px;
+      }
+
+      .attention-kind {
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: var(--accent-coral);
+      }
+
+      .attention-title {
+        font-size: 16.5px;
+        font-weight: 700;
+        color: var(--text-primary);
+        letter-spacing: -0.2px;
+        line-height: 1.25;
+      }
+
+      .attention-copy {
+        font-size: 12px;
+        color: var(--text-secondary);
+        line-height: 1.45;
+      }
+
+      .attention-meta-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 10.5px;
+        color: var(--text-secondary);
+        background: var(--bg-card-subtle);
+        padding: 6px 10px;
+        border-radius: 10px;
+        font-weight: 600;
+      }
+
+      .attention-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 10px;
+        border-top: 1px solid #faf6ee;
+      }
+
+      .btn-action-quiet-link {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--accent-coral);
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: gap 0.15s ease;
+      }
+
+      .attention-card:hover .btn-action-quiet-link {
+        gap: 8px;
+      }
+
+      /* ==========================================================================
+       6. ENTER ONCE MODULE (VERIFIED REUSABLE INFORMATION)
+       ========================================================================== */
+      .enter-once-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        padding: 18px 24px;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      .enter-once-left {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        max-width: 580px;
+      }
+
+      .enter-once-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: var(--status-green-soft);
+        color: var(--status-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .enter-once-text {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .enter-once-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .enter-once-sub {
+        font-size: 11.5px;
+        color: var(--text-secondary);
+        line-height: 1.4;
+      }
+
+      .enter-once-pills-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .verified-data-pill {
+        background: var(--bg-card-subtle);
+        border-radius: var(--radius-pill);
+        padding: 5px 12px;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .verified-data-pill i {
+        color: var(--status-green);
+        width: 12px;
+        height: 12px;
+      }
+
+      .btn-review-details {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--accent-coral);
+        padding: 8px 16px;
+        border-radius: var(--radius-pill);
+        background: var(--accent-coral-soft);
+        white-space: nowrap;
+        transition: all 0.15s ease;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .btn-review-details:hover {
+        background: #fce6df;
+      }
+
+      /* ==========================================================================
+       7. OFFICIAL ROYAL SQUARE FORMS (DISTINCT FORMAL CARDS)
+       ========================================================================== */
+      .forms-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+
+      .form-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        padding: 22px;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 16px;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .form-card:hover {
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-2px);
+      }
+
+      .form-card-top {
+        display: flex;
+        gap: 14px;
+      }
+
+      /* Formal Document Preview Thumbnail */
+      .form-doc-thumbnail {
+        width: 54px;
+        height: 68px;
+        border-radius: 10px;
+        background: #faf9f6;
+        border: 1px solid #ece7de;
+        padding: 6px 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-shrink: 0;
+        position: relative;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+      }
+
+      .thumb-rs-seal {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        background: #181716;
+        color: #ffffff;
+        font-size: 7px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .thumb-dummy-lines {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .dummy-line {
+        height: 2.5px;
+        border-radius: 2px;
+        background: #e5dfd4;
+        width: 100%;
+      }
+
+      .dummy-line.short {
+        width: 65%;
+      }
+
+      .dummy-stamp-pill {
+        font-size: 5.5px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        text-align: center;
+        border-radius: 2px;
+        padding: 1px 0;
+      }
+
+      .dummy-stamp-pill.signed {
+        background: var(--status-green-soft);
+        color: var(--status-green);
+      }
+
+      .dummy-stamp-pill.pending {
+        background: var(--accent-coral-soft);
+        color: var(--accent-coral);
+      }
+
+      .form-info-block {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+      }
+
+      .form-badge-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+      }
+
+      .official-tag {
+        font-size: 8.5px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .form-title {
+        font-size: 14.5px;
+        font-weight: 700;
+        color: var(--text-primary);
+        letter-spacing: -0.2px;
+        line-height: 1.25;
+      }
+
+      .form-meta-adviser {
+        font-size: 11px;
+        color: var(--text-secondary);
+        margin-top: 2px;
+      }
+
+      .form-meta-adviser strong {
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+
+      .form-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 10px;
+        border-top: 1px solid #faf6ee;
+        margin-top: 2px;
+      }
+
+      .form-date-ver {
+        font-size: 10.5px;
+        color: var(--text-subtle);
+        font-weight: 600;
+      }
+
+      .form-actions-cluster {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn-form-quiet {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        padding: 4px 10px;
+        border-radius: var(--radius-pill);
+        transition: all 0.15s;
+      }
+
+      .btn-form-quiet:hover {
+        background: var(--bg-card-hover);
+        color: var(--text-primary);
+      }
+
+      .btn-form-accent {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--accent-coral);
+        padding: 4px 11px;
+        border-radius: var(--radius-pill);
+        background: var(--accent-coral-soft);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.15s;
+      }
+
+      .btn-form-accent:hover {
+        background: #fce5df;
+      }
+
+      /* ==========================================================================
+       8. VAULT FILTERS + "MY DOCUMENTS" GRID
+       ========================================================================== */
+      .vault-control-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 4px;
+      }
+
+      .vault-filter-pills {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--bg-card);
+        padding: 4px;
+        border-radius: var(--radius-pill);
+        box-shadow: var(--shadow-button);
+      }
+
+      .vault-pill-btn {
+        padding: 6px 14px;
+        border-radius: var(--radius-pill);
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        transition: all 0.15s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .vault-pill-btn:hover {
+        color: var(--text-primary);
+        background: var(--bg-card-hover);
+      }
+
+      .vault-pill-btn.active {
+        background: #181716;
+        color: #ffffff;
+        font-weight: 700;
+      }
+
+      .vault-count-bubble {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 16px;
+        min-width: 16px;
+        padding: 0 5px;
+        border-radius: var(--radius-pill);
+        font-size: 9px;
+        background: rgba(255, 255, 255, 0.22);
+      }
+
+      .vault-pill-btn:not(.active) .vault-count-bubble {
+        background: #ece7de;
+        color: var(--text-primary);
+      }
+
+      .vault-search-wrap {
+        position: relative;
+        width: 280px;
+      }
+
+      .vault-search-wrap input {
+        width: 100%;
+        height: 38px;
+        border-radius: var(--radius-pill);
+        background: var(--bg-card);
+        border: none;
+        padding: 0 16px 0 34px;
+        font-size: 11.5px;
+        color: var(--text-primary);
+        box-shadow: var(--shadow-button);
+        outline: none;
+        transition: all 0.2s ease;
+      }
+
+      .vault-search-wrap input:focus {
+        box-shadow: 0 4px 16px var(--accent-coral-glow);
+      }
+
+      .vault-search-wrap svg {
+        position: absolute;
+        left: 12px;
+        top: 12px;
+        width: 14px;
+        height: 14px;
+        color: var(--text-subtle);
+      }
+
+      .documents-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+
+      .doc-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        padding: 20px 22px;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 14px;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .doc-card:hover {
+        box-shadow: var(--shadow-hover);
+        transform: translateY(-2px);
+      }
+
+      .doc-card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .doc-type-icon-box {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: var(--bg-card-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent-coral);
+        flex-shrink: 0;
+      }
+
+      .doc-card-body {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .doc-category-tag {
+        font-size: 9.5px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: var(--text-subtle);
+      }
+
+      .doc-card-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text-primary);
+        letter-spacing: -0.2px;
+      }
+
+      .doc-card-sub {
+        font-size: 11.5px;
+        color: var(--text-secondary);
+        line-height: 1.4;
+      }
+
+      .doc-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 10px;
+        border-top: 1px solid #faf6ee;
+      }
+
+      .doc-linked-workflow {
+        font-size: 10px;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 600;
+      }
+
+      .doc-cta-link {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--accent-coral);
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: gap 0.15s;
+      }
+
+      .doc-card:hover .doc-cta-link {
+        gap: 6px;
+      }
+
+      /* ==========================================================================
+       9. TWO-COLUMN SPLIT: AUTOMATED REMINDERS & SECURE VAULT / POPIA
+       ========================================================================== */
+      .reminders-and-trust-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 1fr;
+        gap: 20px;
+        align-items: stretch;
+      }
+
+      .reminders-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        padding: 22px 24px;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        justify-content: space-between;
+      }
+
+      .reminders-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .reminder-row {
+        background: var(--bg-card-subtle);
+        border-radius: 12px;
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: background 0.15s;
+      }
+
+      .reminder-row:hover {
+        background: var(--bg-card-hover);
+      }
+
+      .reminder-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .reminder-icon {
+        width: 26px;
+        height: 26px;
+        border-radius: 8px;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent-coral);
+        flex-shrink: 0;
+      }
+
+      .reminder-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .reminder-due {
+        font-size: 10.5px;
+        color: var(--text-secondary);
+        margin-top: 1px;
+      }
+
+      .reminder-recipient-pill {
+        font-size: 9.5px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: var(--radius-pill);
+        background: #ffffff;
+        color: var(--text-primary);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      /* Trust / POPIA module */
+      .trust-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        padding: 22px 24px;
+        box-shadow: var(--shadow-card);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      .trust-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .trust-icon-box {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: var(--status-green-soft);
+        color: var(--status-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .trust-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--text-primary);
+        letter-spacing: -0.2px;
+      }
+
+      .trust-sub {
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: var(--status-green);
+      }
+
+      .trust-copy {
+        font-size: 12px;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      .trust-pillars-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+
+      .trust-pillar-item {
+        background: var(--bg-card-subtle);
+        border-radius: 10px;
+        padding: 8px 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        font-size: 10.5px;
+      }
+
+      .trust-pillar-item strong {
+        color: var(--text-primary);
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .trust-pillar-item span {
+        color: var(--text-secondary);
+        font-size: 9.5px;
+      }
+
+      /* ==========================================================================
+       10. SIMPLE MODE BEHAVIOR
+       ========================================================================== */
+      body.simple-mode .enter-once-card,
+      body.simple-mode .reminders-and-trust-grid,
+      body.simple-mode .vault-control-row,
+      body.simple-mode .doc-linked-workflow,
+      body.simple-mode .form-date-ver,
+      body.simple-mode .official-tag,
+      body.simple-mode .attention-meta-bar,
+      body.simple-mode .header-center-search {
+        display: none !important;
+      }
+
+      body.simple-mode .attention-grid,
+      body.simple-mode .forms-grid,
+      body.simple-mode .documents-grid {
+        grid-template-columns: 1fr;
+      }
+
+      body.simple-mode .simple-summary-tag {
+        display: block !important;
+        background: var(--bg-card-subtle);
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+
+      .simple-summary-tag {
+        display: none;
+      }
+
+      /* ==========================================================================
+       11. DOCUMENT / FORM DETAIL PREVIEW SIDE PANEL (DRAWER FROM RIGHT)
+       ========================================================================== */
+      .detail-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(23, 22, 21, 0.28);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        z-index: 1001;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.28s ease;
+      }
+
+      .detail-backdrop.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .detail-drawer {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        bottom: 16px;
+        width: 480px;
+        max-width: calc(100vw - 32px);
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-detail);
+        z-index: 1002;
+        transform: translateX(calc(100% + 24px));
+        transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding: 26px 24px;
+        overflow-y: auto;
+        scrollbar-width: none;
+      }
+
+      .detail-drawer::-webkit-scrollbar {
+        display: none;
+      }
+
+      .detail-drawer.open {
+        transform: translateX(0);
+      }
+
+      .drawer-top-action-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #f0ece4;
+      }
+
+      .drawer-doc-code {
+        font-size: 10.5px;
+        font-weight: 800;
+        background: var(--bg-card-subtle);
+        padding: 3px 9px;
+        border-radius: var(--radius-pill);
+        color: var(--text-secondary);
+        letter-spacing: 0.5px;
+      }
+
+      .detail-headline-block {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .detail-title {
+        font-size: 21px;
+        font-weight: 700;
+        color: var(--text-primary);
+        letter-spacing: -0.3px;
+      }
+
+      .detail-meta-tags {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .detail-section-card {
+        background: var(--bg-card-subtle);
+        border-radius: var(--radius-subcard);
+        padding: 16px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .detail-section-kicker {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: var(--accent-coral);
+      }
+
+      .detail-step-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .detail-step-desc {
+        font-size: 12px;
+        color: var(--text-secondary);
+        line-height: 1.45;
+      }
+
+      .verification-checklist {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .verification-check-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #ffffff;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-size: 11.5px;
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+
+      .verification-check-item i {
+        color: var(--status-green);
+        width: 14px;
+        height: 14px;
+      }
+
+      .activity-feed-list {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .activity-feed-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 11px;
+        padding-bottom: 6px;
+        border-bottom: 1px dashed #ece7de;
+      }
+
+      .activity-time {
+        color: var(--text-subtle);
+        font-weight: 600;
+      }
+
+      .activity-desc {
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+
+      .drawer-action-buttons {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 6px;
+      }
+
+      .btn-drawer-primary {
+        flex: 1;
+        height: 40px;
+        background: var(--accent-coral);
+        color: #ffffff;
+        border-radius: var(--radius-pill);
+        font-size: 12px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        box-shadow: 0 4px 14px var(--accent-coral-glow);
+        transition: background 0.15s;
+      }
+
+      .btn-drawer-primary:hover {
+        background: var(--accent-coral-hover);
+      }
+
+      .btn-drawer-subtle {
+        height: 40px;
+        padding: 0 16px;
+        background: var(--bg-card-subtle);
+        color: var(--text-primary);
+        border-radius: var(--radius-pill);
+        font-size: 12px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.15s;
+      }
+
+      .btn-drawer-subtle:hover {
+        background: #ede8df;
+      }
+
+      /* ==========================================================================
+       12. UPLOAD MODAL (AUTHENTIC CLASSIFICATION WORKFLOW)
+       ========================================================================== */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(23, 22, 21, 0.35);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        z-index: 1020;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.24s ease;
+      }
+
+      .modal-backdrop.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .upload-modal-window {
+        width: 100%;
+        max-width: 520px;
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-modal);
+        padding: 28px 28px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        transform: translateY(16px) scale(0.98);
+        transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .modal-backdrop.open .upload-modal-window {
+        transform: translateY(0) scale(1);
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .modal-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-primary);
+        letter-spacing: -0.2px;
+      }
+
+      .upload-dropzone {
+        border: 2px dashed #e0dbd0;
+        border-radius: var(--radius-subcard);
+        padding: 32px 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 10px;
+        background: var(--bg-card-subtle);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .upload-dropzone:hover {
+        border-color: var(--accent-coral);
+        background: var(--accent-coral-soft);
+      }
+
+      .dropzone-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent-coral);
+        box-shadow: var(--shadow-button);
+      }
+
+      .dropzone-main-text {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .dropzone-sub-text {
+        font-size: 11px;
+        color: var(--text-secondary);
+      }
+
+      .classification-box {
+        background: var(--bg-card-subtle);
+        border-radius: 12px;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .class-label-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .class-label-row span {
+        font-size: 10.5px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .auto-detected-badge {
+        font-size: 9.5px;
+        font-weight: 700;
+        background: var(--accent-coral-soft);
+        color: var(--accent-coral);
+        padding: 2px 7px;
+        border-radius: var(--radius-pill);
+      }
+
+      .custom-select {
+        width: 100%;
+        height: 38px;
+        background: #ffffff;
+        border: 1px solid #ece7de;
+        border-radius: 10px;
+        padding: 0 12px;
+        font-size: 12px;
+        color: var(--text-primary);
+        outline: none;
+      }
+
+      .modal-footer-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 4px;
+      }
+
+      /* ==========================================================================
+       13. SLIDE-OUT LEFT NAVBAR (IDENTICAL APPROVED DRAWER)
+       ========================================================================== */
+      .nav-drawer-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(23, 22, 21, 0.25);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        z-index: 998;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
+
+      .nav-drawer-backdrop.open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .nav-drawer {
+        position: fixed;
+        top: 16px;
+        left: 16px;
+        bottom: 16px;
+        width: 298px;
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-drawer);
+        z-index: 999;
+        transform: translateX(calc(-100% - 24px));
+        transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding: 22px 18px;
+        overflow-y: auto;
+        scrollbar-width: none;
+      }
+
+      .nav-drawer::-webkit-scrollbar {
+        display: none;
+      }
+
+      .nav-drawer.open {
+        transform: translateX(0);
+      }
+
+      .drawer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 4px;
+      }
+
+      .drawer-nav-section {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .drawer-section-label {
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        color: var(--text-subtle);
+        padding: 0 12px 3px;
+      }
+
+      .drawer-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .drawer-link {
+        height: 42px;
+        border-radius: var(--radius-pill);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0 14px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+      }
+
+      .drawer-link:hover {
+        color: var(--text-primary);
+        background: var(--bg-card-hover);
+        transform: translateX(2px);
+      }
+
+      .drawer-link.active {
+        background: var(--accent-coral-soft);
+        color: var(--accent-coral);
+        font-weight: 700;
+      }
+
+      .drawer-link.active .drawer-icon,
+      .drawer-link.active svg {
+        color: var(--accent-coral);
+        stroke: var(--accent-coral);
+      }
+
+      .drawer-icon,
+      .drawer-link svg {
+        width: 17px;
+        height: 17px;
+        color: var(--text-secondary);
+        transition: all 0.15s ease;
+        flex-shrink: 0;
+      }
+
+      .drawer-active-pip {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--accent-coral);
+        margin-left: auto;
+        flex-shrink: 0;
+      }
+
+      .drawer-badge {
+        margin-left: auto;
+        font-size: 10px;
+        font-weight: 700;
+        background: var(--accent-coral-soft);
+        color: var(--accent-coral);
+        padding: 2px 7px;
+        border-radius: var(--radius-pill);
+      }
+
+      .drawer-actions-list {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .drawer-action-btn {
+        height: 38px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 0 10px;
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+        width: 100%;
+        text-align: left;
+      }
+
+      .drawer-action-btn:hover {
+        background: var(--bg-card-hover);
+        color: var(--text-primary);
+        transform: translateX(3px);
+      }
+
+      .action-icon-pill {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: var(--bg-card-subtle);
+        border: 1px solid rgba(0, 0, 0, 0.03);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-secondary);
+        flex-shrink: 0;
+        transition: all 0.18s ease;
+      }
+
+      .action-icon-pill svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .drawer-footer {
+        margin-top: auto;
+        padding-top: 8px;
+      }
+
+      .drawer-profile-box {
+        background: var(--bg-card-subtle);
+        border-radius: 18px;
+        padding: 8px 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .drawer-profile-box:hover {
+        background: #ece7de;
+      }
+
+      /* Lightweight Toast Notification */
+      .toast-pill {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(80px);
+        background: #181716;
+        color: #ffffff;
+        padding: 9px 20px;
+        border-radius: var(--radius-pill);
+        font-size: 12px;
+        font-weight: 600;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+        z-index: 1040;
+        opacity: 0;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      .toast-pill.active {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-viewport">
+      <!-- ====================================================================
+         1. TOP HEADER (EXACT REUSED PORTAL BAR)
+         ==================================================================== -->
+      <header class="top-header">
+        <!-- Left: Navigation Drawer Toggle + Brand -->
+        <div class="brand-cluster">
+          <button
+            class="btn-circle"
+            id="menuToggleBtn"
+            aria-label="Open Navigation"
+            onclick="openNavDrawer()"
+            title="Open Navigation Menu"
+          >
+            <i data-lucide="menu" style="width: 16px; height: 16px"></i>
+          </button>
+          <div class="brand-logo-mark"><img src="./royal-square-logo.png" alt="Royal Square" style="width: 100%; height: 100%; display: block; object-fit: cover;" /></div>
+          <div class="brand-titles">
+            <span class="brand-title">Royal Square</span>
+            <span class="brand-subtitle">Client Portal</span>
+          </div>
+        </div>
+
+        <!-- Center: Clean Search Bar -->
+        <div class="header-center-search">
+          <input type="text" placeholder="Start searching here..." />
+          <i data-lucide="search" class="search-icon"></i>
+        </div>
+
+        <!-- Right: View Mode Toggle + Notifications + Lang + Latoya Matai Profile -->
+        <div class="header-right">
+          <button
+            class="mode-toggle-pill"
+            id="simpleModeToggle"
+            onclick="toggleSimpleMode()"
+            title="Toggle Simple Mode"
+          >
+            <i
+              data-lucide="sliders-horizontal"
+              class="mode-icon"
+              style="width: 13px; height: 13px"
+            ></i>
+            <span class="mode-label-text" id="modeToggleLabel"
+              >Simple Mode</span
+            >
+            <div class="toggle-switch-track">
+              <div class="toggle-switch-thumb"></div>
+            </div>
+          </button>
+
+          <button
+            class="btn-circle notif-btn"
+            aria-label="Notifications"
+            onclick="
+              showToast('Latoya, you have 3 documents requiring attention.')
+            "
+          >
+            <i data-lucide="bell" style="width: 15px; height: 15px"></i>
+            <span class="notif-dot"></span>
+          </button>
+
+          <button
+            class="btn-lang"
+            id="lang-btn"
+            onclick="showToast('Language: English (South Africa)')"
+          >
+            <span>EN</span>
+            <i data-lucide="chevron-down" style="width: 10px; height: 10px"></i>
+          </button>
+
+          <!-- Latoya Matai Profile Pill -->
+          <div
+            class="profile-pill-topright"
+            onclick="
+              showToast(
+                'Viewing security & document profile for Latoya Matai...',
+              )
+            "
+          >
+            <div class="client-avatar-wrapper">
+              <img
+                src="/latoya-matai.png"
+                alt="Latoya Matai"
+                class="client-avatar"
+              />
+              <span
+                class="avatar-status-dot"
+                title="Authenticated Profile"
+              ></span>
+            </div>
+            <div class="client-meta">
+              <div class="client-name">Latoya Matai</div>
+              <div class="client-role">
+                <span>Private Client</span>
+                <span class="tier-badge">PREMIER</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ====================================================================
+         2. PAGE INTRO (HEADLINE + STATS + UPLOAD BUTTON)
+         ==================================================================== -->
+      <section class="page-intro-row">
+        <div class="intro-title-block">
+          <span class="intro-eyebrow">Documents & Forms</span>
+          <h1 class="intro-headline" id="pageMainHeading">
+            Everything Royal Square needs, <strong>in one place.</strong>
+          </h1>
+          <p class="intro-supporting" id="pageSubHeading">
+            Upload, complete, sign and securely store your financial documents.
+          </p>
+        </div>
+
+        <div class="intro-right-actions">
+          <div class="intro-stats-cluster">
+            <div class="stat-pill">
+              <span class="stat-indicator-dot"></span>
+              <span>12 documents</span>
+            </div>
+            <div class="stat-pill attention">
+              <span class="stat-indicator-dot pulsing"></span>
+              <span>3 need attention</span>
+            </div>
+          </div>
+
+          <button class="btn-coral-upload" style="background: #171615;" onclick="window.parent.location.href='/documents/suite'; location.href='/documents/suite';">
+            <i data-lucide="file-check-2" style="width: 16px; height: 16px; color: #e85d3f;"></i>
+            <span>Statutory Signing Suite</span>
+          </button>
+          <button class="btn-coral-upload" onclick="openUploadModal()">
+            <i data-lucide="upload-cloud" style="width: 16px; height: 16px"></i>
+            <span>Upload document</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Statutory Signing Suite Highlight Banner -->
+      <section style="background: linear-gradient(135deg, #171615 0%, #282522 100%); border-radius: 20px; padding: 20px 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; color: #ffffff; box-shadow: 0 8px 24px rgba(0,0,0,0.08);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(232, 93, 63, 0.15); border: 1px solid rgba(232, 93, 63, 0.3); display: flex; align-items: center; justify-content: center; color: #e85d3f;">
+            <i data-lucide="file-text" style="width: 22px; height: 22px;"></i>
+          </div>
+          <div>
+            <div style="font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+              Statutory Signing & Mandate Suite
+              <span style="font-size: 9.5px; background: #2b7a48; color: #ffffff; padding: 2px 8px; border-radius: 999px; font-weight: 700;">5 Official Legal Papers</span>
+            </div>
+            <div style="font-size: 11.5px; color: #aba69e; margin-top: 3px;">
+              ASTUTE Consent · Broker Appointment · Confidentiality & POPIA · FAIS Disclosure · SLA. Digitally sign, annotate & export to PDF.
+            </div>
+          </div>
+        </div>
+        <button style="background: #e85d3f; color: #ffffff; border: none; border-radius: 999px; padding: 10px 20px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;" onclick="window.parent.location.href='/documents/suite'; location.href='/documents/suite';">
+          <span>Open Signing Suite</span>
+          <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+        </button>
+      </section>
+
+      <!-- ====================================================================
+         3. TOP PRIORITY: NEEDS YOUR ATTENTION (3 TARGETED CARDS)
+         ==================================================================== -->
+      <section class="section-group">
+        <div class="section-eyebrow-row">
+          <span class="section-label-tag urgent">
+            <i data-lucide="alert-circle" style="width: 12px; height: 12px"></i>
+            <span>Needs your attention</span>
+          </span>
+          <span
+            style="
+              font-size: 11px;
+              color: var(--accent-coral);
+              font-weight: 700;
+            "
+            >3 actions waiting for you</span
+          >
+        </div>
+
+        <div class="attention-grid">
+          <!-- ATTENTION CARD 1: Client Consent -->
+          <article class="attention-card" onclick="openFormDrawer('consent')">
+            <div>
+              <div class="attention-card-top">
+                <div class="attention-icon-box">
+                  <i
+                    data-lucide="file-signature"
+                    style="width: 18px; height: 18px"
+                  ></i>
+                </div>
+                <span class="pill-state coral">
+                  <span class="state-dot"></span>
+                  <span>Signature required</span>
+                </span>
+              </div>
+
+              <div class="attention-title-group">
+                <span class="attention-kind">Royal Square Form</span>
+                <h2 class="attention-title">
+                  Client Consent to Obtain Information
+                </h2>
+                <p class="attention-copy">
+                  Give Royal Square permission to obtain relevant financial
+                  information from insurers, banks and investment providers.
+                </p>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div class="attention-meta-bar">
+                <i
+                  data-lucide="sparkles"
+                  style="width: 12px; height: 12px; color: var(--accent-coral)"
+                ></i>
+                <span>Step 1 of Financial Planning</span>
+              </div>
+
+              <div class="attention-card-footer">
+                <span
+                  style="
+                    font-size: 10.5px;
+                    color: var(--text-subtle);
+                    font-weight: 600;
+                  "
+                  >Due: Required for advice</span
+                >
+                <span class="btn-action-quiet-link">
+                  <span>Review & sign</span>
+                  <i
+                    data-lucide="arrow-right"
+                    style="width: 12px; height: 12px"
+                  ></i>
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <!-- ATTENTION CARD 2: Latest Bank Statement -->
+          <article class="attention-card" onclick="openDocDrawer('bank-stmt')">
+            <div>
+              <div class="attention-card-top">
+                <div class="attention-icon-box">
+                  <i
+                    data-lucide="receipt"
+                    style="width: 18px; height: 18px"
+                  ></i>
+                </div>
+                <span class="pill-state coral">
+                  <span class="state-dot"></span>
+                  <span>Required</span>
+                </span>
+              </div>
+
+              <div class="attention-title-group">
+                <span class="attention-kind">Client Upload</span>
+                <h2 class="attention-title">Latest Bank Statement</h2>
+                <p class="attention-copy">
+                  Needed for your Banking Details Update. Must be less than 3
+                  months old and stamped by the issuing bank.
+                </p>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div class="attention-meta-bar">
+                <i
+                  data-lucide="link-2"
+                  style="
+                    width: 12px;
+                    height: 12px;
+                    color: var(--text-secondary);
+                  "
+                ></i>
+                <span>Banking Details Update · #BD-2048</span>
+              </div>
+
+              <div class="attention-card-footer">
+                <span
+                  style="
+                    font-size: 10.5px;
+                    color: var(--text-subtle);
+                    font-weight: 600;
+                  "
+                  >Valid within 90 days</span
+                >
+                <span class="btn-action-quiet-link">
+                  <span>Upload statement</span>
+                  <i
+                    data-lucide="arrow-right"
+                    style="width: 12px; height: 12px"
+                  ></i>
+                </span>
+              </div>
+            </div>
+          </article>
+
+          <!-- ATTENTION CARD 3: Annual Review Circumstances Confirmation -->
+          <article
+            class="attention-card"
+            onclick="openFormDrawer('afr-confirm')"
+          >
+            <div>
+              <div class="attention-card-top">
+                <div class="attention-icon-box">
+                  <i
+                    data-lucide="calendar-check-2"
+                    style="width: 18px; height: 18px"
+                  ></i>
+                </div>
+                <span class="pill-state coral">
+                  <span class="state-dot"></span>
+                  <span>3 fields remaining</span>
+                </span>
+              </div>
+
+              <div class="attention-title-group">
+                <span class="attention-kind">Annual Review</span>
+                <h2 class="attention-title">Annual Financial Review 2026</h2>
+                <p class="attention-copy">
+                  Confirm whether your income, family, employment or financial
+                  circumstances have changed prior to your consultation.
+                </p>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div class="attention-meta-bar">
+                <i
+                  data-lucide="clock"
+                  style="
+                    width: 12px;
+                    height: 12px;
+                    color: var(--text-secondary);
+                  "
+                ></i>
+                <span>Linked to Annual Financial Review</span>
+              </div>
+
+              <div class="attention-card-footer">
+                <span
+                  style="
+                    font-size: 10.5px;
+                    color: var(--text-subtle);
+                    font-weight: 600;
+                  "
+                  >Consultation: 18 Sep</span
+                >
+                <span class="btn-action-quiet-link">
+                  <span>Continue</span>
+                  <i
+                    data-lucide="arrow-right"
+                    style="width: 12px; height: 12px"
+                  ></i>
+                </span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+         4. ENTER ONCE MODULE (VERIFIED REUSABLE INFORMATION)
+         ==================================================================== -->
+      <section class="enter-once-card">
+        <div class="enter-once-left">
+          <div class="enter-once-icon">
+            <i data-lucide="shield-check" style="width: 22px; height: 22px"></i>
+          </div>
+          <div class="enter-once-text">
+            <div class="enter-once-title">
+              Your verified information · Enter once principle
+            </div>
+            <div class="enter-once-sub">
+              We'll use verified details to pre-fill Royal Square forms. You'll
+              only confirm what changed.
+            </div>
+          </div>
+        </div>
+
+        <div class="enter-once-pills-row">
+          <span class="verified-data-pill">
+            <span>Latoya Matai</span>
+            <i data-lucide="check"></i>
+          </span>
+          <span class="verified-data-pill">
+            <span>ID •••••••••••••</span>
+            <i data-lucide="check"></i>
+          </span>
+          <span class="verified-data-pill">
+            <span>Mobile ••• ••• ••••</span>
+            <i data-lucide="check"></i>
+          </span>
+          <span class="verified-data-pill">
+            <span>Email verified</span>
+            <i data-lucide="check"></i>
+          </span>
+          <button
+            class="btn-review-details"
+            onclick="
+              showToast('Reviewing verified personal & tax credentials...')
+            "
+          >
+            <span>Review my details</span>
+            <i data-lucide="arrow-right" style="width: 11px; height: 11px"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+         5. OFFICIAL ROYAL SQUARE FORMS (FORMAL DOCUMENT CARDS)
+         ==================================================================== -->
+      <section class="section-group">
+        <div class="section-eyebrow-row">
+          <span class="section-label-tag">
+            <i data-lucide="award" style="width: 12px; height: 12px"></i>
+            <span>Royal Square Forms</span>
+          </span>
+          <span style="font-size: 11px; color: var(--text-secondary)"
+            >Official legal & compliance agreements</span
+          >
+        </div>
+
+        <div class="forms-grid">
+          <!-- FORM 1: Notice of Appointment as a Financial Advisor -->
+          <article class="form-card" onclick="openFormDrawer('broker')">
+            <div class="form-card-top">
+              <div class="form-doc-thumbnail">
+                <div class="thumb-rs-seal">RS</div>
+                <div class="thumb-dummy-lines">
+                  <span class="dummy-line"></span>
+                  <span class="dummy-line short"></span>
+                  <span class="dummy-line"></span>
+                </div>
+                <div class="dummy-stamp-pill signed">SIGNED</div>
+              </div>
+
+              <div class="form-info-block">
+                <div class="form-badge-row">
+                  <span class="official-tag">
+                    <i
+                      data-lucide="file-check"
+                      style="width: 10px; height: 10px"
+                    ></i>
+                    <span>Official Form</span>
+                  </span>
+                  <span class="pill-state green">
+                    <span class="state-dot"></span>
+                    <span>Signed</span>
+                  </span>
+                </div>
+                <h3 class="form-title">
+                  Notice of Appointment as a Financial Advisor
+                </h3>
+                <div class="form-meta-adviser">
+                  Adviser: <strong>Qiniso Thulani Ntuli</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-card-footer">
+              <span class="form-date-ver">Signed 05 Sep 2026 · v2025.1</span>
+              <div class="form-actions-cluster">
+                <button
+                  class="btn-form-quiet"
+                  onclick="
+                    event.stopPropagation();
+                    openFormDrawer('broker');
+                  "
+                >
+                  View
+                </button>
+                <button
+                  class="btn-form-quiet"
+                  onclick="
+                    event.stopPropagation();
+                    showToast(
+                      'Downloading signed Notice of Appointment (PDF)...',
+                    );
+                  "
+                >
+                  Download
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- FORM 2: Client Consent to Obtain Information -->
+          <article class="form-card" onclick="openFormDrawer('consent')">
+            <div class="form-card-top">
+              <div class="form-doc-thumbnail">
+                <div
+                  class="thumb-rs-seal"
+                  style="background: var(--accent-coral)"
+                >
+                  RS
+                </div>
+                <div class="thumb-dummy-lines">
+                  <span class="dummy-line"></span>
+                  <span class="dummy-line"></span>
+                  <span class="dummy-line short"></span>
+                </div>
+                <div class="dummy-stamp-pill pending">ACTION</div>
+              </div>
+
+              <div class="form-info-block">
+                <div class="form-badge-row">
+                  <span class="official-tag" style="color: var(--accent-coral)">
+                    <i
+                      data-lucide="file-text"
+                      style="width: 10px; height: 10px"
+                    ></i>
+                    <span>Official Form</span>
+                  </span>
+                  <span class="pill-state coral">
+                    <span class="state-dot"></span>
+                    <span>Needs signature</span>
+                  </span>
+                </div>
+                <h3 class="form-title">Client Consent to Obtain Information</h3>
+                <div class="form-meta-adviser">
+                  Adviser: <strong>Qiniso Thulani Ntuli</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-card-footer">
+              <span class="form-date-ver"
+                >Version 2026.2 · Pending sign-off</span
+              >
+              <button
+                class="btn-form-accent"
+                onclick="
+                  event.stopPropagation();
+                  openFormDrawer('consent');
+                "
+              >
+                <span>Complete & sign</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 11px; height: 11px"
+                ></i>
+              </button>
+            </div>
+          </article>
+
+          <!-- FORM 3: Service Level Agreement -->
+          <article class="form-card" onclick="openFormDrawer('sla')">
+            <div class="form-card-top">
+              <div class="form-doc-thumbnail">
+                <div class="thumb-rs-seal">RS</div>
+                <div class="thumb-dummy-lines">
+                  <span class="dummy-line"></span>
+                  <span class="dummy-line short"></span>
+                  <span class="dummy-line"></span>
+                </div>
+                <div class="dummy-stamp-pill signed">SIGNED</div>
+              </div>
+
+              <div class="form-info-block">
+                <div class="form-badge-row">
+                  <span class="official-tag">
+                    <i
+                      data-lucide="file-check"
+                      style="width: 10px; height: 10px"
+                    ></i>
+                    <span>Official Form</span>
+                  </span>
+                  <span class="pill-state green">
+                    <span class="state-dot"></span>
+                    <span>Signed</span>
+                  </span>
+                </div>
+                <h3 class="form-title">
+                  Financial Services Provider Service Level Agreement
+                </h3>
+                <div class="form-meta-adviser">
+                  Provider: <strong>Royal Square Financial FSP 29370</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-card-footer">
+              <span class="form-date-ver"
+                >Signed 14 Jan 2025 · Premier Tier</span
+              >
+              <div class="form-actions-cluster">
+                <button
+                  class="btn-form-quiet"
+                  onclick="
+                    event.stopPropagation();
+                    openFormDrawer('sla');
+                  "
+                >
+                  View
+                </button>
+                <button
+                  class="btn-form-quiet"
+                  onclick="
+                    event.stopPropagation();
+                    showToast('Downloading Service Level Agreement (PDF)...');
+                  "
+                >
+                  Download
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- FORM 4: FAIS Disclosure Record -->
+          <article class="form-card" onclick="openFormDrawer('fais')">
+            <div class="form-card-top">
+              <div class="form-doc-thumbnail">
+                <div class="thumb-rs-seal">RS</div>
+                <div class="thumb-dummy-lines">
+                  <span class="dummy-line"></span>
+                  <span class="dummy-line"></span>
+                  <span class="dummy-line short"></span>
+                </div>
+                <div class="dummy-stamp-pill signed">ACKNOWLEDGED</div>
+              </div>
+
+              <div class="form-info-block">
+                <div class="form-badge-row">
+                  <span class="official-tag">
+                    <i
+                      data-lucide="file-check"
+                      style="width: 10px; height: 10px"
+                    ></i>
+                    <span>Official Form</span>
+                  </span>
+                  <span class="pill-state green">
+                    <span class="state-dot"></span>
+                    <span>Acknowledged</span>
+                  </span>
+                </div>
+                <h3 class="form-title">FAIS Disclosure Record</h3>
+                <div class="form-meta-adviser">
+                  Compliance: <strong>Statutory Section 8 Disclosure</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-card-footer">
+              <span class="form-date-ver">Acknowledged 12 May 2026</span>
+              <div class="form-actions-cluster">
+                <button
+                  class="btn-form-quiet"
+                  onclick="
+                    event.stopPropagation();
+                    openFormDrawer('fais');
+                  "
+                >
+                  View disclosure
+                </button>
+                <button
+                  class="btn-form-quiet"
+                  onclick="
+                    event.stopPropagation();
+                    showToast('Downloading FAIS Disclosure copy (PDF)...');
+                  "
+                >
+                  Download copy
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- FORM 5: Confidentiality Agreement -->
+          <article class="form-card" onclick="openFormDrawer('nda')">
+            <div class="form-card-top">
+              <div class="form-doc-thumbnail">
+                <div class="thumb-rs-seal">RS</div>
+                <div class="thumb-dummy-lines">
+                  <span class="dummy-line"></span>
+                  <span class="dummy-line short"></span>
+                  <span class="dummy-line"></span>
+                </div>
+                <div class="dummy-stamp-pill signed">SIGNED</div>
+              </div>
+
+              <div class="form-info-block">
+                <div class="form-badge-row">
+                  <span class="official-tag">
+                    <i
+                      data-lucide="file-check"
+                      style="width: 10px; height: 10px"
+                    ></i>
+                    <span>Official Form</span>
+                  </span>
+                  <span class="pill-state green">
+                    <span class="state-dot"></span>
+                    <span>Signed</span>
+                  </span>
+                </div>
+                <h3 class="form-title">Confidentiality Agreement</h3>
+                <div class="form-meta-adviser">
+                  Mutual POPIA & Confidentiality Guarantee
+                </div>
+              </div>
+            </div>
+
+            <div class="form-card-footer">
+              <span class="form-date-ver">Signed 14 Jan 2025 · Active</span>
+              <div class="form-actions-cluster">
+                <button
+                  class="btn-form-quiet"
+                  onclick="
+                    event.stopPropagation();
+                    openFormDrawer('nda');
+                  "
+                >
+                  View
+                </button>
+                <button
+                  class="btn-form-quiet"
+                  onclick="
+                    event.stopPropagation();
+                    showToast('Downloading Confidentiality Agreement (PDF)...');
+                  "
+                >
+                  Download
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+         6. VAULT FILTER BAR & "MY DOCUMENTS" GRID
+         ==================================================================== -->
+      <section class="section-group">
+        <div class="section-eyebrow-row">
+          <span class="section-label-tag">
+            <i data-lucide="folders" style="width: 12px; height: 12px"></i>
+            <span>My Documents</span>
+          </span>
+          <span style="font-size: 11px; color: var(--text-secondary)"
+            >6 active records</span
+          >
+        </div>
+
+        <!-- Filter Controls & Vault Search -->
+        <div class="vault-control-row">
+          <div class="vault-filter-pills" role="tablist">
+            <button
+              class="vault-pill-btn active"
+              onclick="applyDocFilter('all', this)"
+            >
+              <span>All</span>
+              <span class="vault-count-bubble">12</span>
+            </button>
+            <button
+              class="vault-pill-btn"
+              onclick="applyDocFilter('forms', this)"
+            >
+              <span>Forms</span>
+              <span class="vault-count-bubble">5</span>
+            </button>
+            <button
+              class="vault-pill-btn"
+              onclick="applyDocFilter('identity', this)"
+            >
+              <span>Identity</span>
+              <span class="vault-count-bubble">3</span>
+            </button>
+            <button
+              class="vault-pill-btn"
+              onclick="applyDocFilter('financial', this)"
+            >
+              <span>Financial</span>
+              <span class="vault-count-bubble">2</span>
+            </button>
+            <button
+              class="vault-pill-btn"
+              onclick="applyDocFilter('insurance', this)"
+            >
+              <span>Insurance</span>
+              <span class="vault-count-bubble">1</span>
+            </button>
+            <button
+              class="vault-pill-btn"
+              onclick="applyDocFilter('tax', this)"
+            >
+              <span>Tax</span>
+              <span class="vault-count-bubble">1</span>
+            </button>
+          </div>
+
+          <div class="vault-search-wrap">
+            <i data-lucide="search"></i>
+            <input
+              type="text"
+              id="docSearchInput"
+              oninput="filterDocumentsByKeyword()"
+              placeholder="Search documents..."
+            />
+          </div>
+        </div>
+
+        <!-- Documents Bento Grid -->
+        <div class="documents-grid" id="documentsGrid">
+          <!-- DOC 1: South African ID -->
+          <article
+            class="doc-card"
+            data-category="identity"
+            onclick="openDocDrawer('said')"
+          >
+            <div class="doc-card-top">
+              <div class="doc-type-icon-box">
+                <i data-lucide="id-card" style="width: 20px; height: 20px"></i>
+              </div>
+              <span class="pill-state green">
+                <span class="state-dot"></span>
+                <span>Verified</span>
+              </span>
+            </div>
+
+            <div class="doc-card-body">
+              <span class="doc-category-tag"
+                >Identity · Home Affairs Verified</span
+              >
+              <h3 class="doc-card-title">South African ID Smart Card</h3>
+              <p class="doc-card-sub">
+                Verified identity book digital scan. Updated 05 Sep 2026 during
+                onboarding verification.
+              </p>
+            </div>
+
+            <div class="doc-card-footer">
+              <span class="doc-linked-workflow">
+                <i
+                  data-lucide="check"
+                  style="width: 11px; height: 11px; color: var(--status-green)"
+                ></i>
+                <span>FICA Certified Valid</span>
+              </span>
+              <span class="doc-cta-link">
+                <span>View details</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 11px; height: 11px"
+                ></i>
+              </span>
+            </div>
+          </article>
+
+          <!-- DOC 2: Proof of Address -->
+          <article
+            class="doc-card"
+            data-category="identity"
+            onclick="openDocDrawer('poa')"
+          >
+            <div class="doc-card-top">
+              <div class="doc-type-icon-box">
+                <i data-lucide="map-pin" style="width: 20px; height: 20px"></i>
+              </div>
+              <span class="pill-state green">
+                <span class="state-dot"></span>
+                <span>Verified</span>
+              </span>
+            </div>
+
+            <div class="doc-card-body">
+              <span class="doc-category-tag">Proof of Address · FICA</span>
+              <h3 class="doc-card-title">Proof of Residential Address</h3>
+              <p class="doc-card-sub">
+                City of Johannesburg municipal utility statement. Expires /
+                refresh due in 4 months.
+              </p>
+            </div>
+
+            <div class="doc-card-footer">
+              <span class="doc-linked-workflow">
+                <i
+                  data-lucide="clock"
+                  style="width: 11px; height: 11px; color: var(--status-amber)"
+                ></i>
+                <span>Valid until Dec 2026</span>
+              </span>
+              <span class="doc-cta-link">
+                <span>View details</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 11px; height: 11px"
+                ></i>
+              </span>
+            </div>
+          </article>
+
+          <!-- DOC 3: Latest Bank Statement -->
+          <article
+            class="doc-card"
+            data-category="financial"
+            onclick="openDocDrawer('bank-stmt')"
+          >
+            <div class="doc-card-top">
+              <div class="doc-type-icon-box">
+                <i data-lucide="landmark" style="width: 20px; height: 20px"></i>
+              </div>
+              <span class="pill-state green">
+                <span class="state-dot"></span>
+                <span>Verified</span>
+              </span>
+            </div>
+
+            <div class="doc-card-body">
+              <span class="doc-category-tag">Banking Verification</span>
+              <h3 class="doc-card-title">Capitec Bank Statement</h3>
+              <p class="doc-card-sub">
+                Stamped proof of account. Statement date: 19 Aug 2026. Account
+                number ending in 2719.
+              </p>
+            </div>
+
+            <div class="doc-card-footer">
+              <span class="doc-linked-workflow">
+                <i
+                  data-lucide="link-2"
+                  style="width: 11px; height: 11px; color: var(--accent-coral)"
+                ></i>
+                <span>Used by: #BD-2048</span>
+              </span>
+              <span class="doc-cta-link">
+                <span>View details</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 11px; height: 11px"
+                ></i>
+              </span>
+            </div>
+          </article>
+
+          <!-- DOC 4: Driver's Licence -->
+          <article
+            class="doc-card"
+            data-category="identity"
+            onclick="openDocDrawer('licence')"
+          >
+            <div class="doc-card-top">
+              <div class="doc-type-icon-box">
+                <i data-lucide="car" style="width: 20px; height: 20px"></i>
+              </div>
+              <span class="pill-state green">
+                <span class="state-dot"></span>
+                <span>Verified</span>
+              </span>
+            </div>
+
+            <div class="doc-card-body">
+              <span class="doc-category-tag"
+                >Identity · Short-Term Insurance</span
+              >
+              <h3 class="doc-card-title">Driver's Licence & PrDP Card</h3>
+              <p class="doc-card-sub">
+                Code EB digital card scan. Verified for vehicle underwriting.
+                Expires: 12 Mar 2027.
+              </p>
+            </div>
+
+            <div class="doc-card-footer">
+              <span class="doc-linked-workflow">
+                <i
+                  data-lucide="check"
+                  style="width: 11px; height: 11px; color: var(--status-green)"
+                ></i>
+                <span>Active underwriting file</span>
+              </span>
+              <span class="doc-cta-link">
+                <span>View details</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 11px; height: 11px"
+                ></i>
+              </span>
+            </div>
+          </article>
+
+          <!-- DOC 5: 2026 Tax Certificate / IRP5 -->
+          <article
+            class="doc-card"
+            data-category="tax"
+            onclick="openDocDrawer('tax-cert')"
+          >
+            <div class="doc-card-top">
+              <div class="doc-type-icon-box">
+                <i
+                  data-lucide="file-spreadsheet"
+                  style="width: 20px; height: 20px"
+                ></i>
+              </div>
+              <span class="pill-state neutral">
+                <span class="state-dot"></span>
+                <span>Available</span>
+              </span>
+            </div>
+
+            <div class="doc-card-body">
+              <span class="doc-category-tag">Tax & SARS Filing</span>
+              <h3 class="doc-card-title">2026 Tax Certificate / IT3b & IT3c</h3>
+              <p class="doc-card-sub">
+                Compiled Sanlam & Allan Gray interest and dividend schedule for
+                SARS eFiling submission.
+              </p>
+            </div>
+
+            <div class="doc-card-footer">
+              <span class="doc-linked-workflow">
+                <i
+                  data-lucide="download"
+                  style="
+                    width: 11px;
+                    height: 11px;
+                    color: var(--text-secondary);
+                  "
+                ></i>
+                <span>Issued 29 Aug 2026</span>
+              </span>
+              <span class="doc-cta-link">
+                <span>View details</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 11px; height: 11px"
+                ></i>
+              </span>
+            </div>
+          </article>
+
+          <!-- DOC 6: Insurance Valuation Certificate -->
+          <article
+            class="doc-card"
+            data-category="insurance"
+            onclick="openDocDrawer('val-cert')"
+          >
+            <div class="doc-card-top">
+              <div class="doc-type-icon-box">
+                <i data-lucide="gem" style="width: 20px; height: 20px"></i>
+              </div>
+              <span class="pill-state green">
+                <span class="state-dot"></span>
+                <span>Current</span>
+              </span>
+            </div>
+
+            <div class="doc-card-body">
+              <span class="doc-category-tag">Asset Valuation</span>
+              <h3 class="doc-card-title">Insurance Valuation Certificate</h3>
+              <p class="doc-card-sub">
+                Appraisal certificate for scheduled jewellery and art assets.
+                Renewal due: Jun 2027.
+              </p>
+            </div>
+
+            <div class="doc-card-footer">
+              <span class="doc-linked-workflow">
+                <i
+                  data-lucide="calendar"
+                  style="
+                    width: 11px;
+                    height: 11px;
+                    color: var(--text-secondary);
+                  "
+                ></i>
+                <span>Renewal in 9 months</span>
+              </span>
+              <span class="doc-cta-link">
+                <span>View details</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 11px; height: 11px"
+                ></i>
+              </span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+         7. TWO-COLUMN SPLIT: AUTOMATED REMINDERS & SECURE VAULT / POPIA
+         ==================================================================== -->
+      <section class="reminders-and-trust-grid">
+        <!-- Compact Upcoming Reminders Module -->
+        <article class="reminders-card">
+          <div class="section-eyebrow-row" style="padding: 0">
+            <span class="section-label-tag">
+              <i
+                data-lucide="alarm-clock"
+                style="width: 12px; height: 12px"
+              ></i>
+              <span>Upcoming Document Reminders</span>
+            </span>
+            <span
+              style="
+                font-size: 10px;
+                color: var(--text-subtle);
+                font-weight: 700;
+              "
+              >AUTOMATED TRACKING</span
+            >
+          </div>
+
+          <div class="reminders-list">
+            <!-- Reminder 1 -->
+            <div class="reminder-row">
+              <div class="reminder-left">
+                <div class="reminder-icon">
+                  <i data-lucide="car" style="width: 14px; height: 14px"></i>
+                </div>
+                <div>
+                  <div class="reminder-title">Driving licence renewal</div>
+                  <div class="reminder-due">Expires 12 Mar 2027</div>
+                </div>
+              </div>
+              <span class="reminder-recipient-pill">
+                <i data-lucide="user" style="width: 10px; height: 10px"></i>
+                <span>Reminder: You</span>
+              </span>
+            </div>
+
+            <!-- Reminder 2 -->
+            <div class="reminder-row">
+              <div class="reminder-left">
+                <div class="reminder-icon">
+                  <i
+                    data-lucide="file-check-2"
+                    style="width: 14px; height: 14px"
+                  ></i>
+                </div>
+                <div>
+                  <div class="reminder-title">
+                    Insurance valuation certificate
+                  </div>
+                  <div class="reminder-due">Due Jun 2027</div>
+                </div>
+              </div>
+              <span class="reminder-recipient-pill">
+                <i data-lucide="users" style="width: 10px; height: 10px"></i>
+                <span>You + Royal Square</span>
+              </span>
+            </div>
+
+            <!-- Reminder 3 -->
+            <div class="reminder-row">
+              <div class="reminder-left">
+                <div class="reminder-icon">
+                  <i
+                    data-lucide="calendar"
+                    style="width: 14px; height: 14px"
+                  ></i>
+                </div>
+                <div>
+                  <div class="reminder-title">Annual financial review</div>
+                  <div class="reminder-due">Due Sep 2027</div>
+                </div>
+              </div>
+              <span class="reminder-recipient-pill">
+                <i data-lucide="shield" style="width: 10px; height: 10px"></i>
+                <span>Royal Square</span>
+              </span>
+            </div>
+
+            <!-- Reminder 4 -->
+            <div class="reminder-row">
+              <div class="reminder-left">
+                <div class="reminder-icon">
+                  <i
+                    data-lucide="refresh-cw"
+                    style="width: 14px; height: 14px"
+                  ></i>
+                </div>
+                <div>
+                  <div class="reminder-title">Retirement fee renewal</div>
+                  <div class="reminder-due">Due Jan 2027</div>
+                </div>
+              </div>
+              <span class="reminder-recipient-pill">
+                <i data-lucide="shield" style="width: 10px; height: 10px"></i>
+                <span>Royal Square</span>
+              </span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Secure Vault & POPIA Module -->
+        <article class="trust-card">
+          <div class="trust-header">
+            <div class="trust-icon-box">
+              <i data-lucide="lock" style="width: 18px; height: 18px"></i>
+            </div>
+            <div>
+              <div class="trust-sub">POPIA Compliant</div>
+              <h3 class="trust-title">Secure Financial Vault</h3>
+            </div>
+          </div>
+
+          <p class="trust-copy">
+            Your financial documents are only accessible to authorised Royal
+            Square personnel and services involved in your financial workflows.
+            All records are protected under POPIA and the FAIS Act.
+          </p>
+
+          <div class="trust-pillars-row">
+            <div class="trust-pillar-item">
+              <strong>
+                <i
+                  data-lucide="check"
+                  style="width: 11px; height: 11px; color: var(--status-green)"
+                ></i>
+                <span>Encrypted</span>
+              </strong>
+              <span>AES-256 at rest</span>
+            </div>
+            <div class="trust-pillar-item">
+              <strong>
+                <i
+                  data-lucide="check"
+                  style="width: 11px; height: 11px; color: var(--status-green)"
+                ></i>
+                <span>Access Logged</span>
+              </strong>
+              <span>Audit trail active</span>
+            </div>
+            <div class="trust-pillar-item">
+              <strong>
+                <i
+                  data-lucide="check"
+                  style="width: 11px; height: 11px; color: var(--status-green)"
+                ></i>
+                <span>Consent Bound</span>
+              </strong>
+              <span>You retain control</span>
+            </div>
+          </div>
+        </article>
+      </section>
+    </div>
+
+    <!-- ====================================================================
+       DOCUMENT / FORM DETAIL PREVIEW SIDE PANEL (DRAWER FROM RIGHT)
+       ==================================================================== -->
+    <div
+      class="detail-backdrop"
+      id="detailBackdrop"
+      onclick="closeDetailDrawer()"
+    ></div>
+
+    <aside
+      class="detail-drawer"
+      id="detailDrawer"
+      aria-label="Document Details Drawer"
+    >
+      <div class="drawer-top-action-bar">
+        <span class="drawer-doc-code" id="drawerDocCode">#DOC-VAULT</span>
+        <button
+          class="btn-circle"
+          style="width: 32px; height: 32px"
+          onclick="closeDetailDrawer()"
+          aria-label="Close details"
+        >
+          <i data-lucide="x" style="width: 15px; height: 15px"></i>
+        </button>
+      </div>
+
+      <div
+        id="drawerDynamicContent"
+        style="display: flex; flex-direction: column; gap: 16px"
+      >
+        <!-- Dynamically injected via JavaScript -->
+      </div>
+    </aside>
+
+    <!-- ====================================================================
+       UPLOAD DOCUMENT MODAL
+       ==================================================================== -->
+    <div
+      class="modal-backdrop"
+      id="uploadModalBackdrop"
+      onclick="closeUploadModal(event)"
+    >
+      <div class="upload-modal-window" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <h2 class="modal-title">Upload document</h2>
+          <button
+            class="btn-circle"
+            style="width: 32px; height: 32px"
+            onclick="closeUploadModal(event)"
+          >
+            <i data-lucide="x" style="width: 15px; height: 15px"></i>
+          </button>
+        </div>
+
+        <div class="upload-dropzone" onclick="simulateFileUpload()">
+          <div class="dropzone-icon">
+            <i data-lucide="upload" style="width: 20px; height: 20px"></i>
+          </div>
+          <div>
+            <div class="dropzone-main-text">
+              Click to choose file or drag here
+            </div>
+            <div class="dropzone-sub-text">
+              Supported prototype formats: PDF, JPG, PNG, DOC/DOCX (Max 15MB)
+            </div>
+          </div>
+        </div>
+
+        <div class="classification-box">
+          <div class="class-label-row">
+            <span>What is this document?</span>
+            <span class="auto-detected-badge" id="autoDetectLabel"
+              >Auto-detected</span
+            >
+          </div>
+          <select class="custom-select" id="docTypeSelect">
+            <option value="bank-statement" selected>
+              Bank Statement (Proof of Account)
+            </option>
+            <option value="identity">South African ID Book / Smart Card</option>
+            <option value="proof-address">
+              Proof of Residential Address (Utility)
+            </option>
+            <option value="drivers-licence">Driver's Licence Card</option>
+            <option value="tax-certificate">Tax Certificate / IRP5</option>
+            <option value="valuation">Insurance Valuation Appraisal</option>
+            <option value="other">Other Supporting Financial Evidence</option>
+          </select>
+        </div>
+
+        <div class="modal-footer-row">
+          <button class="btn-drawer-subtle" onclick="closeUploadModal(event)">
+            Cancel
+          </button>
+          <button
+            class="btn-drawer-primary"
+            style="flex: initial; padding: 0 22px"
+            onclick="confirmUpload()"
+          >
+            <span>Upload & classify</span>
+            <i data-lucide="check" style="width: 13px; height: 13px"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ====================================================================
+       SLIDE-OUT LEFT NAVBAR (IDENTICAL APPROVED DRAWER)
+       ==================================================================== -->
+    <div
+      class="nav-drawer-backdrop"
+      id="navDrawerBackdrop"
+      onclick="closeNavDrawer()"
+    ></div>
+
+    <aside
+      class="nav-drawer"
+      id="navDrawer"
+      aria-label="Client Navigation Drawer"
+    >
+      <!-- Drawer Header -->
+      <div class="drawer-header">
+        <div class="brand-cluster">
+          <div class="brand-logo-mark"><img src="./royal-square-logo.png" alt="Royal Square" style="width: 100%; height: 100%; display: block; object-fit: cover;" /></div>
+          <div class="brand-titles">
+            <span class="brand-title">Royal Square</span>
+            <span class="brand-subtitle">Client Portal</span>
+          </div>
+        </div>
+        <button
+          class="btn-circle"
+          style="width: 32px; height: 32px"
+          onclick="closeNavDrawer()"
+          aria-label="Close navigation"
+        >
+          <i data-lucide="x" style="width: 15px; height: 15px"></i>
+        </button>
+      </div>
+
+      <!-- Primary Destinations -->
+      <div class="drawer-nav-section">
+        <span class="drawer-section-label">Navigation</span>
+        <nav class="drawer-menu">
+          <a
+            href="index.html"
+            class="drawer-link"
+            onclick="handleNavClick(event, 'Home', 'index.html')"
+          >
+            <i data-lucide="layout-dashboard" class="drawer-icon"></i>
+            <span>Home</span>
+          </a>
+          <a
+            href="requests.html"
+            class="drawer-link"
+            onclick="handleNavClick(event, 'Requests', 'requests.html')"
+          >
+            <i data-lucide="inbox" class="drawer-icon"></i>
+            <span>Requests</span>
+            <span class="drawer-badge">2</span>
+          </a>
+          <a
+            href="documents.html"
+            class="drawer-link active"
+            onclick="handleNavClick(event, 'Documents', 'documents.html')"
+          >
+            <i data-lucide="files" class="drawer-icon"></i>
+            <span>Documents</span>
+            <span class="drawer-active-pip"></span>
+          </a>
+          <a
+            href="finances.html"
+            class="drawer-link"
+            onclick="handleNavClick(event, 'Finances', 'finances.html')"
+          >
+            <i data-lucide="wallet" class="drawer-icon"></i>
+            <span>Finances</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="drawer-nav-section">
+        <span class="drawer-section-label">Quick Actions</span>
+        <div class="drawer-actions-list">
+          <button
+            class="drawer-action-btn"
+            onclick="handleDrawerAction('Update beneficiary')"
+          >
+            <div class="action-icon-pill">
+              <i data-lucide="user-plus"></i>
+            </div>
+            <span>Update beneficiary</span>
+          </button>
+          <button
+            class="drawer-action-btn"
+            onclick="handleDrawerAction('Update personal details')"
+          >
+            <div class="action-icon-pill">
+              <i data-lucide="id-card"></i>
+            </div>
+            <span>Update personal details</span>
+          </button>
+          <button
+            class="drawer-action-btn"
+            onclick="handleDrawerAction('Report change in circumstances')"
+          >
+            <div class="action-icon-pill">
+              <i data-lucide="file-pen-line"></i>
+            </div>
+            <span>My circumstances changed</span>
+          </button>
+          <button
+            class="drawer-action-btn"
+            onclick="handleDrawerAction('Book a review')"
+          >
+            <div class="action-icon-pill">
+              <i data-lucide="calendar-plus"></i>
+            </div>
+            <span>Book a review</span>
+          </button>
+          <button
+            class="drawer-action-btn"
+            onclick="handleDrawerAction('Ask my adviser')"
+          >
+            <div class="action-icon-pill">
+              <i data-lucide="messages-square"></i>
+            </div>
+            <span>Ask my adviser</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Drawer Footer -->
+      <div class="drawer-footer">
+        <div
+          class="drawer-profile-box"
+          onclick="
+            closeNavDrawer();
+            showToast('Latoya Matai: Account Authenticated & Protected');
+          "
+        >
+          <div class="client-avatar-wrapper">
+            <img
+              src="/latoya-matai.png"
+              alt="Latoya Matai"
+              class="client-avatar"
+            />
+            <span class="avatar-status-dot"></span>
+          </div>
+          <div class="client-meta">
+            <div class="client-name">Latoya Matai</div>
+            <div class="client-role">
+              <span>Private Client</span>
+              <span class="tier-badge">PREMIER</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Lightweight Toast Notification -->
+    <div class="toast-pill" id="modeToast">
+      <i
+        data-lucide="info"
+        id="toastIcon"
+        style="width: 13px; height: 13px; color: var(--accent-coral)"
+      ></i>
+      <span id="toastMsg">Action triggered</span>
+    </div>
+
+    <!-- ====================================================================
+       SCRIPTS: LUCIDE & INTERACTIVITY & SIDE PANELS & SIMPLE MODE
+       ==================================================================== -->
+    <script>
+      // Initialize Lucide Icons
+      lucide.createIcons();
+
+      // 1. Navigation Drawer Control
+      function openNavDrawer() {
+        document.getElementById("navDrawer").classList.add("open");
+        document.getElementById("navDrawerBackdrop").classList.add("open");
+        document.body.classList.add("drawer-locked");
+      }
+
+      function closeNavDrawer() {
+        document.getElementById("navDrawer").classList.remove("open");
+        document.getElementById("navDrawerBackdrop").classList.remove("open");
+        document.body.classList.remove("drawer-locked");
+      }
+
+      function handleNavClick(e, name, targetUrl) {
+        if (name === "Documents") {
+          e.preventDefault();
+          closeNavDrawer();
+        } else {
+          closeNavDrawer();
+        }
+      }
+
+      function handleDrawerAction(actionName) {
+        closeNavDrawer();
+        showToast(`Initiating quick action: "${actionName}"`);
+      }
+
+      // 2. Simple Mode Toggle Engine
+      function toggleSimpleMode() {
+        const isSimple = document.body.classList.toggle("simple-mode");
+        const toggleBtn = document.getElementById("simpleModeToggle");
+        const label = document.getElementById("modeToggleLabel");
+        const heading = document.getElementById("pageMainHeading");
+        const subHeading = document.getElementById("pageSubHeading");
+
+        if (isSimple) {
+          toggleBtn.classList.add("active");
+          label.textContent = "Simple Mode: ON";
+          heading.innerHTML = "Everything looks <strong>good.</strong>";
+          subHeading.textContent =
+            "A calm, simple overview of your essential forms and documents.";
+          showToast("Simple Mode Enabled · Focused view");
+        } else {
+          toggleBtn.classList.remove("active");
+          label.textContent = "Simple Mode";
+          heading.innerHTML =
+            "Everything Royal Square needs, <strong>in one place.</strong>";
+          subHeading.textContent =
+            "Upload, complete, sign and securely store your financial documents.";
+          showToast("Detailed Mode Enabled · Full compliance & audit view");
+        }
+
+        lucide.createIcons();
+      }
+
+      // 3. Document and Form Detail Drawer Engine
+      const documentDatabase = {
+        // Ordinary client document: Bank statement
+        "bank-stmt": {
+          type: "doc",
+          code: "#DOC-BS-2048",
+          title: "Latest Bank Statement",
+          status: "Verified",
+          statusClass: "green",
+          uploaded: "05 Sep 2026 · 14:18",
+          statementDate: "19 Aug 2026",
+          validUntil: "19 Nov 2026",
+          linkedRequest: "Banking Details Update · #BD-2048",
+          kicker: "Verification Analysis",
+          summaryTitle: "Capitec Bank Stamped Statement",
+          summaryDesc:
+            "Official PDF document submitted to verify banking account details for monthly Sanlam debit order schedules.",
+          verification: [
+            "Account holder matched ✓",
+            "Document type confirmed ✓",
+            "Statement date valid ✓",
+            "Client identity matched ✓",
+          ],
+          usedBy: "Banking Details Update",
+          activity: [
+            { time: "14:20", desc: "Attached to Banking Details Update" },
+            { time: "14:19", desc: "Statement date verified" },
+            { time: "14:19", desc: "Document classified" },
+            { time: "14:18", desc: "Uploaded by Latoya Matai" },
+          ],
+        },
+        said: {
+          type: "doc",
+          code: "#DOC-ID-0192",
+          title: "South African ID Smart Card",
+          status: "Verified",
+          statusClass: "green",
+          uploaded: "05 Sep 2026 · 09:12",
+          statementDate: "Issue: 14 Feb 2018",
+          validUntil: "Lifetime / Permanent",
+          linkedRequest: "Client Identity Profile",
+          kicker: "FICA Verification Status",
+          summaryTitle: "National Identity Verification",
+          summaryDesc:
+            "Biometric verification match completed against Department of Home Affairs records.",
+          verification: [
+            "National identity number verified ✓",
+            "Facial biometric check confirmed ✓",
+            "POPIA processing consent logged ✓",
+            "FSP compliance archival secured ✓",
+          ],
+          usedBy: "Premier Client Master Record",
+          activity: [
+            {
+              time: "05 Sep · 09:15",
+              desc: "FICA identity certificate issued",
+            },
+            {
+              time: "05 Sep · 09:13",
+              desc: "Automated biometric match confirmed",
+            },
+            { time: "05 Sep · 09:12", desc: "Scanned ID card uploaded" },
+          ],
+        },
+        poa: {
+          type: "doc",
+          code: "#DOC-POA-8831",
+          title: "Proof of Residential Address",
+          status: "Verified",
+          statusClass: "green",
+          uploaded: "14 Aug 2026 · 11:20",
+          statementDate: "01 Aug 2026",
+          validUntil: "01 Dec 2026 (Refresh in 4 months)",
+          linkedRequest: "Residential Address Update",
+          kicker: "Address Verification",
+          summaryTitle: "City of Johannesburg Utility Account",
+          summaryDesc:
+            "Demonstrates proof of continuous physical residence for South African FICA statutory compliance.",
+          verification: [
+            "Residential address geocoded ✓",
+            "Statement date under 90 days ✓",
+            "Named occupant match ✓",
+            "Synced to all policy schedules ✓",
+          ],
+          usedBy: "Momentum, Sanlam & Santam schedules",
+          activity: [
+            {
+              time: "14 Aug · 11:28",
+              desc: "Address updated across policy schedules",
+            },
+            { time: "14 Aug · 11:21", desc: "Utility document validated" },
+          ],
+        },
+        licence: {
+          type: "doc",
+          code: "#DOC-DRV-4019",
+          title: "Driver's Licence & PrDP Card",
+          status: "Verified",
+          statusClass: "green",
+          uploaded: "12 Mar 2024 · 10:00",
+          statementDate: "Issue: 12 Mar 2022",
+          validUntil: "12 Mar 2027",
+          linkedRequest: "Motor Insurance Schedule",
+          kicker: "Underwriting Credentials",
+          summaryTitle: "Code EB Driver Certification",
+          summaryDesc:
+            "Active South African driving licence used for Santam short-term comprehensive vehicle coverage.",
+          verification: [
+            "Licence card validity active ✓",
+            "Code EB restriction endorsed ✓",
+            "Underwriter risk tier confirmed ✓",
+            "Automated renewal reminder set ✓",
+          ],
+          usedBy: "Motor Accident Claim #RSF-2841",
+          activity: [
+            {
+              time: "05 Sep · 12:02",
+              desc: "Referenced in Motor Accident Claim #RSF-2841",
+            },
+            { time: "12 Mar 2024", desc: "Initial verification on record" },
+          ],
+        },
+        "tax-cert": {
+          type: "doc",
+          code: "#DOC-TAX-2026",
+          title: "2026 Tax Certificate (IT3b & IT3c)",
+          status: "Available",
+          statusClass: "neutral",
+          uploaded: "29 Aug 2026 · 16:45",
+          statementDate: "Tax Year 2026",
+          validUntil: "Archival Tax Record",
+          linkedRequest: "SARS eFiling Archival",
+          kicker: "Tax Dossier",
+          summaryTitle: "Consolidated Tax Statement",
+          summaryDesc:
+            "Summarises taxable interest, foreign dividends and capital gains distributions across all portfolios.",
+          verification: [
+            "Sanlam IT3b reconciliation complete ✓",
+            "Allan Gray IT3c capital gains verified ✓",
+            "SARS eFiling format standard validated ✓",
+          ],
+          usedBy: "SARS Annual Return Submission",
+          activity: [
+            { time: "29 Aug · 16:45", desc: "Consolidated tax pack generated" },
+          ],
+        },
+        "val-cert": {
+          type: "doc",
+          code: "#DOC-VAL-9012",
+          title: "Insurance Valuation Certificate",
+          status: "Current",
+          statusClass: "green",
+          uploaded: "18 Jun 2025 · 14:10",
+          statementDate: "12 Jun 2025",
+          validUntil: "Jun 2027 (Renewal in 9 months)",
+          linkedRequest: "All-Risks Asset Schedule",
+          kicker: "Independent Valuation",
+          summaryTitle: "Precious Jewellery Appraisal",
+          summaryDesc:
+            "Certified independent valuation appraisal covering scheduled jewellery and high-value domestic items.",
+          verification: [
+            "Accredited appraiser stamp verified ✓",
+            "Item replacement value indexed ✓",
+            "All-Risks Santam endorsement active ✓",
+          ],
+          usedBy: "Santam Premier Policy Schedule",
+          activity: [
+            { time: "18 Jun 2025", desc: "Certificate uploaded and endorsed" },
+          ],
+        },
+
+        // Official Royal Square Forms
+        broker: {
+          type: "form",
+          code: "#FRM-ADV-01",
+          title: "Notice of Appointment as a Financial Advisor",
+          status: "Signed",
+          statusClass: "green",
+          signedBy: "Latoya Matai",
+          signedDate: "05 Sep 2026",
+          adviser: "Qiniso Thulani Ntuli",
+          version: "2025-01",
+          kicker: "Official Broker Mandate",
+          summaryTitle: "Royal Square Financial Appointment",
+          summaryDesc:
+            "Statutory mandate appointing Qiniso Thulani Ntuli CFP® and Royal Square Financial as legal intermediary.",
+          audit: [
+            "Document opened via client portal",
+            "Client information prefilled via Enter Once",
+            "Client reviewed terms & FAIS mandate",
+            "Client signed electronically",
+            "Final certified copy generated",
+          ],
+        },
+        consent: {
+          type: "form",
+          code: "#FRM-CON-02",
+          title: "Client Consent to Obtain Information",
+          status: "Signature required",
+          statusClass: "coral",
+          signedBy: "Pending Latoya Matai",
+          signedDate: "Required for advice",
+          adviser: "Qiniso Thulani Ntuli",
+          version: "2026-02",
+          kicker: "Action Required",
+          summaryTitle: "Information Collection Authority",
+          summaryDesc:
+            "Grants formal permission under POPIA for Royal Square to obtain balance and policy schedules from product providers.",
+          audit: [
+            "Document generated by Royal Square",
+            "Pre-filled with Latoya Matai verified credentials",
+            "Pending digital client sign-off",
+          ],
+        },
+        sla: {
+          type: "form",
+          code: "#FRM-SLA-03",
+          title: "Financial Services Provider Service Level Agreement",
+          status: "Signed",
+          statusClass: "green",
+          signedBy: "Latoya Matai",
+          signedDate: "14 Jan 2025",
+          adviser: "Qiniso Thulani Ntuli",
+          version: "2025-01",
+          kicker: "Service Mandate",
+          summaryTitle: "Premier Client SLA Terms",
+          summaryDesc:
+            "Defines consultation frequency, review cycles, fee schedules, and wealth advisory standards.",
+          audit: [
+            "Document reviewed during onboarding",
+            "Signed digitally with 2FA verification",
+            "Archived in legal contract repository",
+          ],
+        },
+        fais: {
+          type: "form",
+          code: "#FRM-FAIS-04",
+          title: "FAIS Disclosure Record",
+          status: "Acknowledged",
+          statusClass: "green",
+          signedBy: "Latoya Matai",
+          signedDate: "12 May 2026",
+          adviser: "Qiniso Thulani Ntuli",
+          version: "2026-01",
+          kicker: "Statutory Disclosure",
+          summaryTitle: "Section 8 Compliance Record",
+          summaryDesc:
+            "Mandatory FAIS Act disclosure detailing FSP 29370 licensing categories, professional indemnity, and compliance contacts.",
+          audit: [
+            "Statutory disclosures provided to client",
+            "Electronic confirmation recorded",
+            "Annual refresh acknowledged",
+          ],
+        },
+        nda: {
+          type: "form",
+          code: "#FRM-NDA-05",
+          title: "Confidentiality Agreement",
+          status: "Signed",
+          statusClass: "green",
+          signedBy: "Latoya Matai & Qiniso Ntuli",
+          signedDate: "14 Jan 2025",
+          adviser: "Qiniso Thulani Ntuli",
+          version: "2025-01",
+          kicker: "Mutual Privacy Shield",
+          summaryTitle: "Confidentiality & Non-Disclosure Agreement",
+          summaryDesc:
+            "Ensures absolute protection of client proprietary financial arrangements, family trusts, and wealth allocations.",
+          audit: [
+            "Mutual bilateral agreement executed",
+            "Dual digital keys recorded",
+            "Perpetual confidentiality shield active",
+          ],
+        },
+        "afr-confirm": {
+          type: "form",
+          code: "#FRM-AFR-06",
+          title: "Annual Review Circumstances Confirmation",
+          status: "3 fields remaining",
+          statusClass: "coral",
+          signedBy: "Pending Latoya Matai",
+          signedDate: "Due: 18 Sep 2026",
+          adviser: "Qiniso Thulani Ntuli",
+          version: "2026-AFR",
+          kicker: "Consultation Preparation",
+          summaryTitle: "Circumstances & Dependents Survey",
+          summaryDesc:
+            "Ensures tax shields, beneficiary allocations and risk tolerances are current prior to the 18 Sep consultation.",
+          audit: [
+            "Questionnaire initialized from 2025 profile",
+            "Employment & Address confirmed",
+            "Pending: Dependents and Retirement Horizon",
+          ],
+        },
+      };
+
+      function openDocDrawer(key) {
+        const data = documentDatabase[key] || documentDatabase["bank-stmt"];
+        document.getElementById("drawerDocCode").textContent = data.code;
+        const container = document.getElementById("drawerDynamicContent");
+
+        container.innerHTML = `
+        <div class="detail-headline-block">
+          <div class="detail-meta-tags">
+            <span class="pill-state ${data.statusClass}">
+              <span class="state-dot"></span>
+              <span>${data.status}</span>
+            </span>
+            <span style="font-size: 11px; color: var(--text-secondary);">Uploaded: <strong>${data.uploaded}</strong></span>
+          </div>
+          <h2 class="detail-title">${data.title}</h2>
+        </div>
+
+        <div class="detail-section-card">
+          <span class="detail-section-kicker">${data.kicker}</span>
+          <div class="detail-step-name">${data.summaryTitle}</div>
+          <p class="detail-step-desc">${data.summaryDesc}</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div style="background: var(--bg-card-subtle); padding: 10px 12px; border-radius: 12px;">
+            <div style="font-size: 9.5px; color: var(--text-subtle); text-transform: uppercase; font-weight: 700;">Statement Date</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--text-primary); margin-top: 2px;">${data.statementDate}</div>
+          </div>
+          <div style="background: var(--bg-card-subtle); padding: 10px 12px; border-radius: 12px;">
+            <div style="font-size: 9.5px; color: var(--text-subtle); text-transform: uppercase; font-weight: 700;">Validity Period</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--text-primary); margin-top: 2px;">${data.validUntil}</div>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <span class="detail-section-kicker" style="color: var(--text-secondary);">Verification Checks</span>
+          <div class="verification-checklist">
+            ${data.verification
+              .map(
+                (v) => `
+              <div class="verification-check-item">
+                <span>${v}</span>
+                <i data-lucide="check"></i>
+              </div>
+            `,
+              )
+              .join("")}
+          </div>
+        </div>
+
+        <div style="background: var(--bg-card-subtle); padding: 12px 14px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 11px; color: var(--text-secondary); font-weight: 600;">Used by workflow</span>
+          <strong style="font-size: 11.5px; color: var(--accent-coral);">${data.usedBy}</strong>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <span class="detail-section-kicker" style="color: var(--text-secondary);">Recent Activity</span>
+          <div class="activity-feed-list">
+            ${data.activity
+              .map(
+                (a) => `
+              <div class="activity-feed-item">
+                <span class="activity-desc">${a.desc}</span>
+                <span class="activity-time">${a.time}</span>
+              </div>
+            `,
+              )
+              .join("")}
+          </div>
+        </div>
+
+        <div class="drawer-action-buttons">
+          <button class="btn-drawer-primary" onclick="showToast('Opening verified PDF viewer...');">
+            <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+            <span>View document</span>
+          </button>
+          <button class="btn-drawer-subtle" onclick="showToast('Downloading encrypted document copy...');">
+            <i data-lucide="download" style="width: 13px; height: 13px;"></i>
+            <span>Download</span>
+          </button>
+          <button class="btn-drawer-subtle" onclick="openUploadModal();">
+            <i data-lucide="refresh-cw" style="width: 13px; height: 13px;"></i>
+            <span>Replace</span>
+          </button>
+        </div>
+      `;
+
+        document.getElementById("detailDrawer").classList.add("open");
+        document.getElementById("detailBackdrop").classList.add("open");
+        document.body.classList.add("drawer-locked");
+        lucide.createIcons();
+      }
+
+      function openFormDrawer(key) {
+        const data = documentDatabase[key] || documentDatabase["broker"];
+        document.getElementById("drawerDocCode").textContent = data.code;
+        const container = document.getElementById("drawerDynamicContent");
+
+        container.innerHTML = `
+        <div class="detail-headline-block">
+          <div class="detail-meta-tags">
+            <span class="pill-state ${data.statusClass}">
+              <span class="state-dot"></span>
+              <span>${data.status}</span>
+            </span>
+            <span style="font-size: 11px; color: var(--text-secondary);">Royal Square Financial</span>
+          </div>
+          <h2 class="detail-title">${data.title}</h2>
+        </div>
+
+        <div class="detail-section-card">
+          <span class="detail-section-kicker">${data.kicker}</span>
+          <div class="detail-step-name">${data.summaryTitle}</div>
+          <p class="detail-step-desc">${data.summaryDesc}</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div style="background: var(--bg-card-subtle); padding: 10px 12px; border-radius: 12px;">
+            <div style="font-size: 9.5px; color: var(--text-subtle); text-transform: uppercase; font-weight: 700;">Signed By</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--text-primary); margin-top: 2px;">${data.signedBy}</div>
+          </div>
+          <div style="background: var(--bg-card-subtle); padding: 10px 12px; border-radius: 12px;">
+            <div style="font-size: 9.5px; color: var(--text-subtle); text-transform: uppercase; font-weight: 700;">Date Executed</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--text-primary); margin-top: 2px;">${data.signedDate}</div>
+          </div>
+        </div>
+
+        <div style="background: var(--bg-card-subtle); padding: 10px 12px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 11px; color: var(--text-secondary); font-weight: 600;">Adviser</span>
+          <strong style="font-size: 11.5px; color: var(--text-primary);">${data.adviser}</strong>
+        </div>
+
+        <div style="background: var(--bg-card-subtle); padding: 10px 12px; border-radius: 12px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 11px; color: var(--text-secondary); font-weight: 600;">Version standard</span>
+          <strong style="font-size: 11.5px; color: var(--text-primary);">v${data.version}</strong>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <span class="detail-section-kicker" style="color: var(--text-secondary);">Compliance & Signature Audit</span>
+          <div class="verification-checklist">
+            ${data.audit
+              .map(
+                (step) => `
+              <div class="verification-check-item">
+                <span>${step}</span>
+                <i data-lucide="check-circle-2"></i>
+              </div>
+            `,
+              )
+              .join("")}
+          </div>
+        </div>
+
+        <div class="drawer-action-buttons">
+          ${
+            data.status === "Signature required" ||
+            data.status === "3 fields remaining"
+              ? `
+            <button class="btn-drawer-primary" onclick="showToast('Launching Royal Square digital signing session...');">
+              <i data-lucide="pen-tool" style="width: 14px; height: 14px;"></i>
+              <span>Complete & sign</span>
+            </button>
+          `
+              : `
+            <button class="btn-drawer-primary" onclick="showToast('Opening signed official document...');">
+              <i data-lucide="file-check" style="width: 14px; height: 14px;"></i>
+              <span>View official document</span>
+            </button>
+            <button class="btn-drawer-subtle" onclick="showToast('Downloading verified signed PDF copy...');">
+              <i data-lucide="download" style="width: 13px; height: 13px;"></i>
+              <span>Download copy</span>
+            </button>
+          `
+          }
+        </div>
+      `;
+
+        document.getElementById("detailDrawer").classList.add("open");
+        document.getElementById("detailBackdrop").classList.add("open");
+        document.body.classList.add("drawer-locked");
+        lucide.createIcons();
+      }
+
+      function closeDetailDrawer() {
+        document.getElementById("detailDrawer").classList.remove("open");
+        document.getElementById("detailBackdrop").classList.remove("open");
+        if (
+          !document.getElementById("navDrawer").classList.contains("open") &&
+          !document
+            .getElementById("uploadModalBackdrop")
+            .classList.contains("open")
+        ) {
+          document.body.classList.remove("drawer-locked");
+        }
+      }
+
+      // 4. Upload Modal Control
+      function openUploadModal() {
+        document.getElementById("uploadModalBackdrop").classList.add("open");
+        document.body.classList.add("drawer-locked");
+      }
+
+      function closeUploadModal(e) {
+        if (e) e.stopPropagation();
+        document.getElementById("uploadModalBackdrop").classList.remove("open");
+        if (
+          !document.getElementById("navDrawer").classList.contains("open") &&
+          !document.getElementById("detailDrawer").classList.contains("open")
+        ) {
+          document.body.classList.remove("drawer-locked");
+        }
+      }
+
+      function simulateFileUpload() {
+        showToast('Simulating file selection: "Capitec_Stamped_Aug2026.pdf"');
+        document.getElementById("autoDetectLabel").textContent =
+          "Detected: Bank Statement";
+        document.getElementById("docTypeSelect").value = "bank-statement";
+      }
+
+      function confirmUpload() {
+        closeUploadModal();
+        showToast(
+          "Document uploaded successfully · FICA classification in progress",
+        );
+      }
+
+      // 5. Filtering & Search Engine
+      function applyDocFilter(category, btnEl) {
+        document
+          .querySelectorAll(".vault-pill-btn")
+          .forEach((b) => b.classList.remove("active"));
+        btnEl.classList.add("active");
+
+        const cards = document.querySelectorAll("#documentsGrid .doc-card");
+        cards.forEach((card) => {
+          if (category === "all") {
+            card.style.display = "flex";
+          } else if (category === "forms") {
+            card.style.display = "none"; // Forms live in the dedicated official section above
+          } else {
+            const cardCat = card.getAttribute("data-category");
+            card.style.display = cardCat === category ? "flex" : "none";
+          }
+        });
+      }
+
+      function filterDocumentsByKeyword() {
+        const q = document
+          .getElementById("docSearchInput")
+          .value.toLowerCase()
+          .trim();
+        const docCards = document.querySelectorAll("#documentsGrid .doc-card");
+        const formCards = document.querySelectorAll(".form-card");
+
+        docCards.forEach((card) => {
+          const text = card.textContent.toLowerCase();
+          card.style.display = text.includes(q) ? "flex" : "none";
+        });
+
+        formCards.forEach((card) => {
+          const text = card.textContent.toLowerCase();
+          card.style.display = text.includes(q) ? "flex" : "none";
+        });
+      }
+
+      // 6. Global ESC listener
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeDetailDrawer();
+          closeNavDrawer();
+          closeUploadModal();
+        }
+      });
+
+      // 7. Lightweight Toast engine
+      let toastTimeout;
+      function showToast(msg) {
+        const toast = document.getElementById("modeToast");
+        document.getElementById("toastMsg").textContent = msg;
+        toast.classList.add("active");
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+          toast.classList.remove("active");
+        }, 2600);
+      }
+    </script>
+  </body>
+</html>
