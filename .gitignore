@@ -103,7 +103,5 @@ frontend/node_modules/
 /frontend/public/demo-assets/documents/
 
 # Unrouted/superseded frontend prototypes retained only as local references.
-/frontend/public/admin-reimagined.html
-/frontend/public/admin-reimagined-assets/
 /frontend/public/prototype/client_change_bank.html
 /frontend/public/login-hero.jpg
