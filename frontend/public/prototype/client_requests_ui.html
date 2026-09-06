@@ -1,0 +1,2650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Royal Square — Requests & Case Tracking</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons CDN -->
+  <script src="./lucide-local.js"></script>
+
+  <style>
+    /* ==========================================================================
+       1. SYSTEM TOKENS (ORGANIC, BORDERLESS LUXURY FINTECH)
+       ========================================================================== */
+    :root {
+      --bg-page: #F4F3EE;                 /* Warm creamy neutral canvas */
+      --bg-card: #FFFFFF;                 /* Crisp white surface */
+      --bg-card-subtle: #FAF9F5;          /* Tone-on-tone sub-card surface */
+      --bg-card-hover: #F6F4EE;
+      
+      --text-primary: #171615;            /* Deep near-black */
+      --text-secondary: #87837C;          /* Warm muted neutral */
+      --text-subtle: #ABA69E;             /* Light caption neutral */
+      
+      --accent-coral: #E85D3F;            /* Signature terracotta coral */
+      --accent-coral-hover: #D84F31;
+      --accent-coral-soft: #FDF0ED;       /* Pale coral pill tint */
+      --accent-coral-glow: rgba(232, 93, 63, 0.20);
+      
+      --status-green: #2B7A48;
+      --status-green-soft: #EDF7F1;
+      --status-amber: #B87314;
+      --status-amber-soft: #FEF6EC;
+      
+      --radius-card: 26px;
+      --radius-subcard: 16px;
+      --radius-pill: 9999px;
+      
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.016), 0 1px 3px rgba(0, 0, 0, 0.01);
+      --shadow-hover: 0 12px 34px rgba(0, 0, 0, 0.038), 0 2px 6px rgba(0, 0, 0, 0.018);
+      --shadow-button: 0 2px 8px rgba(0, 0, 0, 0.025);
+      --shadow-drawer: 0 20px 50px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+      --shadow-detail: -16px 0 48px rgba(0, 0, 0, 0.09), -4px 0 16px rgba(0, 0, 0, 0.03);
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px 38px 48px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body.drawer-locked {
+      overflow: hidden;
+    }
+
+    button, input, a {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .app-viewport {
+      width: 100%;
+      max-width: 1420px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ==========================================================================
+       2. TOP HEADER (EXACT SYSTEM CONSISTENCY)
+       ========================================================================== */
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      height: 46px;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .btn-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-button);
+      transition: all 0.15s ease;
+    }
+
+    .btn-circle:hover {
+      background: #FAF9F6;
+      transform: scale(1.03);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .brand-logo-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      background: #FFFFFF;
+      overflow: hidden;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: -0.5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
+
+    .brand-logo-mark img { transform: scale(1.6); }
+
+    .brand-titles {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .brand-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .header-center-search {
+      flex: 1;
+      max-width: 320px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-center-search input {
+      width: 100%;
+      height: 40px;
+      background: var(--bg-card);
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 0 18px 0 42px;
+      font-size: 11.5px;
+      color: var(--text-primary);
+      outline: none;
+      box-shadow: var(--shadow-button);
+      transition: all 0.2s ease;
+    }
+
+    .header-center-search input::placeholder {
+      color: var(--text-subtle);
+    }
+
+    .header-center-search input:focus {
+      box-shadow: 0 4px 16px var(--accent-coral-glow);
+    }
+
+    .header-center-search .search-icon {
+      position: absolute;
+      left: 15px;
+      right: auto;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px;
+      height: 15px;
+      color: var(--text-subtle);
+      pointer-events: none;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .mode-toggle-pill {
+      height: 40px;
+      background: var(--bg-card);
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 3px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-button);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-toggle-pill:hover {
+      background: #FAF8F4;
+    }
+
+    .mode-toggle-pill.active {
+      background: var(--accent-coral-soft);
+    }
+
+    .mode-icon {
+      color: var(--text-secondary);
+      transition: color 0.15s;
+    }
+
+    .mode-toggle-pill.active .mode-icon {
+      color: var(--accent-coral);
+    }
+
+    .mode-label-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .toggle-switch-track {
+      width: 24px;
+      height: 14px;
+      border-radius: var(--radius-pill);
+      background: #E5E1D7;
+      position: relative;
+      transition: background 0.2s ease;
+    }
+
+    .mode-toggle-pill.active .toggle-switch-track {
+      background: var(--accent-coral);
+    }
+
+    .toggle-switch-thumb {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .mode-toggle-pill.active .toggle-switch-thumb {
+      transform: translateX(10px);
+    }
+
+    .btn-lang {
+      height: 40px;
+      padding: 0 13px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card);
+      border: none;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: var(--shadow-button);
+      transition: background 0.15s;
+    }
+
+    .notif-btn {
+      position: relative;
+    }
+
+    .notif-dot {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-coral);
+      border: 1.5px solid #FFFFFF;
+    }
+
+    .profile-pill-topright {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-card);
+      border: none;
+      padding: 4px 14px 4px 5px;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-button);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .profile-pill-topright:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .client-avatar-wrapper {
+      position: relative;
+    }
+
+    .client-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .avatar-status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #2E7D4C;
+      border: 2px solid #FFFFFF;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+
+    .client-meta {
+      line-height: 1.2;
+      text-align: left;
+    }
+
+    .client-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .client-role {
+      font-size: 9.5px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tier-badge {
+      font-size: 8px;
+      font-weight: 800;
+      background: #181716;
+      color: #FFFFFF;
+      padding: 1px 5px;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ==========================================================================
+       3. PAGE INTRO (FREE-FLOATING HEADER & MICRO-STATS)
+       ========================================================================== */
+    .page-intro-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 6px 4px 2px;
+    }
+
+    .intro-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .intro-eyebrow {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: var(--accent-coral);
+      text-transform: uppercase;
+    }
+
+    .intro-headline {
+      font-size: 29px;
+      font-weight: 400;
+      letter-spacing: -0.6px;
+      color: var(--text-primary);
+      line-height: 1.15;
+    }
+
+    .intro-headline strong {
+      font-weight: 700;
+    }
+
+    .intro-supporting {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    .intro-stats-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      padding: 7px 15px;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-button);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .stat-pill.attention {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+      font-weight: 700;
+    }
+
+    .stat-indicator-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #2E7D4C;
+    }
+
+    .stat-indicator-dot.pulsing {
+      background: var(--accent-coral);
+      box-shadow: 0 0 0 3px rgba(232, 93, 63, 0.18);
+      animation: pulse-ring 1.8s infinite;
+    }
+
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(232, 93, 63, 0.35); }
+      70% { box-shadow: 0 0 0 6px rgba(232, 93, 63, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(232, 93, 63, 0); }
+    }
+
+    /* ==========================================================================
+       4. FILTER / CONTROL BAR
+       ========================================================================== */
+    .control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 2px;
+    }
+
+    .filter-pills-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      padding: 4px;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-button);
+    }
+
+    .filter-pill-btn {
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .filter-pill-btn:hover {
+      color: var(--text-primary);
+      background: var(--bg-card-hover);
+    }
+
+    .filter-pill-btn.active {
+      background: #181716;
+      color: #FFFFFF;
+      font-weight: 700;
+    }
+
+    .filter-pill-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 16px;
+      min-width: 16px;
+      padding: 0 5px;
+      border-radius: var(--radius-pill);
+      font-size: 9px;
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .filter-pill-btn:not(.active) .filter-pill-count {
+      background: #ECE7DE;
+      color: var(--text-primary);
+    }
+
+    .control-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .request-search-wrap {
+      position: relative;
+      width: 260px;
+    }
+
+    .request-search-wrap input {
+      width: 100%;
+      height: 38px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card);
+      border: none;
+      padding: 0 16px 0 34px;
+      font-size: 11.5px;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-button);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .request-search-wrap input:focus {
+      box-shadow: 0 4px 16px var(--accent-coral-glow);
+    }
+
+    .request-search-wrap svg {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      width: 14px;
+      height: 14px;
+      color: var(--text-subtle);
+    }
+
+    .sort-dropdown-btn {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card);
+      box-shadow: var(--shadow-button);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .sort-dropdown-btn:hover {
+      color: var(--text-primary);
+      background: #FAF9F6;
+    }
+
+    /* ==========================================================================
+       5. TOP PRIORITY: NEEDS YOUR ACTION
+       ========================================================================== */
+    .priority-hero-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-card);
+      box-shadow: 0 6px 28px rgba(232, 93, 63, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+      padding: 24px 28px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .priority-hero-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 6px;
+      background: var(--accent-coral);
+    }
+
+    .priority-hero-card:hover {
+      box-shadow: 0 14px 40px rgba(232, 93, 63, 0.13), 0 2px 6px rgba(0,0,0,0.02);
+      transform: translateY(-1px);
+    }
+
+    .priority-top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .priority-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-urgent {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .badge-status-ball {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 4px 11px;
+      border-radius: var(--radius-pill);
+      background: #181716;
+      color: #FFFFFF;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .badge-due-date {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .priority-body-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .priority-details {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .priority-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .priority-copy {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      max-width: 620px;
+    }
+
+    .priority-right-action-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    .priority-progress-bar-wrap {
+      width: 100%;
+      max-width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .progress-meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 7px;
+      background: #F0ECE4;
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+
+    .progress-fill-coral {
+      height: 100%;
+      background: var(--accent-coral);
+      border-radius: var(--radius-pill);
+      transition: width 0.4s ease;
+    }
+
+    .priority-button-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-coral-primary {
+      height: 42px;
+      padding: 0 20px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-coral);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px var(--accent-coral-glow);
+      transition: all 0.15s ease;
+    }
+
+    .btn-coral-primary:hover {
+      background: var(--accent-coral-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary-quiet {
+      height: 42px;
+      padding: 0 16px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card-subtle);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+
+    .btn-secondary-quiet:hover {
+      background: #ECE8DF;
+    }
+
+    /* ==========================================================================
+       6. ACTIVE REQUESTS — ASYMMETRIC BENTO GRID
+       ========================================================================== */
+    .bento-requests-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      grid-auto-rows: auto;
+      gap: 20px;
+    }
+
+    .request-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      padding: 24px 26px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+      position: relative;
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .request-card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    .card-header-bar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .card-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .card-kicker-tag {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .case-id-pill {
+      background: var(--bg-card-subtle);
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .request-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    /* Restrained Status Pills ("Who has the ball") */
+    .status-pill {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 4px 11px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-pill.waiting-adviser {
+      background: #F1ECE3;
+      color: #5D5952;
+    }
+
+    .status-pill.assessment {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+    }
+
+    .status-pill.waiting-provider {
+      background: #EAE6DD;
+      color: var(--text-secondary);
+    }
+
+    .status-pill.complete {
+      background: var(--status-green-soft);
+      color: var(--status-green);
+    }
+
+    .ball-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .card-supporting-copy {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    /* Workflow Timeline Component (Clean line & node) */
+    .workflow-timeline {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      position: relative;
+      margin: 6px 0 2px;
+      padding: 0 4px;
+    }
+
+    .timeline-step-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      flex-shrink: 0;
+    }
+
+    .node-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9.5px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .timeline-step-node.completed .node-circle {
+      background: #181716;
+      color: #FFFFFF;
+    }
+
+    .timeline-step-node.current .node-circle {
+      background: var(--accent-coral);
+      color: #FFFFFF;
+      box-shadow: 0 0 0 4px var(--accent-coral-soft);
+    }
+
+    .timeline-step-node.upcoming .node-circle {
+      background: #EFECE5;
+      color: var(--text-subtle);
+    }
+
+    .node-label {
+      position: absolute;
+      top: 26px;
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .timeline-step-node.current .node-label {
+      color: var(--accent-coral);
+      font-weight: 700;
+    }
+
+    .timeline-step-node.upcoming .node-label {
+      color: var(--text-subtle);
+    }
+
+    .timeline-connector {
+      flex: 1;
+      height: 2px;
+      background: #EFECE5;
+      margin: 0 3px;
+      position: relative;
+      top: -9px;
+      z-index: 1;
+    }
+
+    .timeline-connector.completed {
+      background: #181716;
+    }
+
+    /* Extra Claim Specific Badges */
+    .claim-evidence-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-card-subtle);
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 11px;
+    }
+
+    .evidence-tag {
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-footer-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 10px;
+      border-top: 1px solid #FAF6EE;
+      margin-top: 4px;
+    }
+
+    .ball-owner-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ball-owner-avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .ball-owner-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .ball-owner-label strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .card-cta-link {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--accent-coral);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: gap 0.15s;
+    }
+
+    .card-cta-link:hover {
+      gap: 7px;
+    }
+
+    /* Small card span styling */
+    .card-span-full {
+      grid-column: 1 / -1;
+    }
+
+    /* Motor Claim Card Distinct Identity */
+    .claim-accent-card {
+      background: #FFFFFF;
+      box-shadow: 0 4px 26px rgba(232, 93, 63, 0.05), 0 1px 3px rgba(0,0,0,0.01);
+    }
+
+    /* ==========================================================================
+       7. RECENTLY COMPLETED SECTION
+       ========================================================================== */
+    .completed-section-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .section-eyebrow-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .view-history-link {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s;
+    }
+
+    .view-history-link:hover {
+      color: var(--accent-coral);
+    }
+
+    .completed-rows-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .completed-row-item {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 13px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-card);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .completed-row-item:hover {
+      background: #FAF9F5;
+      transform: translateX(3px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .completed-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .completed-check-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--status-green-soft);
+      color: var(--status-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .completed-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .completed-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 1px;
+    }
+
+    .completed-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .completed-date {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-subtle);
+    }
+
+    /* ==========================================================================
+       8. SIMPLE MODE OVERRIDES
+       ========================================================================== */
+    body.simple-mode .workflow-timeline,
+    body.simple-mode .claim-evidence-row,
+    body.simple-mode .card-kicker-tag,
+    body.simple-mode .progress-meta-row,
+    body.simple-mode .header-center-search {
+      display: none !important;
+    }
+
+    body.simple-mode .bento-requests-grid {
+      grid-template-columns: 1fr;
+    }
+
+    body.simple-mode .request-card {
+      padding: 26px 30px;
+    }
+
+    body.simple-mode .request-title {
+      font-size: 21px;
+    }
+
+    body.simple-mode .card-supporting-copy {
+      font-size: 14px;
+      max-width: 780px;
+    }
+
+    body.simple-mode .simple-summary-tag {
+      display: block !important;
+      background: var(--bg-card-subtle);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .simple-summary-tag {
+      display: none;
+    }
+
+    /* ==========================================================================
+       9. DETAIL PREVIEW SIDE PANEL (POLISHED DRAWER FROM RIGHT)
+       ========================================================================== */
+    .detail-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(23, 22, 21, 0.28);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      z-index: 1001;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s ease;
+    }
+
+    .detail-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .detail-drawer {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      bottom: 16px;
+      width: 460px;
+      max-width: calc(100vw - 32px);
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-detail);
+      z-index: 1002;
+      transform: translateX(calc(100% + 24px));
+      transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 26px 24px;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .detail-drawer::-webkit-scrollbar {
+      display: none;
+    }
+
+    .detail-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-top-action-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #F0ECE4;
+    }
+
+    .drawer-case-code {
+      font-size: 10.5px;
+      font-weight: 800;
+      background: var(--bg-card-subtle);
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      color: var(--text-secondary);
+      letter-spacing: 0.5px;
+    }
+
+    .detail-headline-block {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .detail-title {
+      font-size: 21px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+    }
+
+    .detail-meta-tags {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .detail-section-card {
+      background: var(--bg-card-subtle);
+      border-radius: var(--radius-subcard);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .detail-section-kicker {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--accent-coral);
+    }
+
+    .detail-step-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .detail-step-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    .detail-step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      padding-left: 26px;
+      margin: 4px 0;
+    }
+
+    .detail-step-list::before {
+      content: '';
+      position: absolute;
+      top: 6px;
+      bottom: 14px;
+      left: 10px;
+      width: 2px;
+      background: #ECE7DE;
+    }
+
+    .detail-step-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .detail-step-item::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 3px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ECE7DE;
+    }
+
+    .detail-step-item.done::before {
+      background: #181716;
+    }
+
+    .detail-step-item.active::before {
+      background: var(--accent-coral);
+      box-shadow: 0 0 0 3px var(--accent-coral-soft);
+    }
+
+    .detail-step-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .detail-step-sub {
+      font-size: 10.5px;
+      color: var(--text-secondary);
+    }
+
+    .docs-pill-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .doc-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #FFFFFF;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 11.5px;
+    }
+
+    .doc-left-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .doc-status-verified {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--status-green);
+      background: var(--status-green-soft);
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+    }
+
+    .compliance-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .compliance-pill {
+      background: #FFFFFF;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .compliance-pill svg {
+      color: var(--status-green);
+      width: 13px;
+      height: 13px;
+    }
+
+    .activity-feed-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .activity-feed-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed #ECE7DE;
+    }
+
+    .activity-time {
+      color: var(--text-subtle);
+      font-weight: 600;
+    }
+
+    .activity-desc {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+       10. SLIDE-OUT LEFT NAVBAR (IDENTICAL SYSTEM FOUNDATION)
+       ========================================================================== */
+    .nav-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(23, 22, 21, 0.25);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .nav-drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .nav-drawer {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      bottom: 16px;
+      width: 298px;
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-drawer);
+      z-index: 999;
+      transform: translateX(calc(-100% - 24px));
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 22px 18px;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .nav-drawer::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 4px;
+    }
+
+    .drawer-nav-section {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .drawer-section-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--text-subtle);
+      padding: 0 12px 3px;
+    }
+
+    .drawer-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .drawer-link {
+      height: 42px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .drawer-link:hover {
+      color: var(--text-primary);
+      background: var(--bg-card-hover);
+      transform: translateX(2px);
+    }
+
+    .drawer-link.active {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+      font-weight: 700;
+    }
+
+    .drawer-link.active .drawer-icon,
+    .drawer-link.active svg {
+      color: var(--accent-coral);
+      stroke: var(--accent-coral);
+    }
+
+    .drawer-icon,
+    .drawer-link svg {
+      width: 17px;
+      height: 17px;
+      color: var(--text-secondary);
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .drawer-active-pip {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent-coral);
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .drawer-badge {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+    }
+
+    .drawer-actions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .drawer-action-btn {
+      height: 38px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+      text-align: left;
+    }
+
+    .drawer-action-btn:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+      transform: translateX(3px);
+    }
+
+    .action-icon-pill {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--bg-card-subtle);
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      transition: all 0.18s ease;
+    }
+
+    .action-icon-pill svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .drawer-footer {
+      margin-top: auto;
+      padding-top: 8px;
+    }
+
+    .drawer-profile-box {
+      background: var(--bg-card-subtle);
+      border-radius: 18px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .drawer-profile-box:hover {
+      background: #ECE7DE;
+    }
+
+    /* Lightweight Toast Notification */
+    .toast-pill {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #181716;
+      color: #FFFFFF;
+      padding: 9px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+      z-index: 1010;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast-pill.active {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-viewport">
+
+    <!-- ====================================================================
+         1. TOP HEADER (BRAND + CENTER SEARCH + CONTROLS + LATOYA PROFILE)
+         ==================================================================== -->
+    <header class="top-header">
+      <!-- Left: Menu Button + Brand -->
+      <div class="brand-cluster">
+        <button class="btn-circle" id="menuToggleBtn" aria-label="Open Navigation" onclick="openNavDrawer()" title="Open Navigation Menu">
+          <i data-lucide="menu" style="width: 16px; height: 16px;"></i>
+        </button>
+        <div class="brand-logo-mark"><img src="./royal-square-logo.png" alt="Royal Square" style="width: 100%; height: 100%; display: block; object-fit: cover;" /></div>
+        <div class="brand-titles">
+          <span class="brand-title">Royal Square</span>
+          <span class="brand-subtitle">Client Portal</span>
+        </div>
+      </div>
+
+      <!-- Center: Clean Search Bar -->
+      <div class="header-center-search">
+        <input type="text" placeholder="Start searching here..." />
+        <i data-lucide="search" class="search-icon"></i>
+      </div>
+
+      <!-- Right: View Mode Toggle + Notifications + Lang + Latoya Matai Profile -->
+      <div class="header-right">
+        <button class="mode-toggle-pill" id="simpleModeToggle" onclick="toggleSimpleMode()" title="Toggle Simple Mode">
+          <i data-lucide="sliders-horizontal" class="mode-icon" style="width: 13px; height: 13px;"></i>
+          <span class="mode-label-text" id="modeToggleLabel">Simple Mode</span>
+          <div class="toggle-switch-track">
+            <div class="toggle-switch-thumb"></div>
+          </div>
+        </button>
+
+        <button class="btn-circle notif-btn" aria-label="Notifications" onclick="showToast('Latoya, you have 1 pending client action.')">
+          <i data-lucide="bell" style="width: 15px; height: 15px;"></i>
+          <span class="notif-dot"></span>
+        </button>
+
+        <button class="btn-lang" id="lang-btn" onclick="showToast('Language: English (South Africa)')">
+          <span>EN</span>
+          <i data-lucide="chevron-down" style="width: 10px; height: 10px;"></i>
+        </button>
+
+        <!-- Latoya Matai Profile Card -->
+        <div class="profile-pill-topright" onclick="showToast('Viewing profile & settings for Latoya Matai...')">
+          <div class="client-avatar-wrapper">
+            <img src="/latoya-matai.png" alt="Latoya Matai" class="client-avatar" />
+            <span class="avatar-status-dot" title="Authenticated Profile"></span>
+          </div>
+          <div class="client-meta">
+            <div class="client-name">Latoya Matai</div>
+            <div class="client-role">
+              <span>Private Client</span>
+              <span class="tier-badge">PREMIER</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         2. PAGE INTRO (FREE-FLOATING HEADLINE & MICRO-STATS)
+         ==================================================================== -->
+    <section class="page-intro-row">
+      <div class="intro-title-block">
+        <span class="intro-eyebrow">My Requests</span>
+        <h1 class="intro-headline" id="pageMainHeading">Everything you're <strong>waiting on.</strong></h1>
+        <p class="intro-supporting" id="pageSubHeading">Follow your requests from submission to completion.</p>
+      </div>
+
+      <div class="intro-stats-cluster">
+        <div class="stat-pill">
+          <span class="stat-indicator-dot"></span>
+          <span>3 Active</span>
+        </div>
+        <div class="stat-pill attention">
+          <span class="stat-indicator-dot pulsing"></span>
+          <span>1 needs you</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         3. FILTER / SEARCH ROW
+         ==================================================================== -->
+    <section class="control-row">
+      <div class="filter-pills-group" role="tablist">
+        <button class="filter-pill-btn active" onclick="applyFilter('all', this)">
+          <span>All</span>
+          <span class="filter-pill-count">4</span>
+        </button>
+        <button class="filter-pill-btn" onclick="applyFilter('needs-me', this)">
+          <span>Needs me</span>
+          <span class="filter-pill-count">1</span>
+        </button>
+        <button class="filter-pill-btn" onclick="applyFilter('in-progress', this)">
+          <span>In progress</span>
+          <span class="filter-pill-count">3</span>
+        </button>
+        <button class="filter-pill-btn" onclick="applyFilter('completed', this)">
+          <span>Completed</span>
+          <span class="filter-pill-count">3</span>
+        </button>
+      </div>
+
+      <div class="control-right-actions">
+        <div class="request-search-wrap">
+          <i data-lucide="search"></i>
+          <input type="text" id="filterSearchInput" oninput="filterByKeyword()" placeholder="Search requests..." />
+        </div>
+        <button class="sort-dropdown-btn" onclick="showToast('Sorted by: Latest first')">
+          <span>Latest first</span>
+          <i data-lucide="chevron-down" style="width: 11px; height: 11px;"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         4. TOP PRIORITY: NEEDS YOUR ACTION
+         ==================================================================== -->
+    <section class="priority-hero-card" id="priorityCard" data-status="needs-me" onclick="openDetailDrawer('afr')">
+      <div class="priority-top-header">
+        <div class="priority-badge-group">
+          <span class="badge-urgent">
+            <i data-lucide="alert-circle" style="width: 12px; height: 12px;"></i>
+            <span>Needs your action</span>
+          </span>
+          <span class="badge-status-ball">
+            <span class="ball-dot" style="background: var(--accent-coral);"></span>
+            <span>Waiting for you</span>
+          </span>
+        </div>
+        <div class="badge-due-date">
+          <i data-lucide="calendar" style="width: 12px; height: 12px; color: var(--accent-coral);"></i>
+          <span>Due: 17 Sep (12 days)</span>
+        </div>
+      </div>
+
+      <div class="priority-body-grid">
+        <div class="priority-details">
+          <h2 class="priority-title">Annual Financial Review 2026</h2>
+          <p class="priority-copy">We need you to confirm whether your circumstances, dependents, or risk goals have changed prior to our scheduled consultation with Qiniso Ntuli.</p>
+          <div class="simple-summary-tag">
+            Step 3 of 6: Your confirmation is needed before Qiniso can complete the wealth rebalance.
+          </div>
+        </div>
+
+        <div class="priority-right-action-col">
+          <div class="priority-progress-bar-wrap">
+            <div class="progress-meta-row">
+              <span>Progress</span>
+              <span>3 of 6 steps</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill-coral" style="width: 50%;"></div>
+            </div>
+          </div>
+
+          <div class="priority-button-cluster">
+            <button class="btn-secondary-quiet" onclick="event.stopPropagation(); openDetailDrawer('afr');">
+              <span>View details</span>
+            </button>
+            <button class="btn-coral-primary" onclick="event.stopPropagation(); showToast('Launching Questionnaire: Circumstances confirmation...');">
+              <span>Continue review</span>
+              <i data-lucide="arrow-right" style="width: 13px; height: 13px;"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         5. ACTIVE REQUESTS — ASYMMETRIC BENTO GRID
+         ==================================================================== -->
+    <main class="bento-requests-grid" id="requestsGrid">
+
+      <!-- REQUEST 1: Banking Details Update -->
+      <article class="request-card" data-status="in-progress" onclick="openDetailDrawer('banking')">
+        <div class="card-header-bar">
+          <div class="card-title-group">
+            <div class="card-kicker-tag">
+              <span>Investment Account · Sanlam</span>
+              <span class="case-id-pill">#BD-2048</span>
+            </div>
+            <h3 class="request-title">Banking Details Update</h3>
+          </div>
+          <span class="status-pill waiting-adviser">
+            <span class="ball-dot"></span>
+            <span>Waiting for Qiniso</span>
+          </span>
+        </div>
+
+        <p class="card-supporting-copy">Your new banking details and signed instruction have been submitted. Qiniso is currently reviewing the stamped verification document.</p>
+
+        <!-- Plain Language Simple Mode Block -->
+        <div class="simple-summary-tag">
+          Qiniso is reviewing your request · 4 of 6 steps complete · <strong>Nothing needed from you.</strong>
+        </div>
+
+        <!-- Workflow Timeline Component -->
+        <div class="workflow-timeline" aria-label="Request workflow progress">
+          <!-- Step 1 -->
+          <div class="timeline-step-node completed">
+            <div class="node-circle"><i data-lucide="check" style="width: 11px; height: 11px;"></i></div>
+            <span class="node-label">Received</span>
+          </div>
+          <div class="timeline-connector completed"></div>
+
+          <!-- Step 2 -->
+          <div class="timeline-step-node completed">
+            <div class="node-circle"><i data-lucide="check" style="width: 11px; height: 11px;"></i></div>
+            <span class="node-label">Verified</span>
+          </div>
+          <div class="timeline-connector completed"></div>
+
+          <!-- Step 3 -->
+          <div class="timeline-step-node completed">
+            <div class="node-circle"><i data-lucide="check" style="width: 11px; height: 11px;"></i></div>
+            <span class="node-label">Signed</span>
+          </div>
+          <div class="timeline-connector completed"></div>
+
+          <!-- Step 4 (Current) -->
+          <div class="timeline-step-node current">
+            <div class="node-circle">4</div>
+            <span class="node-label">Review</span>
+          </div>
+          <div class="timeline-connector"></div>
+
+          <!-- Step 5 -->
+          <div class="timeline-step-node upcoming">
+            <div class="node-circle">5</div>
+            <span class="node-label">Provider</span>
+          </div>
+          <div class="timeline-connector"></div>
+
+          <!-- Step 6 -->
+          <div class="timeline-step-node upcoming">
+            <div class="node-circle">6</div>
+            <span class="node-label">Done</span>
+          </div>
+        </div>
+
+        <div class="card-footer-meta">
+          <div class="ball-owner-info">
+            <img src="/qiniso-ntuli.png" alt="Qiniso" class="ball-owner-avatar" />
+            <span class="ball-owner-label">Current step with <strong>Qiniso Ntuli</strong> · Today, 14:22</span>
+          </div>
+          <span class="card-cta-link">
+            <span>View request</span>
+            <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
+          </span>
+        </div>
+      </article>
+
+      <!-- REQUEST 2: Motor Accident Claim (Claim #RSF-2841) -->
+      <article class="request-card claim-accent-card" data-status="in-progress" onclick="openDetailDrawer('motor')">
+        <div class="card-header-bar">
+          <div class="card-title-group">
+            <div class="card-kicker-tag" style="color: var(--accent-coral);">
+              <i data-lucide="shield-alert" style="width: 12px; height: 12px;"></i>
+              <span>Short-Term Insurance</span>
+              <span class="case-id-pill" style="background: var(--accent-coral-soft); color: var(--accent-coral);">Claim #RSF-2841</span>
+            </div>
+            <h3 class="request-title">Motor Accident Claim</h3>
+          </div>
+          <span class="status-pill assessment">
+            <span class="ball-dot"></span>
+            <span>Waiting for Santam</span>
+          </span>
+        </div>
+
+        <p class="card-supporting-copy">Your claim was registered following the offline incident dossier. Santam has dispatched an independent assessor to inspect vehicle damage.</p>
+
+        <!-- Plain Language Simple Mode Block -->
+        <div class="simple-summary-tag">
+          Assessment underway by Santam · 6 of 10 steps · <strong>Nothing needed from you.</strong>
+        </div>
+
+        <!-- Evidence Micro-Banner -->
+        <div class="claim-evidence-row">
+          <span class="evidence-tag">
+            <i data-lucide="check-circle-2" style="width: 13px; height: 13px; color: var(--status-green);"></i>
+            <span>Dossier evidence 92% complete</span>
+          </span>
+          <span style="font-size: 10px; color: var(--text-secondary); font-weight: 600;">Photos & Voice statement verified</span>
+        </div>
+
+        <!-- Claim Visual Stepper Timeline -->
+        <div class="workflow-timeline" aria-label="Claim workflow progress">
+          <div class="timeline-step-node completed">
+            <div class="node-circle"><i data-lucide="check" style="width: 11px; height: 11px;"></i></div>
+            <span class="node-label">Reported</span>
+          </div>
+          <div class="timeline-connector completed"></div>
+
+          <div class="timeline-step-node completed">
+            <div class="node-circle"><i data-lucide="check" style="width: 11px; height: 11px;"></i></div>
+            <span class="node-label">Registered</span>
+          </div>
+          <div class="timeline-connector completed"></div>
+
+          <div class="timeline-step-node current">
+            <div class="node-circle"><i data-lucide="eye" style="width: 10px; height: 10px;"></i></div>
+            <span class="node-label">Assessment</span>
+          </div>
+          <div class="timeline-connector"></div>
+
+          <div class="timeline-step-node upcoming">
+            <div class="node-circle">4</div>
+            <span class="node-label">Quotes</span>
+          </div>
+          <div class="timeline-connector"></div>
+
+          <div class="timeline-step-node upcoming">
+            <div class="node-circle">5</div>
+            <span class="node-label">Authorize</span>
+          </div>
+          <div class="timeline-connector"></div>
+
+          <div class="timeline-step-node upcoming">
+            <div class="node-circle">6</div>
+            <span class="node-label">Repair</span>
+          </div>
+        </div>
+
+        <div class="card-footer-meta">
+          <div class="ball-owner-info">
+            <i data-lucide="building-2" style="width: 15px; height: 15px; color: var(--accent-coral);"></i>
+            <span class="ball-owner-label">Assigned to <strong>Santam Claims Team</strong> · Today, 12:08</span>
+          </div>
+          <span class="card-cta-link" style="color: var(--accent-coral);">
+            <span>Track claim</span>
+            <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
+          </span>
+        </div>
+      </article>
+
+      <!-- REQUEST 3: Beneficiary Update (Spanning balanced asymmetric width) -->
+      <article class="request-card card-span-full" data-status="in-progress" onclick="openDetailDrawer('beneficiary')">
+        <div class="card-header-bar">
+          <div class="card-title-group">
+            <div class="card-kicker-tag">
+              <span>Retirement Annuity · Momentum Wealth</span>
+              <span class="case-id-pill">#BU-1092</span>
+            </div>
+            <h3 class="request-title">Beneficiary Allocation Update</h3>
+          </div>
+          <span class="status-pill waiting-provider">
+            <span class="ball-dot"></span>
+            <span>Waiting for Momentum</span>
+          </span>
+        </div>
+
+        <p class="card-supporting-copy">Your signed Section 37C nomination form was endorsed by Qiniso and transmitted to Momentum Wealth for policy schedule amendment.</p>
+
+        <!-- Plain Language Simple Mode Block -->
+        <div class="simple-summary-tag">
+          Momentum Wealth is updating your policy schedules · 5 of 6 steps complete · <strong>Nothing needed from you.</strong>
+        </div>
+
+        <!-- Workflow Timeline Component -->
+        <div class="workflow-timeline" aria-label="Beneficiary workflow progress">
+          <div class="timeline-step-node completed">
+            <div class="node-circle"><i data-lucide="check" style="width: 11px; height: 11px;"></i></div>
+            <span class="node-label">Instruction</span>
+          </div>
+          <div class="timeline-connector completed"></div>
+
+          <div class="timeline-step-node completed">
+            <div class="node-circle"><i data-lucide="check" style="width: 11px; height: 11px;"></i></div>
+            <span class="node-label">FICA Checked</span>
+          </div>
+          <div class="timeline-connector completed"></div>
+
+          <div class="timeline-step-node completed">
+            <div class="node-circle"><i data-lucide="check" style="width: 11px; height: 11px;"></i></div>
+            <span class="node-label">Form Signed</span>
+          </div>
+          <div class="timeline-connector completed"></div>
+
+          <div class="timeline-step-node completed">
+            <div class="node-circle"><i data-lucide="check" style="width: 11px; height: 11px;"></i></div>
+            <span class="node-label">Adviser Endorsed</span>
+          </div>
+          <div class="timeline-connector completed"></div>
+
+          <div class="timeline-step-node current">
+            <div class="node-circle">5</div>
+            <span class="node-label">Provider Schedule</span>
+          </div>
+          <div class="timeline-connector"></div>
+
+          <div class="timeline-step-node upcoming">
+            <div class="node-circle">6</div>
+            <span class="node-label">Complete</span>
+          </div>
+        </div>
+
+        <div class="card-footer-meta">
+          <div class="ball-owner-info">
+            <i data-lucide="clock" style="width: 14px; height: 14px; color: var(--text-subtle);"></i>
+            <span class="ball-owner-label">Stage 5 of 6 · Next step is confirmation certificate · Updated 28 Aug</span>
+          </div>
+          <span class="card-cta-link">
+            <span>View request</span>
+            <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
+          </span>
+        </div>
+      </article>
+
+    </main>
+
+    <!-- ====================================================================
+         6. RECENTLY COMPLETED SECTION
+         ==================================================================== -->
+    <section class="completed-section-wrap" id="completedSection">
+      <div class="section-eyebrow-row">
+        <span class="section-title">Recently Completed</span>
+        <a href="#history" class="view-history-link" onclick="showToast('Loading completed request archive (2024–2026)...')">
+          <span>View all history</span>
+          <i data-lucide="arrow-right" style="width: 12px; height: 12px;"></i>
+        </a>
+      </div>
+
+      <div class="completed-rows-list">
+        <!-- Completed 1 -->
+        <div class="completed-row-item" onclick="showToast('Opening archive record: 2026 Tax Certificate (IT3b/c)')">
+          <div class="completed-left">
+            <div class="completed-check-circle">
+              <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+            </div>
+            <div>
+              <div class="completed-name">2026 Tax Certificate Request (IT3b & IT3c)</div>
+              <div class="completed-sub">Compiled for SARS eFiling submission · Stored in encrypted Vault</div>
+            </div>
+          </div>
+          <div class="completed-right">
+            <span class="completed-date">Completed · 29 Aug 2026</span>
+            <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: var(--text-subtle);"></i>
+          </div>
+        </div>
+
+        <!-- Completed 2 -->
+        <div class="completed-row-item" onclick="showToast('Opening archive record: Residential Address Update')">
+          <div class="completed-left">
+            <div class="completed-check-circle">
+              <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+            </div>
+            <div>
+              <div class="completed-name">Residential Address & FICA Proof Update</div>
+              <div class="completed-sub">Synced across Sanlam, Allan Gray and Santam policy schedules</div>
+            </div>
+          </div>
+          <div class="completed-right">
+            <span class="completed-date">Completed · 14 Aug 2026</span>
+            <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: var(--text-subtle);"></i>
+          </div>
+        </div>
+
+        <!-- Completed 3 -->
+        <div class="completed-row-item" onclick="showToast('Opening archive record: Annual Financial Review 2025')">
+          <div class="completed-left">
+            <div class="completed-check-circle">
+              <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+            </div>
+            <div>
+              <div class="completed-name">Annual Financial Review 2025</div>
+              <div class="completed-sub">Advice Record signed · Section 10C rebalance executed successfully</div>
+            </div>
+          </div>
+          <div class="completed-right">
+            <span class="completed-date">Completed · 04 Dec 2025</span>
+            <i data-lucide="chevron-right" style="width: 14px; height: 14px; color: var(--text-subtle);"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ====================================================================
+       REQUEST DETAIL PREVIEW SIDE PANEL (DRAWER FROM RIGHT)
+       ==================================================================== -->
+  <div class="detail-backdrop" id="detailBackdrop" onclick="closeDetailDrawer()"></div>
+
+  <aside class="detail-drawer" id="detailDrawer" aria-label="Request Details Drawer">
+    <!-- Top Action Bar -->
+    <div class="drawer-top-action-bar">
+      <span class="drawer-case-code" id="detailCaseCode">#BD-2048</span>
+      <button class="btn-circle" style="width: 32px; height: 32px;" onclick="closeDetailDrawer()" aria-label="Close details">
+        <i data-lucide="x" style="width: 15px; height: 15px;"></i>
+      </button>
+    </div>
+
+    <!-- Dynamic Container for Drawer Content -->
+    <div id="drawerDynamicContent" style="display: flex; flex-direction: column; gap: 16px;">
+      <!-- Populated via JavaScript dynamically for each request -->
+    </div>
+  </aside>
+
+  <!-- ====================================================================
+       SLIDE-OUT LEFT NAVBAR (IDENTICAL APPROVED DRAWER)
+       ==================================================================== -->
+  <div class="nav-drawer-backdrop" id="navDrawerBackdrop" onclick="closeNavDrawer()"></div>
+  
+  <aside class="nav-drawer" id="navDrawer" aria-label="Client Navigation Drawer">
+    <!-- Drawer Header -->
+    <div class="drawer-header">
+      <div class="brand-cluster">
+        <div class="brand-logo-mark"><img src="./royal-square-logo.png" alt="Royal Square" style="width: 100%; height: 100%; display: block; object-fit: cover;" /></div>
+        <div class="brand-titles">
+          <span class="brand-title">Royal Square</span>
+          <span class="brand-subtitle">Client Portal</span>
+        </div>
+      </div>
+      <button class="btn-circle" style="width: 32px; height: 32px;" onclick="closeNavDrawer()" aria-label="Close navigation">
+        <i data-lucide="x" style="width: 15px; height: 15px;"></i>
+      </button>
+    </div>
+
+    <!-- Primary Destinations -->
+    <div class="drawer-nav-section">
+      <span class="drawer-section-label">Navigation</span>
+      <nav class="drawer-menu">
+        <a href="index.html" class="drawer-link" onclick="handleNavClick(event, 'Home', 'index.html')">
+          <i data-lucide="layout-dashboard" class="drawer-icon"></i>
+          <span>Home</span>
+        </a>
+        <a href="requests.html" class="drawer-link active" onclick="handleNavClick(event, 'Requests', 'requests.html')">
+          <i data-lucide="inbox" class="drawer-icon"></i>
+          <span>Requests</span>
+          <span class="drawer-badge">2</span>
+          <span class="drawer-active-pip"></span>
+        </a>
+        <a href="documents.html" class="drawer-link" onclick="handleNavClick(event, 'Documents', 'documents.html')">
+          <i data-lucide="files" class="drawer-icon"></i>
+          <span>Documents</span>
+        </a>
+        <a href="finances.html" class="drawer-link" onclick="handleNavClick(event, 'Finances', 'finances.html')">
+          <i data-lucide="wallet" class="drawer-icon"></i>
+          <span>Finances</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Contextual Actions -->
+    <div class="drawer-nav-section">
+      <span class="drawer-section-label">Quick Actions</span>
+      <div class="drawer-actions-list">
+        <button class="drawer-action-btn" onclick="handleDrawerAction('Update beneficiary')">
+          <div class="action-icon-pill">
+            <i data-lucide="user-plus"></i>
+          </div>
+          <span>Update beneficiary</span>
+        </button>
+        <button class="drawer-action-btn" onclick="handleDrawerAction('Update personal details')">
+          <div class="action-icon-pill">
+            <i data-lucide="id-card"></i>
+          </div>
+          <span>Update personal details</span>
+        </button>
+        <button class="drawer-action-btn" onclick="handleDrawerAction('Report change in circumstances')">
+          <div class="action-icon-pill">
+            <i data-lucide="file-pen-line"></i>
+          </div>
+          <span>My circumstances changed</span>
+        </button>
+        <button class="drawer-action-btn" onclick="handleDrawerAction('Book a review')">
+          <div class="action-icon-pill">
+            <i data-lucide="calendar-plus"></i>
+          </div>
+          <span>Book a review</span>
+        </button>
+        <button class="drawer-action-btn" onclick="handleDrawerAction('Ask my adviser')">
+          <div class="action-icon-pill">
+            <i data-lucide="messages-square"></i>
+          </div>
+          <span>Ask my adviser</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="drawer-footer">
+      <div class="drawer-profile-box" onclick="closeNavDrawer(); showToast('Latoya Matai: Account Authenticated & Protected');">
+        <div class="client-avatar-wrapper">
+          <img src="/latoya-matai.png" alt="Latoya Matai" class="client-avatar" />
+          <span class="avatar-status-dot"></span>
+        </div>
+        <div class="client-meta">
+          <div class="client-name">Latoya Matai</div>
+          <div class="client-role">
+            <span>Private Client</span>
+            <span class="tier-badge">PREMIER</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Lightweight Toast Notification -->
+  <div class="toast-pill" id="modeToast">
+    <i data-lucide="info" id="toastIcon" style="width: 13px; height: 13px; color: var(--accent-coral);"></i>
+    <span id="toastMsg">Action triggered</span>
+  </div>
+
+  <!-- ====================================================================
+       SCRIPTS: LUCIDE & INTERACTIVITY & SIDE PANELS & SIMPLE MODE
+       ==================================================================== -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // 1. Left Slide-Out Navigation Drawer
+    function openNavDrawer() {
+      document.getElementById('navDrawer').classList.add('open');
+      document.getElementById('navDrawerBackdrop').classList.add('open');
+      document.body.classList.add('drawer-locked');
+    }
+
+    function closeNavDrawer() {
+      document.getElementById('navDrawer').classList.remove('open');
+      document.getElementById('navDrawerBackdrop').classList.remove('open');
+      document.body.classList.remove('drawer-locked');
+    }
+
+    function handleNavClick(e, name, targetUrl) {
+      if (name === 'Requests') {
+        e.preventDefault();
+        closeNavDrawer();
+      } else {
+        // Allow natural navigation to index.html or other pages
+        closeNavDrawer();
+      }
+    }
+
+    function handleDrawerAction(actionName) {
+      closeNavDrawer();
+      showToast(`Initiating quick action: "${actionName}"`);
+    }
+
+    // 2. Simple Mode Toggle Engine
+    function toggleSimpleMode() {
+      const isSimple = document.body.classList.toggle('simple-mode');
+      const toggleBtn = document.getElementById('simpleModeToggle');
+      const label = document.getElementById('modeToggleLabel');
+      const heading = document.getElementById('pageMainHeading');
+      const subHeading = document.getElementById('pageSubHeading');
+
+      if (isSimple) {
+        toggleBtn.classList.add('active');
+        label.textContent = 'Simple Mode: ON';
+        heading.innerHTML = 'Here is what’s <strong>in progress.</strong>';
+        subHeading.textContent = 'A focused, plain-language look at what Royal Square is handling for you.';
+        showToast('Simple Mode Enabled · Essential summary view');
+      } else {
+        toggleBtn.classList.remove('active');
+        label.textContent = 'Simple Mode';
+        heading.innerHTML = 'Everything you’re <strong>waiting on.</strong>';
+        subHeading.textContent = 'Follow your requests from submission to completion.';
+        showToast('Detailed Mode Enabled · Complete workflow tracking');
+      }
+
+      lucide.createIcons();
+    }
+
+    // 3. Request Detail Drawer (Slide from Right)
+    const detailData = {
+      banking: {
+        code: '#BD-2048',
+        title: 'Banking Details Update',
+        status: 'Waiting for Qiniso',
+        statusClass: 'waiting-adviser',
+        client: 'Latoya Matai',
+        started: '05 Sep 2026',
+        currentKicker: 'Current Step: Adviser Review',
+        currentTitle: 'Adviser review in progress',
+        currentDesc: 'Qiniso is reviewing your stamped bank statement and signed direct debit mandate before delivering the schedule to Sanlam.',
+        steps: [
+          { name: 'Request received', sub: 'Submitted via client portal · 14:11', state: 'done' },
+          { name: 'Bank statement uploaded', sub: 'Capitec stamped PDF · 14:14', state: 'done' },
+          { name: 'Statement verified', sub: 'FICA automated match · 14:18', state: 'done' },
+          { name: 'Instruction completed', sub: 'Signed electronically · 14:22', state: 'done' },
+          { name: 'Adviser review', sub: 'Qiniso Ntuli reviewing mandate', state: 'active' },
+          { name: 'Provider submission', sub: 'Sanlam Investment Management', state: 'upcoming' },
+          { name: 'Complete', sub: 'Direct debit active on new account', state: 'upcoming' }
+        ],
+        documents: [
+          { name: 'Capitec Bank Statement (Stamped)', status: 'Verified' },
+          { name: 'Sanlam Debit Mandate Instruction', status: 'Signed' }
+        ],
+        compliance: ['Identity verified', 'Consent active', 'Instruction recorded', 'Evidence complete'],
+        activity: [
+          { time: 'Today · 14:22', desc: 'Mandate signed by Latoya Matai' },
+          { time: 'Today · 14:18', desc: 'Capitec bank statement verified' },
+          { time: 'Today · 14:11', desc: 'Request initiated by client' }
+        ]
+      },
+      motor: {
+        code: 'Claim #RSF-2841',
+        title: 'Motor Accident Claim',
+        status: 'Waiting for Santam',
+        statusClass: 'assessment',
+        client: 'Latoya Matai',
+        started: '05 Sep 2026',
+        currentKicker: 'Current Step: Independent Assessor',
+        currentTitle: 'Vehicle Assessment underway',
+        currentDesc: 'Santam has received your offline accident dossier and dispatched an accredited assessor to inspect vehicle damage on your 2024 Mercedes-Benz GLC.',
+        steps: [
+          { name: 'Incident Reported', sub: 'Offline dossier synchronized · 11:45', state: 'done' },
+          { name: 'Claim Registered', sub: 'Claim number #RSF-2841 issued · 11:58', state: 'done' },
+          { name: 'Accident Dossier Verified', sub: 'GPS location & timestamp confirmed · 12:02', state: 'done' },
+          { name: 'Damage Assessment', sub: 'Santam assessor dispatched · Today 12:08', state: 'active' },
+          { name: 'Approved Panelbeater Quotes', sub: 'Pending assessor evaluation', state: 'upcoming' },
+          { name: 'Repair Authorisation', sub: 'Final insurer approval', state: 'upcoming' },
+          { name: 'Repair & Collection', sub: 'Vehicle handover with courtesy car', state: 'upcoming' }
+        ],
+        documents: [
+          { name: 'Offline Incident Dossier (6 photos)', status: 'Verified' },
+          { name: 'Recorded Voice Statement (01:42)', status: 'Verified' },
+          { name: 'Driver License & PDP Card', status: 'Verified' }
+        ],
+        compliance: ['Incident timestamp logged', 'Accident location triangulated', 'Digital statement encrypted', 'Third-party notification active'],
+        activity: [
+          { time: 'Today · 12:08', desc: 'Santam assessor assigned to case' },
+          { time: 'Today · 11:58', desc: 'Claim number #RSF-2841 generated' },
+          { time: 'Today · 11:45', desc: 'Offline accident photos uploaded' }
+        ]
+      },
+      beneficiary: {
+        code: '#BU-1092',
+        title: 'Beneficiary Allocation Update',
+        status: 'Waiting for Momentum',
+        statusClass: 'waiting-provider',
+        client: 'Latoya Matai',
+        started: '28 Aug 2026',
+        currentKicker: 'Current Step: Provider Confirmation',
+        currentTitle: 'Momentum policy schedule update',
+        currentDesc: 'Qiniso has endorsed your revised beneficiary nominations under Section 37C of the Pension Funds Act. Momentum Wealth is issuing the updated schedule.',
+        steps: [
+          { name: 'Instruction Received', sub: 'Allocation split 60/40 · 28 Aug', state: 'done' },
+          { name: 'FICA Identity Verification', sub: 'Nominees verified · 28 Aug', state: 'done' },
+          { name: 'Section 37C Form Signed', sub: 'Digitally executed · 28 Aug', state: 'done' },
+          { name: 'Adviser Endorsement', sub: 'Approved by Qiniso Ntuli · 28 Aug', state: 'done' },
+          { name: 'Provider Schedule Update', sub: 'Momentum Operations processing', state: 'active' },
+          { name: 'Confirmation Certificate', sub: 'Endorsed policy certificate', state: 'upcoming' }
+        ],
+        documents: [
+          { name: 'Section 37C Nomination Form', status: 'Signed' },
+          { name: 'Nominee National ID Copies', status: 'Verified' }
+        ],
+        compliance: ['Section 37C compliant', 'FAIS disclosure filed', 'Beneficiary consent logged', 'Record locked'],
+        activity: [
+          { time: '28 Aug · 16:40', desc: 'Delivered to Momentum Wealth Ops' },
+          { time: '28 Aug · 15:10', desc: 'Endorsed by Qiniso Ntuli CFP®' },
+          { time: '28 Aug · 14:02', desc: 'Beneficiary nominations updated' }
+        ]
+      },
+      afr: {
+        code: '#AFR-2026',
+        title: 'Annual Financial Review 2026',
+        status: 'Waiting for you',
+        statusClass: 'waiting-you',
+        client: 'Latoya Matai',
+        started: '01 Sep 2026',
+        currentKicker: 'Action Required: Client Confirmation',
+        currentTitle: 'Confirm change of circumstances',
+        currentDesc: 'To ensure your wealth allocation, tax-free allowances and Section 10C retirement shields remain optimal, please verify if any income, dependent or health circumstances changed.',
+        steps: [
+          { name: 'Review Scheduled', sub: 'Session confirmed for 18 Sep 2026', state: 'done' },
+          { name: 'Portfolio Performance Pack', sub: 'Compiled by Royal Square · 01 Sep', state: 'done' },
+          { name: 'Client Circumstances Survey', sub: 'Waiting for your confirmation', state: 'active' },
+          { name: 'Pre-Meeting Analysis', sub: 'Qiniso Ntuli rebalancing model', state: 'upcoming' },
+          { name: 'Consultation & Sign-Off', sub: 'Virtual or in-office meeting', state: 'upcoming' },
+          { name: 'Implementation of Advice', sub: 'Rebalances & tax deductions', state: 'upcoming' }
+        ],
+        documents: [
+          { name: '2026 Portfolio Valuation Dossier', status: 'Verified' },
+          { name: 'Circumstances Questionnaire', status: 'Pending you' }
+        ],
+        compliance: ['FAIS Act section 8 fulfilled', 'FSP 29370 scheduled review', 'POPIA secure consent', 'Suitability mandate active'],
+        activity: [
+          { time: '01 Sep · 09:30', desc: 'Review invitation dispatched' },
+          { time: '01 Sep · 09:15', desc: 'Portfolio evaluation snapshot taken' }
+        ]
+      }
+    };
+
+    function openDetailDrawer(key) {
+      const data = detailData[key] || detailData.banking;
+      document.getElementById('detailCaseCode').textContent = data.code;
+
+      const container = document.getElementById('drawerDynamicContent');
+      container.innerHTML = `
+        <div class="detail-headline-block">
+          <div class="detail-meta-tags">
+            <span class="status-pill ${data.statusClass}">
+              <span class="ball-dot"></span>
+              <span>${data.status}</span>
+            </span>
+            <span style="font-size: 11px; color: var(--text-secondary);">Client: <strong>${data.client}</strong></span>
+          </div>
+          <h2 class="detail-title">${data.title}</h2>
+        </div>
+
+        <div class="detail-section-card">
+          <span class="detail-section-kicker">${data.currentKicker}</span>
+          <div class="detail-step-name">${data.currentTitle}</div>
+          <p class="detail-step-desc">${data.currentDesc}</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span class="detail-section-kicker" style="color: var(--text-secondary);">Workflow Pipeline</span>
+          <div class="detail-step-list">
+            ${data.steps.map(s => `
+              <div class="detail-step-item ${s.state}">
+                <span class="detail-step-title">${s.name}</span>
+                <span class="detail-step-sub">${s.sub}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span class="detail-section-kicker" style="color: var(--text-secondary);">Associated Documents</span>
+          <div class="docs-pill-list">
+            ${data.documents.map(d => `
+              <div class="doc-item-row">
+                <span class="doc-left-info">
+                  <i data-lucide="file-text" style="width: 14px; height: 14px; color: var(--accent-coral);"></i>
+                  <span>${d.name}</span>
+                </span>
+                <span class="doc-status-verified" style="${d.status === 'Pending you' ? 'background: var(--accent-coral-soft); color: var(--accent-coral);' : ''}">${d.status}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span class="detail-section-kicker" style="color: var(--text-secondary);">Compliance & Audit</span>
+          <div class="compliance-grid">
+            ${data.compliance.map(c => `
+              <div class="compliance-pill">
+                <i data-lucide="check"></i>
+                <span>${c}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <span class="detail-section-kicker" style="color: var(--text-secondary);">Recent Activity</span>
+          <div class="activity-feed-list">
+            ${data.activity.map(a => `
+              <div class="activity-feed-item">
+                <span class="activity-desc">${a.desc}</span>
+                <span class="activity-time">${a.time}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+
+      document.getElementById('detailDrawer').classList.add('open');
+      document.getElementById('detailBackdrop').classList.add('open');
+      document.body.classList.add('drawer-locked');
+      lucide.createIcons();
+    }
+
+    function closeDetailDrawer() {
+      document.getElementById('detailDrawer').classList.remove('open');
+      document.getElementById('detailBackdrop').classList.remove('open');
+      if (!document.getElementById('navDrawer').classList.contains('open')) {
+        document.body.classList.remove('drawer-locked');
+      }
+    }
+
+    // Keyboard ESC closes both drawers
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDetailDrawer();
+        closeNavDrawer();
+      }
+    });
+
+    // 4. Filtering Engine
+    function applyFilter(filterType, btnEl) {
+      document.querySelectorAll('.filter-pill-btn').forEach(b => b.classList.remove('active'));
+      btnEl.classList.add('active');
+
+      const priorityCard = document.getElementById('priorityCard');
+      const cards = document.querySelectorAll('#requestsGrid .request-card');
+      const completedSection = document.getElementById('completedSection');
+
+      if (filterType === 'all') {
+        priorityCard.style.display = 'flex';
+        cards.forEach(c => c.style.display = 'flex');
+        completedSection.style.display = 'flex';
+      } else if (filterType === 'needs-me') {
+        priorityCard.style.display = 'flex';
+        cards.forEach(c => c.style.display = 'none');
+        completedSection.style.display = 'none';
+      } else if (filterType === 'in-progress') {
+        priorityCard.style.display = 'none';
+        cards.forEach(c => c.style.display = 'flex');
+        completedSection.style.display = 'none';
+      } else if (filterType === 'completed') {
+        priorityCard.style.display = 'none';
+        cards.forEach(c => c.style.display = 'none');
+        completedSection.style.display = 'flex';
+      }
+    }
+
+    function filterByKeyword() {
+      const q = document.getElementById('filterSearchInput').value.toLowerCase().trim();
+      const priorityCard = document.getElementById('priorityCard');
+      const cards = document.querySelectorAll('#requestsGrid .request-card');
+      const completedItems = document.querySelectorAll('.completed-row-item');
+
+      if (!q) {
+        priorityCard.style.display = 'flex';
+        cards.forEach(c => c.style.display = 'flex');
+        completedItems.forEach(i => i.style.display = 'flex');
+        return;
+      }
+
+      // Check priority card
+      const pText = priorityCard.textContent.toLowerCase();
+      priorityCard.style.display = pText.includes(q) ? 'flex' : 'none';
+
+      // Check active requests
+      cards.forEach(c => {
+        const text = c.textContent.toLowerCase();
+        c.style.display = text.includes(q) ? 'flex' : 'none';
+      });
+
+      // Check completed rows
+      completedItems.forEach(i => {
+        const text = i.textContent.toLowerCase();
+        i.style.display = text.includes(q) ? 'flex' : 'none';
+      });
+    }
+
+    // 5. Lightweight Toast
+    let toastTimeout;
+    function showToast(msg) {
+      const toast = document.getElementById('modeToast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.add('active');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('active');
+      }, 2600);
+    }
+  </script>
+</body>
+</html>

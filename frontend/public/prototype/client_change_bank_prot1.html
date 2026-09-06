@@ -1,0 +1,2579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Royal Square — Change Banking Details</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & Caveat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Caveat:wght@600&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons CDN -->
+  <script src="./lucide-local.js"></script>
+
+  <style>
+    /* ==========================================================================
+       1. SYSTEM TOKENS (ORGANIC, BORDERLESS LUXURY FINTECH)
+       100% Exact match to client_ui.html & client_requests_ui.html
+       ========================================================================== */
+    :root {
+      --bg-page: #F4F3EE;                 /* Warm creamy neutral canvas */
+      --bg-card: #FFFFFF;                 /* Crisp white surface */
+      --bg-card-subtle: #FAF9F5;          /* Tone-on-tone sub-card surface */
+      --bg-card-hover: #F6F4EE;
+      
+      --text-primary: #171615;            /* Deep near-black */
+      --text-secondary: #87837C;          /* Warm muted neutral */
+      --text-subtle: #ABA69E;             /* Light caption neutral */
+      
+      --accent-coral: #E85D3F;            /* Signature terracotta coral */
+      --accent-coral-hover: #D84F31;
+      --accent-coral-soft: #FDF0ED;       /* Pale coral pill tint */
+      --accent-coral-glow: rgba(232, 93, 63, 0.20);
+      
+      --status-green: #2B7A48;
+      --status-green-soft: #EDF7F1;
+      --status-amber: #B87314;
+      --status-amber-soft: #FEF6EC;
+      
+      --radius-card: 26px;
+      --radius-subcard: 16px;
+      --radius-pill: 9999px;
+      
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.016), 0 1px 3px rgba(0, 0, 0, 0.01);
+      --shadow-hover: 0 12px 34px rgba(0, 0, 0, 0.038), 0 2px 6px rgba(0, 0, 0, 0.018);
+      --shadow-button: 0 2px 8px rgba(0, 0, 0, 0.025);
+      --shadow-drawer: 0 20px 50px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+      --shadow-detail: -16px 0 48px rgba(0, 0, 0, 0.09), -4px 0 16px rgba(0, 0, 0, 0.03);
+      --shadow-selected: 0 10px 32px rgba(232, 93, 63, 0.08), 0 1px 4px rgba(232, 93, 63, 0.18);
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-legal: 'Georgia', 'Times New Roman', serif;
+      --font-script: 'Caveat', cursive;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px 38px 48px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body.drawer-locked {
+      overflow: hidden;
+    }
+
+    button, input, a, select {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .app-viewport {
+      width: 100%;
+      max-width: 1420px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ==========================================================================
+       2. TOP HEADER (RESTORED EXACT APPROVED COMPONENT FROM CLIENT_UI.HTML)
+       ========================================================================== */
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      height: 46px;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .btn-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-button);
+      transition: all 0.15s ease;
+    }
+
+    .btn-circle:hover {
+      background: #FAF9F6;
+      transform: scale(1.03);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .brand-logo-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      background: #FFFFFF;
+      overflow: hidden;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: -0.5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
+
+    .brand-logo-mark img { transform: scale(1.6); }
+
+    .brand-titles {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .brand-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    .brand-subtitle {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .header-center-search {
+      flex: 1;
+      max-width: 320px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-center-search input {
+      width: 100%;
+      height: 40px;
+      background: var(--bg-card);
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 0 18px 0 42px;
+      font-size: 11.5px;
+      color: var(--text-primary);
+      outline: none;
+      box-shadow: var(--shadow-button);
+      transition: all 0.2s ease;
+    }
+
+    .header-center-search input::placeholder {
+      color: var(--text-subtle);
+    }
+
+    .header-center-search input:focus {
+      box-shadow: 0 4px 16px var(--accent-coral-glow);
+    }
+
+    .header-center-search .search-icon {
+      position: absolute;
+      left: 15px;
+      right: auto;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 15px;
+      height: 15px;
+      color: var(--text-subtle);
+      pointer-events: none;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .mode-toggle-pill {
+      height: 40px;
+      background: var(--bg-card);
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 3px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-button);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-toggle-pill:hover {
+      background: #FAF8F4;
+    }
+
+    .mode-toggle-pill.active {
+      background: var(--accent-coral-soft);
+    }
+
+    .mode-icon {
+      color: var(--text-secondary);
+      transition: color 0.15s;
+    }
+
+    .mode-toggle-pill.active .mode-icon {
+      color: var(--accent-coral);
+    }
+
+    .mode-label-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .toggle-switch-track {
+      width: 24px;
+      height: 14px;
+      border-radius: var(--radius-pill);
+      background: #E5E1D7;
+      position: relative;
+      transition: background 0.2s ease;
+    }
+
+    .mode-toggle-pill.active .toggle-switch-track {
+      background: var(--accent-coral);
+    }
+
+    .toggle-switch-thumb {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .mode-toggle-pill.active .toggle-switch-thumb {
+      transform: translateX(10px);
+    }
+
+    .btn-lang {
+      height: 40px;
+      padding: 0 13px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card);
+      border: none;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: var(--shadow-button);
+      transition: background 0.15s;
+    }
+
+    .notif-btn {
+      position: relative;
+    }
+
+    .notif-dot {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-coral);
+      border: 1.5px solid #FFFFFF;
+    }
+
+    .profile-pill-topright {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-card);
+      border: none;
+      padding: 4px 14px 4px 5px;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-button);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .profile-pill-topright:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .client-avatar-wrapper {
+      position: relative;
+    }
+
+    .client-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .avatar-status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #2E7D4C;
+      border: 2px solid #FFFFFF;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+
+    .client-meta {
+      line-height: 1.2;
+      text-align: left;
+    }
+
+    .client-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .client-role {
+      font-size: 9.5px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tier-badge {
+      font-size: 8px;
+      font-weight: 800;
+      background: #181716;
+      color: #FFFFFF;
+      padding: 1px 5px;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    /* ==========================================================================
+       3. PAGE INTRO & WORKFLOW BREADCRUMB HEADER
+       ========================================================================== */
+    .page-intro-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 4px 4px 0;
+    }
+
+    .intro-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .intro-eyebrow {
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: var(--accent-coral);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .intro-headline {
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      line-height: 1.15;
+    }
+
+    .intro-headline strong {
+      font-weight: 700;
+    }
+
+    .intro-supporting {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+    }
+
+    .intro-case-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      padding: 7px 15px;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-button);
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .stat-pill.attention {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+      font-weight: 700;
+    }
+
+    .case-code-tag {
+      background: var(--bg-card-subtle);
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* ==========================================================================
+       4. INTEGRATED WORKFLOW TIMELINE STEPPER (AUTHENTIC TO CLIENT_REQUESTS_UI)
+       ========================================================================== */
+    .stepper-container-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      padding: 16px 28px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .workflow-timeline {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      position: relative;
+      padding: 0 8px;
+    }
+
+    .timeline-step-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .node-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10.5px;
+      font-weight: 700;
+      background: #EFECE5;
+      color: var(--text-subtle);
+      transition: all 0.2s ease;
+    }
+
+    .timeline-step-node.completed .node-circle {
+      background: #181716;
+      color: #FFFFFF;
+    }
+
+    .timeline-step-node.current .node-circle {
+      background: var(--accent-coral);
+      color: #FFFFFF;
+      box-shadow: 0 0 0 4px var(--accent-coral-soft);
+    }
+
+    .node-label {
+      position: absolute;
+      top: 30px;
+      font-size: 9.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .timeline-step-node.current .node-label {
+      color: var(--accent-coral);
+      font-weight: 700;
+    }
+
+    .timeline-step-node.completed .node-label {
+      color: var(--text-primary);
+    }
+
+    .timeline-connector {
+      flex: 1;
+      height: 2px;
+      background: #EFECE5;
+      margin: 0 6px;
+      position: relative;
+      top: -8px;
+      z-index: 1;
+    }
+
+    .timeline-connector.completed {
+      background: #181716;
+    }
+
+    .btn-exit-workflow {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      transition: all 0.15s;
+    }
+
+    .btn-exit-workflow:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    /* ==========================================================================
+       5. MAIN WORKFLOW CONTAINER & STEPS
+       ========================================================================== */
+    .flow-main-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      padding: 34px 38px 38px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+      position: relative;
+    }
+
+    .flow-header-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .flow-step-tag {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      color: var(--accent-coral);
+      text-transform: uppercase;
+    }
+
+    .flow-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: var(--text-primary);
+    }
+
+    .flow-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      max-width: 680px;
+    }
+
+    /* --------------------------------------------------------------------------
+       STEP 1: SELECT AFFECTED PRODUCT (CLEAN LUXURY CARDS, NO HARSH BORDERS)
+       -------------------------------------------------------------------------- */
+    .product-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .product-select-card {
+      background: var(--bg-card-subtle);
+      border-radius: var(--radius-subcard);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .product-select-card:hover {
+      background: #FFFFFF;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .product-select-card.selected {
+      background: #FFFFFF;
+      box-shadow: var(--shadow-selected);
+    }
+
+    .product-select-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 4px;
+      border-radius: 4px 0 0 4px;
+      background: transparent;
+      transition: background 0.2s;
+    }
+
+    .product-select-card.selected::before {
+      background: var(--accent-coral);
+    }
+
+    .product-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .product-icon-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-coral);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .product-select-card.selected .product-icon-box {
+      background: var(--accent-coral-soft);
+    }
+
+    .custom-check-pill {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #EFECE5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      transition: all 0.15s ease;
+    }
+
+    .product-select-card.selected .custom-check-pill {
+      background: var(--accent-coral);
+    }
+
+    .product-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .product-provider-name {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+
+    .product-plan-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    .product-number-display {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .product-card-footer {
+      padding-top: 12px;
+      border-top: 1px solid #FAF6EE;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+    }
+
+    .debit-amount-val {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* --------------------------------------------------------------------------
+       STEP 2 & 3: UPLOAD & VERIFY (CLEAN DROPZONE + INLINE EXTRACTION)
+       -------------------------------------------------------------------------- */
+    .step-section {
+      display: none;
+      flex-direction: column;
+      gap: 22px;
+      animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .step-section.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .upload-drop-surface {
+      border: 2px dashed #E2DCD0;
+      border-radius: var(--radius-subcard);
+      padding: 38px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 12px;
+      background: var(--bg-card-subtle);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .upload-drop-surface:hover {
+      background: var(--accent-coral-soft);
+      border-color: var(--accent-coral);
+    }
+
+    .drop-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent-coral);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+    .drop-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .drop-sub {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .demo-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .btn-test-trigger {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: #EFECE5;
+      padding: 4px 11px;
+      border-radius: var(--radius-pill);
+      transition: all 0.15s;
+    }
+
+    .btn-test-trigger:hover {
+      color: var(--text-primary);
+      background: #E5E1D7;
+    }
+
+    /* Verification Result Card */
+    .verified-result-card {
+      background: var(--bg-card-subtle);
+      border-radius: var(--radius-subcard);
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .verif-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .verif-badge-state {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--status-green);
+      background: var(--status-green-soft);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+    }
+
+    .verif-age-tag {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--status-green);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .verif-data-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      background: #FFFFFF;
+      padding: 16px;
+      border-radius: 12px;
+    }
+
+    .verif-grid-cell {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .verif-lbl {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      color: var(--text-subtle);
+    }
+
+    .verif-val {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* --------------------------------------------------------------------------
+       STEP 4: CONFIRM EXTRACTED DETAILS (EDITABLE IN-PLACE)
+       -------------------------------------------------------------------------- */
+    .confirm-details-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .extracted-tag {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--status-green);
+      background: var(--status-green-soft);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .clean-input {
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid #EAE5DC;
+      background: #FFFFFF;
+      padding: 0 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .clean-input:focus {
+      border-color: var(--accent-coral);
+      box-shadow: 0 0 0 3px var(--accent-coral-soft);
+    }
+
+    /* --------------------------------------------------------------------------
+       STEP 5: COMPLETE INSTRUCTION (SUBTLE ENTER ONCE PROOF)
+       -------------------------------------------------------------------------- */
+    .enter-once-summary-strip {
+      background: var(--bg-card-subtle);
+      border-radius: 14px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .enter-once-chips-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .reused-chip {
+      background: #FFFFFF;
+      padding: 4px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .reused-chip i {
+      color: var(--status-green);
+      width: 11px;
+      height: 11px;
+    }
+
+    /* --------------------------------------------------------------------------
+       STEP 6: SPLIT-SCREEN OFFICIAL SIGNING (SANLAM DEBIT MANDATE)
+       -------------------------------------------------------------------------- */
+    .mandate-signing-layout {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 26px;
+      align-items: start;
+    }
+
+    .official-mandate-doc {
+      background: #FFFFFF;
+      border-radius: 12px;
+      border: 1px solid #ECE7DE;
+      padding: 32px 36px;
+      font-family: var(--font-legal);
+      font-size: 11.5px;
+      line-height: 1.5;
+      color: #22201E;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.025);
+    }
+
+    .mandate-doc-header {
+      font-family: var(--font-main);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-bottom: 2px solid #171615;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .mandate-firm-name {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.2px;
+    }
+
+    .mandate-firm-sub {
+      font-size: 9.5px;
+      color: var(--text-secondary);
+    }
+
+    .mandate-doc-title {
+      font-family: var(--font-main);
+      text-align: center;
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin: 12px 0 16px;
+    }
+
+    .mandate-sig-target-box {
+      height: 64px;
+      border-bottom: 1.5px solid #171615;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 14px;
+    }
+
+    .rendered-sig-display {
+      max-height: 56px;
+      max-width: 100%;
+    }
+
+    .rendered-typed-display {
+      font-family: var(--font-script);
+      font-size: 28px;
+      color: #171615;
+    }
+
+    .signing-right-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sig-tabs-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .sig-tab-pill {
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      background: #EAE6DD;
+      color: var(--text-secondary);
+    }
+
+    .sig-tab-pill.active {
+      background: #171615;
+      color: #FFFFFF;
+    }
+
+    .canvas-signing-wrap {
+      background: #FFFFFF;
+      border: 1.5px dashed #D9D4C7;
+      border-radius: 12px;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    #sigCanvas {
+      width: 100%;
+      height: 110px;
+      display: block;
+      cursor: crosshair;
+    }
+
+    /* --------------------------------------------------------------------------
+       STEP 7: REVIEW BEFORE SUBMITTING
+       -------------------------------------------------------------------------- */
+    .review-summary-table {
+      background: var(--bg-card-subtle);
+      border-radius: var(--radius-subcard);
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .review-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px dashed #ECE7DE;
+    }
+
+    .review-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .review-lbl {
+      color: var(--text-secondary);
+    }
+
+    .review-val {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .compliance-pills-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .comp-pill {
+      background: #FFFFFF;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .comp-pill i {
+      color: var(--status-green);
+      width: 12px;
+      height: 12px;
+    }
+
+    /* --------------------------------------------------------------------------
+       STEP 8: SUBMISSION SUCCESS (MATCHING REQUESTS #BD-2048)
+       -------------------------------------------------------------------------- */
+    .success-container-block {
+      display: none;
+      flex-direction: column;
+      gap: 24px;
+      animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .request-hero-match-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-card);
+      padding: 26px 30px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+    }
+
+    .request-hero-match-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 5px;
+      background: var(--accent-coral);
+      border-radius: 4px 0 0 4px;
+    }
+
+    .sim-controller-banner {
+      background: #FAF8F4;
+      border: 1px dashed var(--accent-coral);
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 4px;
+    }
+
+    /* Workflow Stepper Action Buttons */
+    .step-actions-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid #FAF6EE;
+    }
+
+    .btn-coral-primary {
+      height: 44px;
+      padding: 0 24px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-coral);
+      color: #FFFFFF;
+      font-size: 12.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px var(--accent-coral-glow);
+      transition: all 0.15s ease;
+    }
+
+    .btn-coral-primary:hover {
+      background: var(--accent-coral-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-quiet-subtle {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      transition: all 0.15s;
+    }
+
+    .btn-quiet-subtle:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+    }
+
+    /* Error Message Box */
+    .inline-error-callout {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+      padding: 11px 16px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .inline-error-callout.visible {
+      display: flex;
+    }
+
+    /* ==========================================================================
+       6. SLIDE-OUT LEFT NAVBAR (RESTORED EXACT COMPONENT FROM PORTAL)
+       ========================================================================== */
+    .nav-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(23, 22, 21, 0.25);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .nav-drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .nav-drawer {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      bottom: 16px;
+      width: 298px;
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-drawer);
+      z-index: 999;
+      transform: translateX(calc(-100% - 24px));
+      transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 22px 18px;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .nav-drawer::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 4px;
+    }
+
+    .drawer-nav-section {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .drawer-section-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--text-subtle);
+      padding: 0 12px 3px;
+    }
+
+    .drawer-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .drawer-link {
+      height: 42px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .drawer-link:hover {
+      color: var(--text-primary);
+      background: var(--bg-card-hover);
+      transform: translateX(2px);
+    }
+
+    .drawer-link.active {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+      font-weight: 700;
+    }
+
+    .drawer-link.active .drawer-icon,
+    .drawer-link.active svg {
+      color: var(--accent-coral);
+      stroke: var(--accent-coral);
+    }
+
+    .drawer-icon,
+    .drawer-link svg {
+      width: 17px;
+      height: 17px;
+      color: var(--text-secondary);
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .drawer-active-pip {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent-coral);
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .drawer-badge {
+      margin-left: auto;
+      font-size: 10px;
+      font-weight: 700;
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+    }
+
+    .drawer-actions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .drawer-action-btn {
+      height: 38px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 100%;
+      text-align: left;
+    }
+
+    .drawer-action-btn:hover {
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+      transform: translateX(3px);
+    }
+
+    .action-icon-pill {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--bg-card-subtle);
+      border: 1px solid rgba(0, 0, 0, 0.03);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      transition: all 0.18s ease;
+    }
+
+    .action-icon-pill svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .drawer-footer {
+      margin-top: auto;
+      padding-top: 8px;
+    }
+
+    .drawer-profile-box {
+      background: var(--bg-card-subtle);
+      border-radius: 18px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .drawer-profile-box:hover {
+      background: #ECE7DE;
+    }
+
+    /* Simple Mode Overrides */
+    body.simple-mode .comp-pill,
+    body.simple-mode .enter-once-summary-strip,
+    body.simple-mode .case-code-tag,
+    body.simple-mode .header-center-search {
+      display: none !important;
+    }
+
+    /* Toast Notification */
+    .toast-pill {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #181716;
+      color: #FFFFFF;
+      padding: 9px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+      z-index: 1010;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast-pill.active {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-viewport">
+
+    <!-- ====================================================================
+         1. TOP HEADER (RESTORED EXACT COMPONENT FROM CLIENT_UI.HTML)
+         ==================================================================== -->
+    <header class="top-header">
+      <!-- Left: Menu Drawer Button + Brand -->
+      <div class="brand-cluster">
+        <button class="btn-circle" id="menuToggleBtn" aria-label="Open Navigation" onclick="openNavDrawer()" title="Open Navigation Menu">
+          <i data-lucide="menu" style="width: 16px; height: 16px;"></i>
+        </button>
+        <div class="brand-logo-mark"><img src="./royal-square-logo.png" alt="Royal Square" style="width: 100%; height: 100%; display: block; object-fit: cover;" /></div>
+        <div class="brand-titles">
+          <span class="brand-title">Royal Square</span>
+          <span class="brand-subtitle">Client Portal</span>
+        </div>
+      </div>
+
+      <!-- Center: Clean Search Bar -->
+      <div class="header-center-search">
+        <input type="text" placeholder="Start searching here..." />
+        <i data-lucide="search" class="search-icon"></i>
+      </div>
+
+      <!-- Right: View Mode Toggle + Notifications + Lang + Latoya Matai Profile -->
+      <div class="header-right">
+        <button class="mode-toggle-pill" id="simpleModeToggle" onclick="toggleSimpleMode()" title="Toggle Simple Mode">
+          <i data-lucide="sliders-horizontal" class="mode-icon" style="width: 13px; height: 13px;"></i>
+          <span class="mode-label-text" id="modeToggleLabel">Simple Mode</span>
+          <div class="toggle-switch-track">
+            <div class="toggle-switch-thumb"></div>
+          </div>
+        </button>
+
+        <button class="btn-circle notif-btn" aria-label="Notifications" onclick="showToast('Latoya, you have 1 pending banking update action.')">
+          <i data-lucide="bell" style="width: 15px; height: 15px;"></i>
+          <span class="notif-dot"></span>
+        </button>
+
+        <button class="btn-lang" id="lang-btn" onclick="showToast('Language: English (South Africa)')">
+          <span>EN</span>
+          <i data-lucide="chevron-down" style="width: 10px; height: 10px;"></i>
+        </button>
+
+        <!-- Latoya Matai Profile Card -->
+        <div class="profile-pill-topright" onclick="showToast('Viewing profile & settings for Latoya Matai...')">
+          <div class="client-avatar-wrapper">
+            <img src="/latoya-matai.png" alt="Latoya Matai" class="client-avatar" />
+            <span class="avatar-status-dot" title="Authenticated Profile"></span>
+          </div>
+          <div class="client-meta">
+            <div class="client-name">Latoya Matai</div>
+            <div class="client-role">
+              <span>Private Client</span>
+              <span class="tier-badge">PREMIER</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         2. PAGE INTRO
+         ==================================================================== -->
+    <section class="page-intro-row">
+      <div class="intro-title-block">
+        <span class="intro-eyebrow">
+          <i data-lucide="sparkles" style="width: 12px; height: 12px;"></i>
+          <span>Guided Instruction</span>
+        </span>
+        <h1 class="intro-headline" id="pageMainHeading">Change your <strong>banking details.</strong></h1>
+        <p class="intro-supporting" id="pageSubHeading">Upload your statement, verify extracted details, and sign your instruction in one seamless flow.</p>
+      </div>
+
+      <div class="intro-case-cluster">
+        <div class="stat-pill">
+          <span>Case</span>
+          <span class="case-code-tag">#BD-2048</span>
+        </div>
+        <div class="stat-pill attention">
+          <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--accent-coral);"></span>
+          <span id="caseActiveStatusPill">In Progress</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         3. CLEAN WORKFLOW STEPPER (AUTHENTIC TIMELINE COMPONENT)
+         ==================================================================== -->
+    <nav class="stepper-container-card" aria-label="Workflow Stepper">
+      <div class="workflow-timeline">
+        <!-- Step 1 -->
+        <div class="timeline-step-node current" id="stepNode1" onclick="jumpToStep(1)">
+          <div class="node-circle">1</div>
+          <span class="node-label">Product</span>
+        </div>
+        <div class="timeline-connector" id="connector1"></div>
+
+        <!-- Step 2 -->
+        <div class="timeline-step-node upcoming" id="stepNode2" onclick="jumpToStep(2)">
+          <div class="node-circle">2</div>
+          <span class="node-label">Statement</span>
+        </div>
+        <div class="timeline-connector" id="connector2"></div>
+
+        <!-- Step 3 -->
+        <div class="timeline-step-node upcoming" id="stepNode3" onclick="jumpToStep(3)">
+          <div class="node-circle">3</div>
+          <span class="node-label">Verify</span>
+        </div>
+        <div class="timeline-connector" id="connector3"></div>
+
+        <!-- Step 4 -->
+        <div class="timeline-step-node upcoming" id="stepNode4" onclick="jumpToStep(4)">
+          <div class="node-circle">4</div>
+          <span class="node-label">Confirm</span>
+        </div>
+        <div class="timeline-connector" id="connector4"></div>
+
+        <!-- Step 5 -->
+        <div class="timeline-step-node upcoming" id="stepNode5" onclick="jumpToStep(5)">
+          <div class="node-circle">5</div>
+          <span class="node-label">Instruction</span>
+        </div>
+        <div class="timeline-connector" id="connector5"></div>
+
+        <!-- Step 6 -->
+        <div class="timeline-step-node upcoming" id="stepNode6" onclick="jumpToStep(6)">
+          <div class="node-circle">6</div>
+          <span class="node-label">Sign</span>
+        </div>
+        <div class="timeline-connector" id="connector6"></div>
+
+        <!-- Step 7 -->
+        <div class="timeline-step-node upcoming" id="stepNode7" onclick="jumpToStep(7)">
+          <div class="node-circle">7</div>
+          <span class="node-label">Submit</span>
+        </div>
+      </div>
+
+      <a href="requests.html" class="btn-exit-workflow" onclick="return confirm('Exit this request? Your draft is automatically saved.');">
+        <i data-lucide="x" style="width: 14px; height: 14px;"></i>
+        <span>Save & exit</span>
+      </a>
+    </nav>
+
+    <!-- ====================================================================
+         4. MAIN INTERACTIVE WORKFLOW CARDS (STEPS 1 TO 7)
+         ==================================================================== -->
+    <main class="flow-main-card" id="flowMainCard">
+
+      <!-- ------------------------------------------------------------------
+           STEP 1: SELECT AFFECTED PRODUCT
+           ------------------------------------------------------------------ -->
+      <section class="step-section active" id="step1View">
+        <div class="flow-header-group">
+          <span class="flow-step-tag">Step 1 of 7 · Product Selection</span>
+          <h2 class="flow-title">Which product should use your new banking details?</h2>
+          <p class="flow-desc">Select the portfolio or policy that needs its direct debit or disbursement account amended. You can select multiple policies under the same instruction.</p>
+        </div>
+
+        <div class="product-cards-grid">
+          <!-- Sanlam Investment -->
+          <article class="product-select-card selected" onclick="toggleProduct(this)">
+            <div class="product-card-top">
+              <div class="product-icon-box">
+                <i data-lucide="trending-up" style="width: 18px; height: 18px;"></i>
+              </div>
+              <div class="custom-check-pill">
+                <i data-lucide="check" style="width: 12px; height: 12px;"></i>
+              </div>
+            </div>
+            <div class="product-card-body">
+              <span class="product-provider-name">Sanlam Investment Management</span>
+              <h3 class="product-plan-title">Unit Trust Growth Fund</h3>
+              <span class="product-number-display">•••• 2719</span>
+            </div>
+            <div class="product-card-footer">
+              <span style="color: var(--text-secondary);">Monthly debit order</span>
+              <span class="debit-amount-val" style="color: var(--accent-coral);">R 8,500.00</span>
+            </div>
+          </article>
+
+          <!-- Momentum Retirement Annuity -->
+          <article class="product-select-card" onclick="toggleProduct(this)">
+            <div class="product-card-top">
+              <div class="product-icon-box">
+                <i data-lucide="landmark" style="width: 18px; height: 18px;"></i>
+              </div>
+              <div class="custom-check-pill">
+                <i data-lucide="check" style="width: 12px; height: 12px;"></i>
+              </div>
+            </div>
+            <div class="product-card-body">
+              <span class="product-provider-name">Momentum Wealth</span>
+              <h3 class="product-plan-title">Retirement Annuity Plan</h3>
+              <span class="product-number-display">•••• 8420</span>
+            </div>
+            <div class="product-card-footer">
+              <span style="color: var(--text-secondary);">Monthly contribution</span>
+              <span class="debit-amount-val">R 4,200.00</span>
+            </div>
+          </article>
+
+          <!-- Santam Short-Term Insurance -->
+          <article class="product-select-card" onclick="toggleProduct(this)">
+            <div class="product-card-top">
+              <div class="product-icon-box">
+                <i data-lucide="shield" style="width: 18px; height: 18px;"></i>
+              </div>
+              <div class="custom-check-pill">
+                <i data-lucide="check" style="width: 12px; height: 12px;"></i>
+              </div>
+            </div>
+            <div class="product-card-body">
+              <span class="product-provider-name">Short-Term Insurance · Santam</span>
+              <h3 class="product-plan-title">Executive Vehicle Policy</h3>
+              <span class="product-number-display">POL-904-SAN</span>
+            </div>
+            <div class="product-card-footer">
+              <span style="color: var(--text-secondary);">Monthly premium</span>
+              <span class="debit-amount-val">R 2,490.00</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="step-actions-footer">
+          <span style="font-size: 11.5px; color: var(--text-secondary); font-weight: 600;" id="productSelectedCount">1 product selected</span>
+          <button class="btn-coral-primary" onclick="goToStep(2)">
+            <span>Continue to Statement</span>
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+           STEP 2: UPLOAD BANK STATEMENT
+           ------------------------------------------------------------------ -->
+      <section class="step-section" id="step2View">
+        <div class="flow-header-group">
+          <span class="flow-step-tag">Step 2 of 7 · Document Evidence</span>
+          <h2 class="flow-title">Upload your latest bank statement</h2>
+          <p class="flow-desc">Your bank statement must be less than 3 months old and stamped or digitally certified by your issuing bank.</p>
+        </div>
+
+        <div class="upload-drop-surface" id="statementDropzone" onclick="simulateFileUpload(false)">
+          <div class="drop-icon-box">
+            <i data-lucide="upload-cloud" style="width: 22px; height: 22px;"></i>
+          </div>
+          <div>
+            <div class="drop-title" id="dropzoneTitle">Click to choose file or drag statement here</div>
+            <div class="drop-sub" id="dropzoneSub">Accepted prototype formats: PDF, JPG, PNG (Max 15MB)</div>
+          </div>
+        </div>
+
+        <div class="demo-toggle-row">
+          <span style="font-size: 10.5px; color: var(--text-subtle); font-weight: 700;">PROTOTYPE TEST STATES:</span>
+          <button class="btn-test-trigger" onclick="simulateFileUpload(false)">Simulate Valid Statement (Aug 2026)</button>
+          <button class="btn-test-trigger" onclick="simulateFileUpload(true)">Simulate Expired Statement (>3 Months)</button>
+        </div>
+
+        <!-- Calm Error Callout -->
+        <div class="inline-error-callout" id="uploadErrorBanner">
+          <i data-lucide="alert-circle" style="width: 16px; height: 16px; flex-shrink: 0;"></i>
+          <span id="uploadErrorText">The uploaded statement is older than 3 months. Please upload a newer statement.</span>
+        </div>
+
+        <div class="step-actions-footer">
+          <button class="btn-quiet-subtle" onclick="goToStep(1)">Back</button>
+          <button class="btn-coral-primary" id="btnStep2Continue" style="opacity: 0.5; pointer-events: none;" onclick="goToStep(3)">
+            <span>Proceed to Verification</span>
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+           STEP 3: VERIFY BANKING EVIDENCE
+           ------------------------------------------------------------------ -->
+      <section class="step-section" id="step3View">
+        <div class="flow-header-group">
+          <span class="flow-step-tag">Step 3 of 7 · Automated Verification</span>
+          <h2 class="flow-title">Banking evidence verified</h2>
+          <p class="flow-desc">We analyzed your bank statement against your Royal Square identity record. All primary compliance criteria match.</p>
+        </div>
+
+        <div class="verified-result-card">
+          <div class="verif-top-row">
+            <span class="verif-badge-state">
+              <i data-lucide="check-circle" style="width: 13px; height: 13px;"></i>
+              <span>BANK STATEMENT VERIFIED</span>
+            </span>
+            <div class="verif-age-tag">
+              <i data-lucide="calendar" style="width: 13px; height: 13px;"></i>
+              <span>Statement date: 19 Aug 2026 (Document age: 17 days ✓)</span>
+            </div>
+          </div>
+
+          <div class="verif-data-grid">
+            <div class="verif-grid-cell">
+              <span class="verif-lbl">Account Holder</span>
+              <span class="verif-val">Latoya Matai ✓</span>
+            </div>
+            <div class="verif-grid-cell">
+              <span class="verif-lbl">Bank</span>
+              <span class="verif-val">First National Bank (FNB)</span>
+            </div>
+            <div class="verif-grid-cell">
+              <span class="verif-lbl">Account Type</span>
+              <span class="verif-val">Cheque Account</span>
+            </div>
+            <div class="verif-grid-cell">
+              <span class="verif-lbl">Account Number</span>
+              <span class="verif-val">•••• 4812</span>
+            </div>
+          </div>
+
+          <div style="font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between;">
+            <span>Requirement: Less than 3 months old ✓</span>
+            <span style="font-size: 10px; color: var(--text-subtle);">Prototype document verification match. Client account authenticated.</span>
+          </div>
+        </div>
+
+        <div class="step-actions-footer">
+          <button class="btn-quiet-subtle" onclick="goToStep(2)">Back</button>
+          <button class="btn-coral-primary" onclick="goToStep(4)">
+            <span>Use this statement</span>
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+           STEP 4: CONFIRM EXTRACTED BANK DETAILS
+           ------------------------------------------------------------------ -->
+      <section class="step-section" id="step4View">
+        <div class="flow-header-group">
+          <span class="flow-step-tag">Step 4 of 7 · Client Confirmation</span>
+          <h2 class="flow-title">Confirm your new banking details</h2>
+          <p class="flow-desc">These details were extracted from your verified statement. You can review and make corrections before continuing.</p>
+        </div>
+
+        <div class="confirm-details-form">
+          <div class="field-group">
+            <label class="field-label">
+              <span>Account holder</span>
+              <span class="extracted-tag">From statement</span>
+            </label>
+            <input type="text" class="clean-input" id="fieldAccHolder" value="Latoya Matai" />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">
+              <span>Bank</span>
+              <span class="extracted-tag">From statement</span>
+            </label>
+            <input type="text" class="clean-input" id="fieldBankName" value="First National Bank (FNB)" />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">
+              <span>Account number</span>
+              <span class="extracted-tag">Verified</span>
+            </label>
+            <input type="text" class="clean-input" id="fieldAccNumber" value="62849104812" />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">
+              <span>Branch code</span>
+              <span class="extracted-tag">Universal</span>
+            </label>
+            <input type="text" class="clean-input" id="fieldBranchCode" value="250655" />
+          </div>
+
+          <div class="field-group" style="grid-column: 1 / -1;">
+            <label class="field-label">
+              <span>Account type</span>
+            </label>
+            <select class="clean-input" id="fieldAccType">
+              <option value="Cheque" selected>Cheque / Current Account</option>
+              <option value="Savings">Savings Account</option>
+              <option value="Transmission">Transmission Account</option>
+            </select>
+          </div>
+        </div>
+
+        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 4px 0;">
+          <input type="checkbox" id="chkConfirmCorrect" style="width: 17px; height: 17px; accent-color: var(--accent-coral);" checked />
+          <span style="font-size: 12.5px; font-weight: 600; color: var(--text-primary);">I confirm that these banking details are correct and belong to me.</span>
+        </label>
+
+        <div class="step-actions-footer">
+          <button class="btn-quiet-subtle" onclick="goToStep(3)">Back</button>
+          <button class="btn-coral-primary" onclick="goToStep(5)">
+            <span>Confirm & proceed</span>
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+           STEP 5: COMPLETE BANKING INSTRUCTION (ENTER ONCE PROOF)
+           ------------------------------------------------------------------ -->
+      <section class="step-section" id="step5View">
+        <div class="flow-header-group">
+          <span class="flow-step-tag">Step 5 of 7 · Instruction Generation</span>
+          <h2 class="flow-title">Review pre-filled instruction</h2>
+          <p class="flow-desc">You only complete what Royal Square does not already know. Known client and product details have been pre-populated.</p>
+        </div>
+
+        <!-- Ambient Enter Once Strip -->
+        <div class="enter-once-summary-strip">
+          <div style="font-size: 11.5px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 6px;">
+            <i data-lucide="shield-check" style="width: 15px; height: 15px; color: var(--status-green);"></i>
+            <span>6 fields reused automatically</span>
+          </div>
+          <div class="enter-once-chips-group">
+            <span class="reused-chip"><i data-lucide="check"></i> Name</span>
+            <span class="reused-chip"><i data-lucide="check"></i> ID Number</span>
+            <span class="reused-chip"><i data-lucide="check"></i> Address</span>
+            <span class="reused-chip"><i data-lucide="check"></i> Mobile</span>
+            <span class="reused-chip"><i data-lucide="check"></i> Email</span>
+            <span class="reused-chip"><i data-lucide="check"></i> Bank Data</span>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="field-group">
+            <label class="field-label">Debit order deduction day</label>
+            <select class="clean-input" id="fieldDebitDay">
+              <option value="1st" selected>1st of the month</option>
+              <option value="15th">15th of the month</option>
+              <option value="25th">25th of the month</option>
+              <option value="Last">Last calendar day of the month</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label">Effective cycle</label>
+            <input type="text" class="clean-input" value="Next cycle (01 October 2026)" readonly style="background: var(--bg-card-subtle);" />
+          </div>
+        </div>
+
+        <div class="step-actions-footer">
+          <button class="btn-quiet-subtle" onclick="goToStep(4)">Back</button>
+          <button class="btn-coral-primary" onclick="goToStep(6)">
+            <span>Proceed to official signing</span>
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+           STEP 6: SIGN OFFICIAL DOCUMENT (SANLAM DIRECT DEBIT MANDATE)
+           ------------------------------------------------------------------ -->
+      <section class="step-section" id="step6View">
+        <div class="flow-header-group">
+          <span class="flow-step-tag">Step 6 of 7 · Authorisation & Signature</span>
+          <h2 class="flow-title">Sign direct debit mandate</h2>
+          <p class="flow-desc">Sign the statutory banking amendment mandate below. Once signed, Qiniso will verify and submit it to Sanlam.</p>
+        </div>
+
+        <div class="mandate-signing-layout">
+          <!-- Printable A4 Document Preview -->
+          <article class="official-mandate-doc">
+            <div class="mandate-doc-header">
+              <div>
+                <div class="mandate-firm-name">Sanlam Investment Management</div>
+                <div class="mandate-firm-sub">Collective Investments · FSP License 579</div>
+              </div>
+              <div style="text-align: right; font-size: 8.5px; color: var(--text-secondary); font-family: var(--font-main);">
+                Doc Ref: SIM-DD-2026-BD2048<br>Mandate Version 2026.1
+              </div>
+            </div>
+
+            <div class="mandate-doc-title">DIRECT DEBIT & BANKING AMENDMENT MANDATE</div>
+
+            <p style="margin-bottom: 10px;">
+              I/We, the undersigned client, <strong>Latoya Matai</strong> (ID: 920412 0184 087), hereby instruct and authorize Sanlam Investment Management to draw against my new banking account detailed below:
+            </p>
+
+            <div style="background: #FAF9F6; border: 1px solid #ECE7DE; border-radius: 6px; padding: 10px 14px; font-family: var(--font-main); font-size: 10px; margin-bottom: 12px;">
+              <div><strong>Affected Portfolio:</strong> Unit Trust Growth Fund (•••• 2719)</div>
+              <div><strong>New Bank:</strong> First National Bank (FNB) · Branch Code: 250655</div>
+              <div><strong>Account Number:</strong> 62849104812 (Cheque Account)</div>
+              <div><strong>Monthly Deduction:</strong> R 8,500.00 on the 1st of each month</div>
+            </div>
+
+            <p style="font-size: 10px; color: #444; margin-bottom: 14px;">
+              This authority may be cancelled by giving 30 days written notice. I acknowledge that the party authorized to draw against my account will advise me of any changes in the debit order schedule.
+            </p>
+
+            <div class="mandate-sig-target-box">
+              <span id="mandateSigPlaceholder" style="font-size: 10px; color: #AAA; font-style: italic;">Sign on the right panel to apply signature</span>
+              <img id="mandateSigImg" class="rendered-sig-display" style="display: none;" alt="Signature" />
+              <span id="mandateSigTyped" class="rendered-typed-display" style="display: none;"></span>
+            </div>
+            <div style="font-family: var(--font-main); font-size: 10px; font-weight: 700; margin-top: 6px;">
+              Latoya Matai · Signed electronically on 05 September 2026
+            </div>
+          </article>
+
+          <!-- Guided Signature Panel -->
+          <div class="signing-right-panel">
+            <div class="sig-tabs-row">
+              <button class="sig-tab-pill active" id="btnTabDraw" onclick="setSignMode('draw')">Draw signature</button>
+              <button class="sig-tab-pill" id="btnTabType" onclick="setSignMode('type')">Type my name</button>
+            </div>
+
+            <div class="canvas-signing-wrap" id="canvasWrap">
+              <canvas id="sigCanvas"></canvas>
+            </div>
+
+            <div id="typeWrap" style="display: none;">
+              <input type="text" class="clean-input" id="typeSigInput" value="Latoya Matai" oninput="handleTypeSig()" placeholder="Type full name..." />
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <button class="btn-quiet-subtle" onclick="clearSignature()" style="padding: 0;">Clear</button>
+              <span style="font-size: 10.5px; color: var(--status-green); font-weight: 600;" id="sigStatusReadyTag">✓ Ready</span>
+            </div>
+
+            <div style="background: var(--bg-card-subtle); padding: 12px; border-radius: 12px; font-size: 11px; color: var(--text-secondary); line-height: 1.4;">
+              By signing, you confirm that you are the legal holder of this bank account and authorize Royal Square Financial to lodge this mandate.
+            </div>
+          </div>
+        </div>
+
+        <div class="step-actions-footer">
+          <button class="btn-quiet-subtle" onclick="goToStep(5)">Back</button>
+          <button class="btn-coral-primary" onclick="goToStep(7)">
+            <span>Review & submit</span>
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </button>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+           STEP 7: REVIEW BEFORE SUBMITTING
+           ------------------------------------------------------------------ -->
+      <section class="step-section" id="step7View">
+        <div class="flow-header-group">
+          <span class="flow-step-tag">Step 7 of 7 · Final Review</span>
+          <h2 class="flow-title">Review before submitting to Qiniso</h2>
+          <p class="flow-desc">Everything is compiled and ready for adviser review. Your verified bank statement and signed mandate will be lodged together.</p>
+        </div>
+
+        <div class="review-summary-table">
+          <div class="review-row">
+            <span class="review-lbl">Affected Product</span>
+            <span class="review-val">Sanlam Investment Management (•••• 2719)</span>
+          </div>
+          <div class="review-row">
+            <span class="review-lbl">New Account Details</span>
+            <span class="review-val">First National Bank · Cheque · •••• 4812</span>
+          </div>
+          <div class="review-row">
+            <span class="review-lbl">Evidence Attached</span>
+            <span class="review-val">Capitec/FNB Bank Statement (Verified ✓)</span>
+          </div>
+          <div class="review-row">
+            <span class="review-lbl">Instruction Mandate</span>
+            <span class="review-val">SIM-DD-2026-BD2048 (Signed by Latoya Matai ✓)</span>
+          </div>
+          <div class="review-row">
+            <span class="review-lbl">Assigned Adviser</span>
+            <span class="review-val">Qiniso Ntuli (CFP®) · FSP 29370</span>
+          </div>
+        </div>
+
+        <div class="compliance-pills-row">
+          <div class="comp-pill"><i data-lucide="check"></i><span>Identity verified</span></div>
+          <div class="comp-pill"><i data-lucide="check"></i><span>Consent active</span></div>
+          <div class="comp-pill"><i data-lucide="check"></i><span>Instruction recorded</span></div>
+          <div class="comp-pill"><i data-lucide="check"></i><span>Evidence complete</span></div>
+        </div>
+
+        <div class="step-actions-footer">
+          <button class="btn-quiet-subtle" onclick="goToStep(6)">Back</button>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn-quiet-subtle" onclick="showToast('Draft progress saved.')">Save draft</button>
+            <button class="btn-coral-primary" onclick="submitBankingInstruction()">
+              <span>Submit to Qiniso</span>
+              <i data-lucide="send" style="width: 14px; height: 14px;"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ------------------------------------------------------------------
+           STEP 8: SUBMISSION SUCCESS (#BD-2048 REQUEST INTEGRATION)
+           ------------------------------------------------------------------ -->
+      <section class="success-container-block" id="successSectionView">
+        <!-- Exact Request Match Card -->
+        <article class="request-hero-match-card">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between;">
+            <div>
+              <div style="font-size: 9.5px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 4px;">
+                <span>Investment Account · Sanlam</span> · <span class="case-code-tag">#BD-2048</span>
+              </div>
+              <h2 style="font-size: 20px; font-weight: 700; color: var(--text-primary);">Banking Details Update</h2>
+            </div>
+            <span class="stat-pill attention" id="liveHeroStatusPill">
+              <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--accent-coral);"></span>
+              <span id="liveStatusText">Waiting for Qiniso</span>
+            </span>
+          </div>
+
+          <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.45;" id="liveStatusCopy">
+            Your new banking details and signed instruction have been submitted. Qiniso is currently reviewing the stamped verification document.
+          </p>
+
+          <!-- 6-Stage Timeline Component matching client_requests_ui.html -->
+          <div class="workflow-timeline" style="margin: 8px 0 4px;">
+            <div class="timeline-step-node completed">
+              <div class="node-circle"><i data-lucide="check" style="width: 11px; height: 11px;"></i></div>
+              <span class="node-label">Received</span>
+            </div>
+            <div class="timeline-connector completed"></div>
+
+            <div class="timeline-step-node completed">
+              <div class="node-circle"><i data-lucide="check" style="width: 11px; height: 11px;"></i></div>
+              <span class="node-label">Verified</span>
+            </div>
+            <div class="timeline-connector completed"></div>
+
+            <div class="timeline-step-node completed">
+              <div class="node-circle"><i data-lucide="check" style="width: 11px; height: 11px;"></i></div>
+              <span class="node-label">Signed</span>
+            </div>
+            <div class="timeline-connector completed" id="liveConnector4"></div>
+
+            <div class="timeline-step-node current" id="liveNode4">
+              <div class="node-circle" id="nodeCircle4">4</div>
+              <span class="node-label">Review</span>
+            </div>
+            <div class="timeline-connector" id="liveConnector5"></div>
+
+            <div class="timeline-step-node upcoming" id="liveNode5">
+              <div class="node-circle" id="nodeCircle5">5</div>
+              <span class="node-label">Provider</span>
+            </div>
+            <div class="timeline-connector" id="liveConnector6"></div>
+
+            <div class="timeline-step-node upcoming" id="liveNode6">
+              <div class="node-circle" id="nodeCircle6">6</div>
+              <span class="node-label">Done</span>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 10px; border-top: 1px solid #FAF6EE; font-size: 11px;">
+            <span style="color: var(--text-secondary);">Current step with <strong>Qiniso Ntuli</strong> · Today, 14:22</span>
+            <span style="font-weight: 700; color: var(--accent-coral);">Stage 4 of 6</span>
+          </div>
+        </article>
+
+        <!-- Simulated Provider Advancement Controller -->
+        <div class="sim-controller-banner">
+          <div>
+            <div style="font-size: 11.5px; font-weight: 700; color: var(--text-primary);">Demo Simulation Controller</div>
+            <div style="font-size: 10.5px; color: var(--text-secondary);">Advance this case to simulate Qiniso's endorsement and Sanlam provider processing.</div>
+          </div>
+          <button class="btn-coral-primary" id="btnSimulateApproval" onclick="advanceSimulatedCase()">
+            <span>Simulate Adviser Approval →</span>
+          </button>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 10px;">
+          <a href="requests.html" class="btn-coral-primary">
+            <span>Track in My Requests</span>
+            <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+          </a>
+          <a href="index.html" class="btn-quiet-subtle">Return home</a>
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- ====================================================================
+       SLIDE-OUT LEFT NAVBAR (RESTORED EXACT COMPONENT FROM PORTAL)
+       ==================================================================== -->
+  <div class="nav-drawer-backdrop" id="navDrawerBackdrop" onclick="closeNavDrawer()"></div>
+  
+  <aside class="nav-drawer" id="navDrawer" aria-label="Client Navigation Drawer">
+    <!-- Drawer Header -->
+    <div class="drawer-header">
+      <div class="brand-cluster">
+        <div class="brand-logo-mark"><img src="./royal-square-logo.png" alt="Royal Square" style="width: 100%; height: 100%; display: block; object-fit: cover;" /></div>
+        <div class="brand-titles">
+          <span class="brand-title">Royal Square</span>
+          <span class="brand-subtitle">Client Portal</span>
+        </div>
+      </div>
+      <button class="btn-circle" style="width: 32px; height: 32px;" onclick="closeNavDrawer()" aria-label="Close navigation">
+        <i data-lucide="x" style="width: 15px; height: 15px;"></i>
+      </button>
+    </div>
+
+    <!-- Primary Destinations -->
+    <div class="drawer-nav-section">
+      <span class="drawer-section-label">Navigation</span>
+      <nav class="drawer-menu">
+        <a href="index.html" class="drawer-link" onclick="handleNavClick(event, 'Home', 'index.html')">
+          <i data-lucide="layout-dashboard" class="drawer-icon"></i>
+          <span>Home</span>
+        </a>
+        <a href="requests.html" class="drawer-link active" onclick="handleNavClick(event, 'Requests', 'requests.html')">
+          <i data-lucide="inbox" class="drawer-icon"></i>
+          <span>Requests</span>
+          <span class="drawer-badge">2</span>
+          <span class="drawer-active-pip"></span>
+        </a>
+        <a href="documents.html" class="drawer-link" onclick="handleNavClick(event, 'Documents', 'documents.html')">
+          <i data-lucide="files" class="drawer-icon"></i>
+          <span>Documents</span>
+        </a>
+        <a href="finances.html" class="drawer-link" onclick="handleNavClick(event, 'Finances', 'finances.html')">
+          <i data-lucide="wallet" class="drawer-icon"></i>
+          <span>Finances</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="drawer-nav-section">
+      <span class="drawer-section-label">Quick Actions</span>
+      <div class="drawer-actions-list">
+        <button class="drawer-action-btn" onclick="handleDrawerAction('Update beneficiary')">
+          <div class="action-icon-pill"><i data-lucide="user-plus"></i></div>
+          <span>Update beneficiary</span>
+        </button>
+        <button class="drawer-action-btn" onclick="handleDrawerAction('Update personal details')">
+          <div class="action-icon-pill"><i data-lucide="id-card"></i></div>
+          <span>Update personal details</span>
+        </button>
+        <button class="drawer-action-btn" onclick="handleDrawerAction('Report change in circumstances')">
+          <div class="action-icon-pill"><i data-lucide="file-pen-line"></i></div>
+          <span>My circumstances changed</span>
+        </button>
+        <button class="drawer-action-btn" onclick="handleDrawerAction('Book a review')">
+          <div class="action-icon-pill"><i data-lucide="calendar-plus"></i></div>
+          <span>Book a review</span>
+        </button>
+        <button class="drawer-action-btn" onclick="handleDrawerAction('Ask my adviser')">
+          <div class="action-icon-pill"><i data-lucide="messages-square"></i></div>
+          <span>Ask my adviser</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Drawer Footer -->
+    <div class="drawer-footer">
+      <div class="drawer-profile-box" onclick="closeNavDrawer(); showToast('Latoya Matai: Account Authenticated & Protected');">
+        <div class="client-avatar-wrapper">
+          <img src="/latoya-matai.png" alt="Latoya Matai" class="client-avatar" />
+          <span class="avatar-status-dot"></span>
+        </div>
+        <div class="client-meta">
+          <div class="client-name">Latoya Matai</div>
+          <div class="client-role">
+            <span>Private Client</span>
+            <span class="tier-badge">PREMIER</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Lightweight Toast Notification -->
+  <div class="toast-pill" id="modeToast">
+    <i data-lucide="info" id="toastIcon" style="width: 13px; height: 13px; color: var(--accent-coral);"></i>
+    <span id="toastMsg">Action triggered</span>
+  </div>
+
+  <!-- ====================================================================
+       SCRIPTS: NAVIGATION, CANVAS, WORKFLOW ENGINE & SIMULATION
+       ==================================================================== -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // 1. Navigation Drawer Control
+    function openNavDrawer() {
+      document.getElementById('navDrawer').classList.add('open');
+      document.getElementById('navDrawerBackdrop').classList.add('open');
+      document.body.classList.add('drawer-locked');
+    }
+
+    function closeNavDrawer() {
+      document.getElementById('navDrawer').classList.remove('open');
+      document.getElementById('navDrawerBackdrop').classList.remove('open');
+      document.body.classList.remove('drawer-locked');
+    }
+
+    function handleNavClick(e, name, targetUrl) {
+      closeNavDrawer();
+    }
+
+    function handleDrawerAction(actionName) {
+      closeNavDrawer();
+      showToast(`Initiating: "${actionName}"`);
+    }
+
+    // 2. Simple Mode Toggle Engine
+    function toggleSimpleMode() {
+      const isSimple = document.body.classList.toggle('simple-mode');
+      const toggleBtn = document.getElementById('simpleModeToggle');
+      const label = document.getElementById('modeToggleLabel');
+
+      if (isSimple) {
+        toggleBtn.classList.add('active');
+        label.textContent = 'Simple Mode: ON';
+        showToast('Simple Mode Enabled · Plain-language view');
+      } else {
+        toggleBtn.classList.remove('active');
+        label.textContent = 'Simple Mode';
+        showToast('Detailed Mode Enabled · Complete workflow tracking');
+      }
+      lucide.createIcons();
+    }
+
+    // 3. Workflow Step Navigation
+    let currentStep = 1;
+
+    function goToStep(step) {
+      currentStep = step;
+      document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+      const targetView = document.getElementById(`step${step}View`);
+      if (targetView) targetView.classList.add('active');
+
+      // Update Stepper Timeline Nodes
+      for (let i = 1; i <= 7; i++) {
+        const node = document.getElementById(`stepNode${i}`);
+        const circle = node.querySelector('.node-circle');
+        const conn = document.getElementById(`connector${i}`);
+
+        if (i < step) {
+          node.className = 'timeline-step-node completed';
+          circle.innerHTML = '<i data-lucide="check" style="width: 12px; height: 12px;"></i>';
+          if (conn) conn.className = 'timeline-connector completed';
+        } else if (i === step) {
+          node.className = 'timeline-step-node current';
+          circle.textContent = i;
+          if (conn) conn.className = 'timeline-connector';
+        } else {
+          node.className = 'timeline-step-node upcoming';
+          circle.textContent = i;
+          if (conn) conn.className = 'timeline-connector';
+        }
+      }
+
+      if (step === 6) initCanvas();
+      lucide.createIcons();
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    }
+
+    function jumpToStep(step) {
+      if (step <= currentStep) goToStep(step);
+    }
+
+    // Product Selection Toggle
+    function toggleProduct(el) {
+      el.classList.toggle('selected');
+      const count = document.querySelectorAll('.product-select-card.selected').length;
+      document.getElementById('productSelectedCount').textContent = `${count} product${count === 1 ? '' : 's'} selected`;
+    }
+
+    // 4. File Upload Simulation & Error State
+    function simulateFileUpload(simulateOld) {
+      const dropzone = document.getElementById('statementDropzone');
+      const errBanner = document.getElementById('uploadErrorBanner');
+      const continueBtn = document.getElementById('btnStep2Continue');
+
+      dropzone.innerHTML = `
+        <div class="drop-icon-box" style="animation: spin 1s infinite;"><i data-lucide="loader" style="width: 22px; height: 22px;"></i></div>
+        <div>
+          <div class="drop-title" style="color: var(--accent-coral);">Reading and verifying statement...</div>
+          <div class="drop-sub">Verifying account holder, bank branch and issue date</div>
+        </div>
+      `;
+      lucide.createIcons();
+
+      setTimeout(() => {
+        if (simulateOld) {
+          errBanner.classList.add('visible');
+          dropzone.innerHTML = `
+            <div class="drop-icon-box" style="color: var(--accent-coral);"><i data-lucide="alert-circle" style="width: 22px; height: 22px;"></i></div>
+            <div>
+              <div class="drop-title" style="color: var(--accent-coral);">Statement Verification Failed</div>
+              <div class="drop-sub">bank-statement-may-2026.pdf (118 days old · Exceeds 90-day limit)</div>
+            </div>
+          `;
+          continueBtn.style.opacity = '0.5';
+          continueBtn.style.pointerEvents = 'none';
+        } else {
+          errBanner.classList.remove('visible');
+          dropzone.innerHTML = `
+            <div class="drop-icon-box" style="color: var(--status-green);"><i data-lucide="file-check-2" style="width: 22px; height: 22px;"></i></div>
+            <div>
+              <div class="drop-title">bank-statement-aug-2026.pdf (2.1 MB)</div>
+              <div class="drop-sub" style="color: var(--status-green); font-weight: 600;">✓ Account holder matched · Statement date verified</div>
+            </div>
+          `;
+          continueBtn.style.opacity = '1';
+          continueBtn.style.pointerEvents = 'auto';
+        }
+        lucide.createIcons();
+      }, 700);
+    }
+
+    // 5. Signature Canvas Setup
+    let canvas, ctx, isDrawing = false, hasDrawn = false;
+
+    function initCanvas() {
+      canvas = document.getElementById('sigCanvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = 110;
+      ctx.lineWidth = 2.2;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#171615';
+
+      canvas.onmousedown = (e) => { isDrawing = true; ctx.moveTo(e.offsetX, e.offsetY); hasDrawn = true; syncSigToDocument(); };
+      canvas.onmousemove = (e) => { if (isDrawing) { ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke(); syncSigToDocument(); } };
+      canvas.onmouseup = () => isDrawing = false;
+
+      // Touch events
+      canvas.ontouchstart = (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const r = canvas.getBoundingClientRect();
+        isDrawing = true;
+        ctx.moveTo(touch.clientX - r.left, touch.clientY - r.top);
+        hasDrawn = true;
+      };
+      canvas.ontouchmove = (e) => {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        const r = canvas.getBoundingClientRect();
+        ctx.lineTo(touch.clientX - r.left, touch.clientY - r.top);
+        ctx.stroke();
+        syncSigToDocument();
+      };
+      canvas.ontouchend = () => isDrawing = false;
+    }
+
+    function setSignMode(mode) {
+      const btnDraw = document.getElementById('btnTabDraw');
+      const btnType = document.getElementById('btnTabType');
+      const canvasWrap = document.getElementById('canvasWrap');
+      const typeWrap = document.getElementById('typeWrap');
+
+      if (mode === 'draw') {
+        btnDraw.classList.add('active');
+        btnType.classList.remove('active');
+        canvasWrap.style.display = 'block';
+        typeWrap.style.display = 'none';
+        syncSigToDocument();
+      } else {
+        btnType.classList.add('active');
+        btnDraw.classList.remove('active');
+        canvasWrap.style.display = 'none';
+        typeWrap.style.display = 'block';
+        handleTypeSig();
+      }
+    }
+
+    function clearSignature() {
+      if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+      hasDrawn = false;
+      document.getElementById('mandateSigPlaceholder').style.display = 'block';
+      document.getElementById('mandateSigImg').style.display = 'none';
+      document.getElementById('mandateSigTyped').style.display = 'none';
+    }
+
+    function syncSigToDocument() {
+      if (!canvas) return;
+      const dataUrl = canvas.toDataURL();
+      document.getElementById('mandateSigPlaceholder').style.display = 'none';
+      document.getElementById('mandateSigTyped').style.display = 'none';
+      const img = document.getElementById('mandateSigImg');
+      img.src = dataUrl;
+      img.style.display = 'block';
+    }
+
+    function handleTypeSig() {
+      const val = document.getElementById('typeSigInput').value.trim();
+      document.getElementById('mandateSigPlaceholder').style.display = 'none';
+      document.getElementById('mandateSigImg').style.display = 'none';
+      const typed = document.getElementById('mandateSigTyped');
+      typed.textContent = val || 'Latoya Matai';
+      typed.style.display = 'block';
+    }
+
+    // 6. Submit & Simulated Provider Engine
+    function submitBankingInstruction() {
+      document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+      document.getElementById('successSectionView').style.display = 'flex';
+      document.getElementById('caseActiveStatusPill').textContent = 'Waiting for Qiniso';
+      showToast('Instruction submitted to Qiniso Ntuli (#BD-2048)');
+      lucide.createIcons();
+    }
+
+    let simStage = 0;
+    function advanceSimulatedCase() {
+      simStage++;
+      const btn = document.getElementById('btnSimulateApproval');
+      const pill = document.getElementById('liveHeroStatusPill');
+      const text = document.getElementById('liveStatusText');
+      const copy = document.getElementById('liveStatusCopy');
+
+      if (simStage === 1) {
+        // Advanced to Provider Submission
+        pill.className = 'stat-pill';
+        text.textContent = 'Submitted to Sanlam';
+        copy.innerHTML = 'Qiniso endorsed your mandate. Submitted directly to <strong>Sanlam Operations</strong> (Ref: <strong>RSF-MOCK-2841</strong>).';
+        
+        document.getElementById('liveNode4').className = 'timeline-step-node completed';
+        document.getElementById('nodeCircle4').innerHTML = '<i data-lucide="check" style="width: 11px; height: 11px;"></i>';
+        document.getElementById('liveConnector5').className = 'timeline-connector completed';
+
+        document.getElementById('liveNode5').className = 'timeline-step-node current';
+        btn.innerHTML = '<span>Simulate Sanlam Acceptance →</span>';
+        showToast('Status updated: Submitted to provider');
+      } else {
+        // Complete
+        pill.className = 'stat-pill';
+        pill.style.background = 'var(--status-green-soft)';
+        pill.style.color = 'var(--status-green)';
+        text.textContent = 'Provider Accepted ✓';
+        copy.innerHTML = 'Sanlam Investment Management has updated your direct debit schedule for Unit Trust Growth Fund (•••• 2719). <strong>Your request is complete.</strong>';
+
+        document.getElementById('liveNode5').className = 'timeline-step-node completed';
+        document.getElementById('nodeCircle5').innerHTML = '<i data-lucide="check" style="width: 11px; height: 11px;"></i>';
+        document.getElementById('liveConnector6').className = 'timeline-connector completed';
+
+        document.getElementById('liveNode6').className = 'timeline-step-node completed';
+        document.getElementById('nodeCircle6').innerHTML = '<i data-lucide="check" style="width: 11px; height: 11px;"></i>';
+
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        btn.innerHTML = '<span>✓ Complete on Schedule</span>';
+        showToast('Sanlam accepted mandate · Case #BD-2048 completed');
+      }
+      lucide.createIcons();
+    }
+
+    // 7. Lightweight Toast Engine
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('modeToast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.add('active');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('active');
+      }, 2400);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,4034 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Royal Square — Accident Mode (Evidence & Claim Intake)</title>
+
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Local icon runtime keeps the accident workflow usable offline. -->
+    <script src="./lucide-local.js"></script>
+
+    <style>
+      /* ==========================================================================
+       1. SYSTEM TOKENS (ORGANIC, BORDERLESS LUXURY FINTECH)
+       ========================================================================== */
+      :root {
+        --bg-page: #f4f3ee; /* Warm creamy neutral canvas */
+        --bg-card: #ffffff; /* Crisp white surface */
+        --bg-card-subtle: #faf9f5; /* Tone-on-tone sub-card surface */
+        --bg-card-hover: #f6f4ee;
+
+        --text-primary: #171615; /* Deep near-black */
+        --text-secondary: #87837c; /* Warm muted neutral */
+        --text-subtle: #aba69e; /* Light caption neutral */
+
+        --accent-coral: #e85d3f; /* Signature terracotta coral */
+        --accent-coral-hover: #d84f31;
+        --accent-coral-soft: #fdf0ed; /* Pale coral pill tint */
+        --accent-coral-glow: rgba(232, 93, 63, 0.16);
+
+        --status-green: #2b7a48;
+        --status-green-soft: #edf7f1;
+        --status-amber: #a46313;
+        --status-amber-soft: #faf3e8;
+
+        --radius-card: 26px;
+        --radius-subcard: 16px;
+        --radius-pill: 9999px;
+
+        /* Pure multi-layered ambient shadows (No harsh grey borders) */
+        --shadow-card:
+          0 4px 24px rgba(0, 0, 0, 0.016), 0 1px 3px rgba(0, 0, 0, 0.01);
+        --shadow-hover:
+          0 12px 34px rgba(0, 0, 0, 0.038), 0 2px 6px rgba(0, 0, 0, 0.018);
+        --shadow-button: 0 2px 8px rgba(0, 0, 0, 0.025);
+        --font-main:
+          "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-page);
+        color: var(--text-primary);
+        font-family: var(--font-main);
+        -webkit-font-smoothing: antialiased;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 22px 36px 40px;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      button,
+      input,
+      textarea,
+      select {
+        font-family: inherit;
+      }
+
+      button {
+        cursor: pointer;
+        border: none;
+        background: transparent;
+      }
+
+      .app-viewport {
+        width: 100%;
+        max-width: 1400px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* ==========================================================================
+       2. TOP HEADER (EXACT ROYAL SQUARE ALIGNMENT)
+       ========================================================================== */
+      .top-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        height: 46px;
+      }
+
+      .header-left-cluster {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+
+      .btn-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--bg-card);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-primary);
+        box-shadow: var(--shadow-button);
+        transition: all 0.15s ease;
+        text-decoration: none;
+      }
+
+      .btn-circle:hover {
+        background: #faf8f4;
+        transform: scale(1.03);
+        box-shadow: var(--shadow-hover);
+      }
+
+      .brand-logo-mark {
+        width: 40px;
+        height: 40px;
+        border-radius: 13px;
+      background: #FFFFFF;
+      overflow: hidden;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 13px;
+        letter-spacing: -0.5px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+      }
+
+      .brand-logo-mark img { transform: scale(1.6); }
+
+      .header-mode-meta {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+      }
+
+      .header-title-row {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .header-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--text-primary);
+        letter-spacing: -0.2px;
+      }
+
+      .pill-mode-tag {
+        font-size: 9px;
+        font-weight: 800;
+        background: var(--accent-coral-soft);
+        color: var(--accent-coral);
+        padding: 2px 7px;
+        border-radius: var(--radius-pill);
+        letter-spacing: 0.4px;
+      }
+
+      .header-subtitle {
+        font-size: 11px;
+        color: var(--text-secondary);
+      }
+
+      /* Connection State Center Control */
+      .header-center-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .connection-status-pill {
+        height: 40px;
+        padding: 0 16px 0 12px;
+        border-radius: var(--radius-pill);
+        background: var(--bg-card);
+        box-shadow: var(--shadow-button);
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-primary);
+        transition: all 0.2s ease;
+      }
+
+      .connection-status-pill.offline {
+        background: var(--accent-coral-soft);
+        color: var(--accent-coral);
+      }
+
+      .pulse-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent-coral);
+        position: relative;
+      }
+
+      .connection-status-pill.offline .pulse-dot::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        border-radius: 50%;
+        background: var(--accent-coral);
+        animation: ripple 1.8s infinite ease-out;
+      }
+
+      .connection-status-pill.online {
+        background: var(--status-green-soft);
+        color: var(--status-green);
+      }
+
+      .connection-status-pill.online .pulse-dot {
+        background: var(--status-green);
+      }
+
+      .connection-status-pill.online .pulse-dot::after {
+        display: none;
+      }
+
+      @keyframes ripple {
+        0% {
+          transform: scale(1);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(2.8);
+          opacity: 0;
+        }
+      }
+
+      .btn-sim-network {
+        height: 40px;
+        padding: 0 14px;
+        background: var(--bg-card);
+        border-radius: var(--radius-pill);
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        box-shadow: var(--shadow-button);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.15s ease;
+      }
+
+      .btn-sim-network:hover {
+        background: #faf8f4;
+        color: var(--text-primary);
+      }
+
+      /* Right Controls & Latoya Profile */
+      .header-right-cluster {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+
+      .mode-toggle-pill {
+        height: 40px;
+        background: var(--bg-card);
+        border-radius: var(--radius-pill);
+        padding: 3px 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: var(--shadow-button);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .mode-toggle-pill.active {
+        background: var(--accent-coral-soft);
+      }
+
+      .mode-label-text {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .mode-toggle-pill.active .mode-label-text {
+        color: var(--accent-coral);
+      }
+
+      .toggle-switch-track {
+        width: 24px;
+        height: 14px;
+        border-radius: var(--radius-pill);
+        background: #e5e1d7;
+        position: relative;
+        transition: background 0.2s ease;
+      }
+
+      .mode-toggle-pill.active .toggle-switch-track {
+        background: var(--accent-coral);
+      }
+
+      .toggle-switch-thumb {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #ffffff;
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      }
+
+      .mode-toggle-pill.active .toggle-switch-thumb {
+        transform: translateX(10px);
+      }
+
+      .profile-pill-topright {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: var(--bg-card);
+        padding: 4px 14px 4px 5px;
+        border-radius: var(--radius-pill);
+        box-shadow: var(--shadow-button);
+      }
+
+      .client-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      }
+
+      .client-meta {
+        line-height: 1.2;
+        text-align: left;
+      }
+
+      .client-name {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .client-role {
+        font-size: 9.5px;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .tier-badge {
+        font-size: 8px;
+        font-weight: 800;
+        background: #181716;
+        color: #ffffff;
+        padding: 1px 5px;
+        border-radius: 4px;
+        letter-spacing: 0.3px;
+      }
+
+      /* ==========================================================================
+       3. SECOND ROW: INCIDENT DATE BADGE & FOCUSED HERO
+       ========================================================================== */
+      .second-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        min-height: 52px;
+      }
+
+      .second-row-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .date-badge {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--bg-card);
+        border-radius: var(--radius-pill);
+        padding: 4px 18px 4px 5px;
+        box-shadow: var(--shadow-button);
+      }
+
+      .date-number-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--bg-card-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        font-weight: 800;
+        color: var(--text-primary);
+      }
+
+      .date-labels {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+      }
+
+      .date-weekday {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .date-month {
+        font-size: 10px;
+        color: var(--text-secondary);
+      }
+
+      .time-soft-divider {
+        width: 1px;
+        height: 22px;
+        background: #ece7de;
+        margin: 0 2px;
+      }
+
+      .time-cluster {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+      }
+
+      .time-digits {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .time-zone-sub {
+        font-size: 9px;
+        font-weight: 700;
+        color: var(--accent-coral);
+      }
+
+      .tag-evidence-dossier {
+        height: 48px;
+        padding: 0 18px;
+        border-radius: var(--radius-pill);
+        background: var(--bg-card);
+        box-shadow: var(--shadow-button);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .tag-evidence-dossier i {
+        color: var(--accent-coral);
+      }
+
+      .hero-text-block {
+        text-align: right;
+        line-height: 1.25;
+      }
+
+      .hero-heading {
+        font-size: 24px;
+        font-weight: 400;
+        letter-spacing: -0.4px;
+        color: var(--text-primary);
+      }
+
+      .hero-subheading {
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--text-secondary);
+        margin-top: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 5px;
+      }
+
+      .hero-subheading strong {
+        color: var(--accent-coral);
+        font-weight: 600;
+      }
+
+      /* ==========================================================================
+       4. COMPACT HORIZONTAL STEP TRACKER
+       ========================================================================== */
+      .step-navigator-capsule {
+        background: var(--bg-card);
+        border-radius: var(--radius-pill);
+        box-shadow: var(--shadow-card);
+        padding: 6px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+      }
+
+      .step-pills-row {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        flex: 1;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .step-pills-row::-webkit-scrollbar {
+        display: none;
+      }
+
+      .step-pill {
+        height: 36px;
+        padding: 0 14px;
+        border-radius: var(--radius-pill);
+        background: transparent;
+        color: var(--text-secondary);
+        font-size: 11px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        white-space: nowrap;
+        transition: all 0.2s ease;
+      }
+
+      .step-pill:hover {
+        background: var(--bg-card-hover);
+        color: var(--text-primary);
+      }
+
+      .step-pill.active {
+        background: #181716;
+        color: #ffffff;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      }
+
+      .step-pill.done {
+        background: var(--accent-coral-soft);
+        color: var(--accent-coral);
+        font-weight: 700;
+      }
+
+      .step-num-bubble {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 700;
+      }
+
+      .step-pill.active .step-num-bubble {
+        background: #ffffff;
+        color: #181716;
+      }
+
+      .step-pill.done .step-num-bubble {
+        background: var(--accent-coral);
+        color: #ffffff;
+      }
+
+      .step-counter-tag {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        padding: 0 16px;
+        white-space: nowrap;
+      }
+
+      /* ==========================================================================
+       5. MAIN BENTO WORKSPACE (NO GIANT EMPTY VOIDS)
+       ========================================================================== */
+      .bento-workspace {
+        display: grid;
+        grid-template-columns: 1fr 370px;
+        gap: 18px;
+        align-items: start;
+      }
+
+      /* Left Card: Responsive, Content-Hugging Intake Area */
+      .intake-master-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        padding: 28px 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .intake-header-block {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .card-kicker-coral {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        color: var(--accent-coral);
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .intake-h1 {
+        font-size: 21px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+        color: var(--text-primary);
+      }
+
+      .intake-p {
+        font-size: 12px;
+        color: var(--text-secondary);
+        line-height: 1.45;
+      }
+
+      /* Form Fields & Tactile Cards */
+      .interactive-fields-flow {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .field-label-group {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 7px;
+      }
+
+      .field-title {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .field-subtext {
+        font-size: 10px;
+        color: var(--text-secondary);
+      }
+
+      /* Segmented Tactile Option Tiles */
+      .tiles-selection-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 8px;
+      }
+
+      .tile-opt-btn {
+        background: var(--bg-card-subtle);
+        border-radius: var(--radius-subcard);
+        padding: 12px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: left;
+        transition: all 0.15s ease;
+        cursor: pointer;
+      }
+
+      .tile-opt-btn:hover {
+        background: var(--bg-card-hover);
+      }
+
+      .tile-opt-btn.active {
+        background: #181716;
+        color: #ffffff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .tile-icon-bubble {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-primary);
+        flex-shrink: 0;
+      }
+
+      .tile-opt-btn.active .tile-icon-bubble {
+        background: #2d2c2a;
+        color: #ffffff;
+      }
+
+      .tile-text-wrap {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.2;
+      }
+
+      .tile-main-label {
+        font-size: 11.5px;
+        font-weight: 700;
+      }
+
+      .tile-sub-label {
+        font-size: 9.5px;
+        color: var(--text-secondary);
+      }
+
+      .tile-opt-btn.active .tile-sub-label {
+        color: #a8a49c;
+      }
+
+      /* Clean Styled Inputs */
+      .input-box-clean {
+        height: 42px;
+        border-radius: var(--radius-subcard);
+        background: var(--bg-card-subtle);
+        border: none;
+        padding: 0 15px;
+        font-size: 12px;
+        color: var(--text-primary);
+        outline: none;
+        width: 100%;
+        transition: box-shadow 0.2s ease;
+      }
+
+      .input-box-clean:focus {
+        box-shadow: 0 0 0 2px var(--accent-coral-glow);
+      }
+
+      .textarea-box-clean {
+        min-height: 85px;
+        border-radius: var(--radius-subcard);
+        background: var(--bg-card-subtle);
+        border: none;
+        padding: 12px 15px;
+        font-size: 12px;
+        color: var(--text-primary);
+        outline: none;
+        resize: vertical;
+        line-height: 1.45;
+        width: 100%;
+      }
+
+      .textarea-box-clean:focus {
+        box-shadow: 0 0 0 2px var(--accent-coral-glow);
+      }
+
+      /* Soft Info Banner */
+      .banner-neutral-info {
+        background: var(--bg-card-subtle);
+        border-radius: var(--radius-subcard);
+        padding: 12px 16px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 11px;
+        color: var(--text-secondary);
+        line-height: 1.4;
+      }
+
+      .banner-neutral-info i {
+        color: var(--accent-coral);
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+
+      /* Footer Action Buttons */
+      .intake-footer-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 8px;
+        padding-top: 18px;
+        border-top: 1px solid #f6f3eb;
+      }
+
+      .btn-coral-action {
+        height: 44px;
+        padding: 0 22px;
+        border-radius: var(--radius-pill);
+        background-color: var(--accent-coral);
+        color: #ffffff;
+        font-size: 12.5px;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 14px var(--accent-coral-glow);
+        transition: all 0.15s ease;
+      }
+
+      .btn-coral-action:hover {
+        background-color: var(--accent-coral-hover);
+        transform: translateY(-1px);
+      }
+
+      .btn-neutral-back {
+        height: 44px;
+        padding: 0 18px;
+        border-radius: var(--radius-pill);
+        background: var(--bg-card-subtle);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.15s;
+      }
+
+      .btn-neutral-back:hover {
+        background: #ede8df;
+        color: var(--text-primary);
+      }
+
+      /* ==========================================================================
+       6. STEP 2 & 3: LOCATION & EVIDENCE CHECKLIST BENTO TILES
+       ========================================================================== */
+      .coordinates-cluster-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+
+      .coord-tile {
+        background: var(--bg-card-subtle);
+        border-radius: var(--radius-subcard);
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .coord-label {
+        font-size: 9.5px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+
+      .coord-val {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .evidence-check-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .evidence-tile-card {
+        background: var(--bg-card-subtle);
+        border-radius: var(--radius-subcard);
+        padding: 10px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+
+      .evidence-tile-card:hover {
+        background: #f4efe6;
+      }
+
+      .evidence-tile-card.done {
+        background: var(--status-green-soft);
+      }
+
+      .evidence-tile-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .evidence-thumb-wrap {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        flex-shrink: 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      }
+
+      .evidence-thumb-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .evidence-thumb-wrap i {
+        color: var(--text-secondary);
+      }
+
+      .evidence-tile-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.25;
+      }
+
+      .evidence-tile-meta {
+        font-size: 9.5px;
+        color: var(--text-secondary);
+        margin-top: 2px;
+      }
+
+      .badge-evidence-status {
+        font-size: 9.5px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: var(--radius-pill);
+        white-space: nowrap;
+      }
+
+      .badge-evidence-status.pending {
+        background: #ece8de;
+        color: var(--text-secondary);
+      }
+
+      .badge-evidence-status.verified {
+        background: #ffffff;
+        color: var(--status-green);
+      }
+
+      /* ==========================================================================
+       7. STEP 6: VOICE STATEMENT CONSOLE & SKETCH
+       ========================================================================== */
+      .voice-suite-card {
+        background: var(--bg-card-subtle);
+        border-radius: var(--radius-subcard);
+        padding: 16px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .voice-control-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .btn-record-voice {
+        height: 40px;
+        padding: 0 18px;
+        border-radius: var(--radius-pill);
+        background: var(--accent-coral);
+        color: #ffffff;
+        font-size: 11.5px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        box-shadow: 0 4px 12px var(--accent-coral-glow);
+        transition: all 0.15s ease;
+      }
+
+      .btn-record-voice.recording {
+        background: #181716;
+        animation: pulseRecord 1.2s infinite;
+      }
+
+      @keyframes pulseRecord {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.03);
+        }
+      }
+
+      .soundwave-visualiser {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        height: 18px;
+      }
+
+      .soundwave-bar {
+        width: 3px;
+        height: 6px;
+        background: #d5d0c3;
+        border-radius: 2px;
+        transition: height 0.1s ease;
+      }
+
+      .soundwave-visualiser.pulsing .soundwave-bar {
+        background: var(--accent-coral);
+        animation: soundDance 0.7s infinite alternate ease-in-out;
+      }
+
+      .soundwave-visualiser.pulsing .soundwave-bar:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+      .soundwave-visualiser.pulsing .soundwave-bar:nth-child(3) {
+        animation-delay: 0.25s;
+      }
+      .soundwave-visualiser.pulsing .soundwave-bar:nth-child(4) {
+        animation-delay: 0.35s;
+      }
+      .soundwave-visualiser.pulsing .soundwave-bar:nth-child(5) {
+        animation-delay: 0.15s;
+      }
+
+      @keyframes soundDance {
+        0% {
+          height: 4px;
+        }
+        100% {
+          height: 18px;
+        }
+      }
+
+      .sketch-master-suite {
+        background: var(--bg-card-subtle);
+        border-radius: var(--radius-subcard);
+        padding: 12px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .sketch-header-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .sketch-tools-group {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .sketch-tool-btn {
+        height: 30px;
+        padding: 0 10px;
+        border-radius: var(--radius-pill);
+        background: #ffffff;
+        font-size: 10.5px;
+        font-weight: 600;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+        transition: all 0.15s;
+      }
+
+      .sketch-tool-btn.active {
+        background: #181716;
+        color: #ffffff;
+      }
+
+      .canvas-viewport-box {
+        width: 100%;
+        height: 170px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+        position: relative;
+        cursor: crosshair;
+      }
+
+      #sketchCanvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      /* ==========================================================================
+       8. RIGHT RAIL (EVIDENCE COMPLETENESS & STATUTORY REMINDERS)
+       ========================================================================== */
+      .bento-sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .sidebar-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        padding: 22px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      /* Evidence Completeness Module */
+      .completeness-topline {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .completeness-score-row {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+      }
+
+      .score-number {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--text-primary);
+        letter-spacing: -0.6px;
+      }
+
+      .score-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-secondary);
+      }
+
+      .concentric-bar-track {
+        width: 100%;
+        height: 8px;
+        border-radius: var(--radius-pill);
+        background: #efece6;
+        overflow: hidden;
+        margin: 2px 0 4px;
+      }
+
+      .concentric-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #e85d3f, #f48e77);
+        border-radius: var(--radius-pill);
+        transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .completeness-checklist {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+      }
+
+      .checklist-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 11px;
+        color: var(--text-secondary);
+        padding: 2px 0;
+      }
+
+      .checklist-row.done {
+        color: var(--text-primary);
+        font-weight: 600;
+      }
+
+      .checklist-row.done i {
+        color: var(--status-green);
+      }
+
+      .checklist-row.missing {
+        color: var(--accent-coral);
+        font-weight: 600;
+      }
+
+      .checklist-row.missing i {
+        color: var(--accent-coral);
+      }
+
+      /* Redesigned 48-Hour Police Statutory Card */
+      .statutory-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        padding: 20px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .statutory-badge-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .badge-statutory {
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+        background: var(--status-amber-soft);
+        color: var(--status-amber);
+        padding: 2px 7px;
+        border-radius: var(--radius-pill);
+        text-transform: uppercase;
+      }
+
+      .statutory-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .statutory-desc {
+        font-size: 10.5px;
+        color: var(--text-secondary);
+        line-height: 1.45;
+      }
+
+      .statutory-input-box {
+        background: var(--bg-card-subtle);
+        border-radius: var(--radius-subcard);
+        padding: 10px 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .statutory-label {
+        font-size: 9.5px;
+        font-weight: 700;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+      }
+
+      .statutory-input {
+        height: 32px;
+        background: #ffffff;
+        border-radius: 8px;
+        border: none;
+        padding: 0 10px;
+        font-size: 11px;
+        color: var(--text-primary);
+        outline: none;
+      }
+
+      /* Scene Safety Protocol Micro-Tiles */
+      .safety-tips-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        padding: 18px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .safety-item-bullet {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 10.5px;
+        color: var(--text-secondary);
+        line-height: 1.4;
+      }
+
+      .safety-item-bullet i {
+        color: var(--accent-coral);
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      /* Emergency Recovery & Hospital Dispatch Hub */
+      .emergency-dispatch-card {
+        background: var(--bg-card);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        padding: 18px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        border-left: 3px solid var(--accent-coral);
+      }
+
+      .emergency-badge-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .badge-emergency-live {
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        background: rgba(232, 93, 63, 0.14);
+        color: var(--accent-coral);
+        padding: 2px 7px;
+        border-radius: var(--radius-pill);
+        text-transform: uppercase;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .emergency-sub-block {
+        background: var(--bg-card-subtle);
+        border-radius: var(--radius-subcard);
+        padding: 11px 13px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        border: 1px solid var(--border-soft);
+      }
+
+      .emergency-facility-title {
+        font-size: 11.5px;
+        font-weight: 800;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .emergency-facility-meta {
+        font-size: 10px;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .emergency-btn-row {
+        display: flex;
+        gap: 6px;
+        margin-top: 4px;
+      }
+
+      .btn-emergency-action {
+        flex: 1;
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 10.5px;
+        font-weight: 800;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        border: 1px solid transparent;
+      }
+
+      .btn-emergency-call {
+        background: #15803d;
+        color: #ffffff;
+      }
+
+      .btn-emergency-call:hover {
+        background: #166534;
+      }
+
+      .btn-emergency-nav {
+        background: #ffffff;
+        color: var(--text-primary);
+        border: 1px solid var(--border-soft);
+      }
+
+      .btn-emergency-nav:hover {
+        background: var(--bg-card-subtle);
+      }
+
+      .btn-tow-dispatch {
+        background: var(--accent-coral);
+        color: #ffffff;
+      }
+
+      .btn-tow-dispatch:hover {
+        background: #d1492b;
+      }
+
+      .anti-pirate-tow-notice {
+        font-size: 9.5px;
+        color: #854d0e;
+        background: #fef9c3;
+        border: 1px solid #fef08a;
+        padding: 6px 9px;
+        border-radius: 6px;
+        line-height: 1.4;
+        display: flex;
+        align-items: flex-start;
+        gap: 5px;
+      }
+
+      /* ==========================================================================
+       9. SUCCESS & CLAIM DOSSIER MODAL
+       ========================================================================== */
+      .dossier-success-block {
+        text-align: center;
+        max-width: 580px;
+        margin: 10px auto 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .success-icon-bubble {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        background: var(--status-green-soft);
+        color: var(--status-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 4px;
+      }
+
+      .dossier-summary-card {
+        background: var(--bg-card-subtle);
+        border-radius: var(--radius-subcard);
+        padding: 18px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .dossier-specs-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 9px;
+      }
+
+      .dossier-pill-item {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .dossier-pill-item i {
+        color: var(--status-green);
+        flex-shrink: 0;
+      }
+
+      /* Sponsor Claims Lifecycle Workflow */
+      .claims-workflow-box {
+        margin-top: 10px;
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 14px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .timeline-step-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        position: relative;
+      }
+
+      .timeline-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #eae6dd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2px;
+        flex-shrink: 0;
+      }
+
+      .timeline-step-row.done .timeline-dot {
+        background: var(--status-green);
+        color: #ffffff;
+      }
+
+      .timeline-step-row.current .timeline-dot {
+        background: var(--accent-coral);
+        color: #ffffff;
+        box-shadow: 0 0 0 3px var(--accent-coral-glow);
+      }
+
+      .timeline-content-title {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+
+      .timeline-content-sub {
+        font-size: 9.5px;
+        color: var(--text-secondary);
+      }
+
+      /* Simple Mode Hide Utility */
+      body.simple-mode .coordinates-cluster-grid,
+      body.simple-mode .field-subtext,
+      body.simple-mode .claims-workflow-box {
+        display: none !important;
+      }
+
+      /* Toast Notification Pill */
+      .toast-pill {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%) translateY(80px);
+        background: #181716;
+        color: #ffffff;
+        padding: 9px 20px;
+        border-radius: var(--radius-pill);
+        font-size: 11.5px;
+        font-weight: 600;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        z-index: 1000;
+        opacity: 0;
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .toast-pill.active {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-viewport">
+      <!-- ====================================================================
+         1. TOP HEADER (BRAND, OFFLINE/ONLINE STATE, PROFILE)
+         ==================================================================== -->
+      <header class="top-header">
+        <div class="header-left-cluster">
+          <a
+            href="client_ui.html"
+            class="btn-circle"
+            title="Exit Accident Mode to Client Home"
+          >
+            <i data-lucide="arrow-left" style="width: 16px; height: 16px"></i>
+          </a>
+          <div class="brand-logo-mark"><img src="./royal-square-logo.png" alt="Royal Square" style="width: 100%; height: 100%; display: block; object-fit: cover;" /></div>
+          <div class="header-mode-meta">
+            <div class="header-title-row">
+              <span class="header-title">Royal Square</span>
+              <span class="pill-mode-tag">ACCIDENT INTAKE</span>
+            </div>
+            <span class="header-subtitle">Secure Scene Dossier</span>
+          </div>
+        </div>
+
+        <!-- Center Network Pill -->
+        <div class="header-center-controls">
+          <div class="connection-status-pill offline" id="connectionStatusPill">
+            <span class="pulse-dot"></span>
+            <span id="connectionPillLabel">OFFLINE · Saved on this device</span>
+          </div>
+
+          <button
+            class="btn-sim-network"
+            onclick="toggleOnlineSimulation()"
+            title="Switch network state"
+          >
+            <i
+              data-lucide="wifi"
+              id="wifiIcon"
+              style="width: 13px; height: 13px"
+            ></i>
+            <span id="btnSimNetworkLabel">Simulate Online</span>
+          </button>
+        </div>
+
+        <!-- Right Profile & Simple View Toggle -->
+        <div class="header-right-cluster">
+          <button
+            class="mode-toggle-pill"
+            id="simpleToggleBtn"
+            onclick="toggleSimpleMode()"
+            title="Toggle Simplified Prompts"
+          >
+            <i
+              data-lucide="sliders-horizontal"
+              style="width: 13px; height: 13px; color: var(--text-secondary)"
+            ></i>
+            <span class="mode-label-text" id="simpleLabelText"
+              >Simple Mode</span
+            >
+            <div class="toggle-switch-track">
+              <div class="toggle-switch-thumb"></div>
+            </div>
+          </button>
+
+          <div class="profile-pill-topright">
+            <img
+              src="/latoya-matai.png"
+              alt="Latoya Matai"
+              class="client-avatar"
+            />
+            <div class="client-meta">
+              <div class="client-name">Latoya Matai</div>
+              <div class="client-role">
+                <span>Private Client</span>
+                <span class="tier-badge">PREMIER</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ====================================================================
+         2. SECOND ROW: INCIDENT DATE BADGE & FOCUSED HERO
+         ==================================================================== -->
+      <div class="second-row">
+        <div class="second-row-left">
+          <div class="date-badge">
+            <div class="date-number-circle">05</div>
+            <div class="date-labels">
+              <span class="date-weekday">Sat,</span>
+              <span class="date-month">September</span>
+            </div>
+            <div class="time-soft-divider"></div>
+            <div class="time-cluster">
+              <span class="time-digits">15:26</span>
+              <span class="time-zone-sub">SAST</span>
+            </div>
+          </div>
+
+          <div class="tag-evidence-dossier">
+            <i data-lucide="shield-alert" style="width: 16px; height: 16px"></i>
+            <span>Capture once at scene · Use throughout claim</span>
+          </div>
+        </div>
+
+        <div class="hero-text-block">
+          <div class="hero-heading">Accident Mode · Scene Intake</div>
+          <div class="hero-subheading">
+            <span
+              >Take a breath.
+              <strong>We'll guide you step-by-step.</strong></span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- ====================================================================
+         3. COMPACT STEP TRACKER
+         ==================================================================== -->
+      <div class="step-navigator-capsule">
+        <div class="step-pills-row">
+          <button
+            class="step-pill active"
+            id="stepPill1"
+            onclick="jumpToStep(1)"
+          >
+            <span class="step-num-bubble">1</span>
+            <span class="step-pill-label" id="stepPillLabel1"
+              >Safety & Incident</span
+            >
+          </button>
+          <button class="step-pill" id="stepPill2" onclick="jumpToStep(2)">
+            <span class="step-num-bubble">2</span>
+            <span class="step-pill-label" id="stepPillLabel2">Location</span>
+          </button>
+          <button class="step-pill" id="stepPill3" onclick="jumpToStep(3)">
+            <span class="step-num-bubble">3</span>
+            <span class="step-pill-label" id="stepPillLabel3"
+              >Scene Evidence</span
+            >
+          </button>
+          <button class="step-pill" id="stepPill4" onclick="jumpToStep(4)">
+            <span class="step-num-bubble">4</span>
+            <span class="step-pill-label" id="stepPillLabel4"
+              >People & Vehicles</span
+            >
+          </button>
+          <button class="step-pill" id="stepPill5" onclick="jumpToStep(5)">
+            <span class="step-num-bubble">5</span>
+            <span class="step-pill-label" id="stepPillLabel5"
+              >Witnesses & Insurer</span
+            >
+          </button>
+          <button class="step-pill" id="stepPill6" onclick="jumpToStep(6)">
+            <span class="step-num-bubble">6</span>
+            <span class="step-pill-label" id="stepPillLabel6"
+              >Statement & Sketch</span
+            >
+          </button>
+          <button class="step-pill" id="stepPill7" onclick="jumpToStep(7)">
+            <span class="step-num-bubble">7</span>
+            <span class="step-pill-label" id="stepPillLabel7"
+              >Review & Save</span
+            >
+          </button>
+        </div>
+
+        <div class="step-counter-tag" id="stepProgressTag">Step 1 of 7</div>
+      </div>
+
+      <!-- ====================================================================
+         4. MAIN BENTO WORKSPACE
+         ==================================================================== -->
+      <div class="bento-workspace">
+        <!-- LEFT: INTAKE MASTER CARD -->
+        <main class="intake-master-card" id="mainIntakeCard">
+          <!-- STEP 1: SAFETY & INCIDENT -->
+          <div id="stepView1" class="step-view-container">
+            <div class="intake-header-block">
+              <span class="card-kicker-coral"
+                ><i data-lucide="shield" style="width: 13px; height: 13px"></i>
+                Step 1 · Safety & Incident</span
+              >
+              <h1 class="intake-h1" id="step1Heading">
+                First, tell us what happened.
+              </h1>
+              <p class="intake-p" id="step1Sub">
+                Please verify you are in a safe area before proceeding. Turn on
+                your vehicle's hazard lights.
+              </p>
+            </div>
+
+            <div class="interactive-fields-flow" style="margin-top: 14px">
+              <div class="form-row-group">
+                <div class="field-label-group">
+                  <span class="field-title">When did the collision occur?</span>
+                  <span class="field-subtext">Prefilled from device clock</span>
+                </div>
+                <input
+                  type="text"
+                  class="input-box-clean"
+                  id="incidentTimestampInput"
+                  value="Today · 15:26 SAST (Saturday, 5 September 2026)"
+                />
+              </div>
+
+              <div class="form-row-group">
+                <div class="field-label-group">
+                  <span class="field-title">Were you driving?</span>
+                </div>
+                <div class="tiles-selection-row">
+                  <div class="tile-opt-btn active" onclick="selectTile(this)">
+                    <div class="tile-icon-bubble">
+                      <i
+                        data-lucide="user-check"
+                        style="width: 14px; height: 14px"
+                      ></i>
+                    </div>
+                    <div class="tile-text-wrap">
+                      <span class="tile-main-label">Yes, I was driving</span>
+                      <span class="tile-sub-label">Latoya Matai (Insured)</span>
+                    </div>
+                  </div>
+                  <div class="tile-opt-btn" onclick="selectTile(this)">
+                    <div class="tile-icon-bubble">
+                      <i
+                        data-lucide="user-x"
+                        style="width: 14px; height: 14px"
+                      ></i>
+                    </div>
+                    <div class="tile-text-wrap">
+                      <span class="tile-main-label">No, someone else</span>
+                      <span class="tile-sub-label"
+                        >Authorised secondary driver</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row-group">
+                <div class="field-label-group">
+                  <span class="field-title"
+                    >Was the vehicle being used for:</span
+                  >
+                </div>
+                <div class="tiles-selection-row">
+                  <div class="tile-opt-btn active" onclick="selectTile(this)">
+                    <div class="tile-icon-bubble">
+                      <i
+                        data-lucide="home"
+                        style="width: 14px; height: 14px"
+                      ></i>
+                    </div>
+                    <div class="tile-text-wrap">
+                      <span class="tile-main-label">Personal use</span>
+                      <span class="tile-sub-label"
+                        >Social, domestic & commute</span
+                      >
+                    </div>
+                  </div>
+                  <div class="tile-opt-btn" onclick="selectTile(this)">
+                    <div class="tile-icon-bubble">
+                      <i
+                        data-lucide="briefcase"
+                        style="width: 14px; height: 14px"
+                      ></i>
+                    </div>
+                    <div class="tile-text-wrap">
+                      <span class="tile-main-label">Business use</span>
+                      <span class="tile-sub-label"
+                        >Client transit or company work</span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row-group">
+                <div class="field-label-group">
+                  <span class="field-title">Was anyone injured?</span>
+                  <span class="field-subtext">Information capture only</span>
+                </div>
+                <div class="tiles-selection-row">
+                  <div
+                    class="tile-opt-btn active"
+                    onclick="handleInjuryOption(this, 'no')"
+                  >
+                    <div class="tile-icon-bubble">
+                      <i
+                        data-lucide="check"
+                        style="
+                          width: 14px;
+                          height: 14px;
+                          color: var(--status-green);
+                        "
+                      ></i>
+                    </div>
+                    <div class="tile-text-wrap">
+                      <span class="tile-main-label">No injuries</span>
+                      <span class="tile-sub-label">All parties safe</span>
+                    </div>
+                  </div>
+                  <div
+                    class="tile-opt-btn"
+                    onclick="handleInjuryOption(this, 'yes')"
+                  >
+                    <div class="tile-icon-bubble">
+                      <i
+                        data-lucide="alert-circle"
+                        style="
+                          width: 14px;
+                          height: 14px;
+                          color: var(--accent-coral);
+                        "
+                      ></i>
+                    </div>
+                    <div class="tile-text-wrap">
+                      <span class="tile-main-label">Yes, injuries</span>
+                      <span class="tile-sub-label">Medical care required</span>
+                    </div>
+                  </div>
+                  <div
+                    class="tile-opt-btn"
+                    onclick="handleInjuryOption(this, 'unsure')"
+                  >
+                    <div class="tile-icon-bubble">
+                      <i
+                        data-lucide="help-circle"
+                        style="width: 14px; height: 14px"
+                      ></i>
+                    </div>
+                    <div class="tile-text-wrap">
+                      <span class="tile-main-label">Not sure yet</span>
+                      <span class="tile-sub-label">Assessing conditions</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                id="injuryEmergencyAlert"
+                style="display: none; background: #fff5f5; border: 1.5px solid #fecaca; border-radius: 12px; padding: 14px 16px; margin-top: 12px; flex-direction: column; gap: 10px;"
+              >
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <span style="font-size: 12px; font-weight: 800; color: #991b1b; display: flex; align-items: center; gap: 6px;">
+                    <i data-lucide="alert-octagon" style="width: 15px; height: 15px; color: #dc2626;"></i>
+                    Medical Assistance &amp; Nearest Emergency Hospital
+                  </span>
+                  <span style="font-size: 9.5px; font-weight: 800; background: #dc2626; color: #ffffff; padding: 2px 7px; border-radius: 999px;">URGENT</span>
+                </div>
+                <div style="font-size: 11px; color: #7f1d1d; line-height: 1.45;">
+                  Nearest Facility: <strong>Netcare Milpark Hospital Trauma Centre (2.4 km away · 9 Guild Rd, Parktown)</strong>. If anyone is injured, contact paramedic services immediately.
+                </div>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <a href="tel:082911" class="btn-emergency-action" style="background: #dc2626; color: #ffffff; padding: 7px 12px;">
+                    <i data-lucide="phone-call" style="width: 12px; height: 12px;"></i> Call Netcare 911 / 112
+                  </a>
+                  <a href="tel:0114805600" class="btn-emergency-action" style="background: #ffffff; color: #991b1b; border: 1px solid #fca5a5; padding: 7px 12px;">
+                    <i data-lucide="phone" style="width: 12px; height: 12px;"></i> Milpark ER: 011 480 5600
+                  </a>
+                  <a href="https://www.google.com/maps/search/?api=1&query=Netcare+Milpark+Hospital" target="_blank" rel="noopener" class="btn-emergency-action" style="background: #ffffff; color: #171615; border: 1px solid #e5e7eb; padding: 7px 12px;">
+                    <i data-lucide="navigation" style="width: 12px; height: 12px;"></i> Hospital Route (Maps)
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="intake-footer-row">
+              <div></div>
+              <button class="btn-coral-action" onclick="goToStep(2)">
+                <span>Next: Capture Location</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 14px; height: 14px"
+                ></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 2: LOCATION -->
+          <div id="stepView2" class="step-view-container" style="display: none">
+            <div class="intake-header-block">
+              <span class="card-kicker-coral"
+                ><i data-lucide="map-pin" style="width: 13px; height: 13px"></i>
+                Step 2 · Location Coordinates</span
+              >
+              <h1 class="intake-h1" id="step2Heading">Where did it happen?</h1>
+              <p class="intake-p" id="step2Sub">
+                Captured separately from camera photos to create tamper-proof
+                collision data.
+              </p>
+            </div>
+
+            <div class="interactive-fields-flow" style="margin-top: 14px">
+              <div style="display: flex; gap: 10px; align-items: center">
+                <button class="btn-coral-action" onclick="simulateGpsLock()">
+                  <i
+                    data-lucide="crosshair"
+                    style="width: 14px; height: 14px"
+                  ></i>
+                  <span id="btnGpsLabel">Capture My Location</span>
+                </button>
+                <button
+                  class="btn-neutral-back"
+                  onclick="promptManualLocation()"
+                >
+                  <i data-lucide="edit-2" style="width: 12px; height: 12px"></i>
+                  <span>Enter manually</span>
+                </button>
+              </div>
+
+              <div class="coordinates-cluster-grid">
+                <div class="coord-tile">
+                  <span class="coord-label">Latitude</span>
+                  <span class="coord-val" id="latDisplay">-26.2041° S</span>
+                </div>
+                <div class="coord-tile">
+                  <span class="coord-label">Longitude</span>
+                  <span class="coord-val" id="longDisplay">28.0473° E</span>
+                </div>
+                <div class="coord-tile">
+                  <span class="coord-label">Accuracy</span>
+                  <span class="coord-val" id="accuracyDisplay">±4 meters</span>
+                </div>
+                <div class="coord-tile">
+                  <span class="coord-label">Timestamp</span>
+                  <span class="coord-val" id="gpsTimeDisplay"
+                    >15:26:14 SAST</span
+                  >
+                </div>
+              </div>
+
+              <div class="form-row-group">
+                <div class="field-label-group">
+                  <span class="field-title"
+                    >Nearest street / intersection landmark</span
+                  >
+                  <span class="field-subtext">Johannesburg CBD</span>
+                </div>
+                <input
+                  type="text"
+                  class="input-box-clean"
+                  id="streetInputEl"
+                  value="Commissioner Street & Sauer Street, Marshalltown, Johannesburg"
+                />
+              </div>
+
+              <!-- Nearest Emergency Facilities & Roadside Dispatch Pill -->
+              <div style="background: #ffffff; border: 1px solid var(--border-soft); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 10px; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; justify-content: space-between;">
+                  <span style="display: flex; align-items: center; gap: 5px;">
+                    <i data-lucide="map-pin" style="width: 12px; height: 12px; color: var(--accent-coral);"></i>
+                    Nearby Incident Emergency Services (Gauteng)
+                  </span>
+                  <span style="color: #15803d; font-weight: 700;">Live GPS Match</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px;">
+                  <div style="background: var(--bg-card-subtle); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-soft);">
+                    <div style="font-size: 11px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 4px;">
+                      <i data-lucide="cross" style="width: 11px; height: 11px; color: #dc2626;"></i> Netcare Milpark
+                    </div>
+                    <div style="font-size: 9.5px; color: var(--text-secondary); margin-top: 2px;">Trauma Centre · 2.4 km</div>
+                    <a href="tel:0114805600" style="display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: #15803d; text-decoration: none; margin-top: 4px;">
+                      <i data-lucide="phone" style="width: 10px; height: 10px;"></i> 011 480 5600
+                    </a>
+                  </div>
+                  <div style="background: var(--bg-card-subtle); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-soft);">
+                    <div style="font-size: 11px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 4px;">
+                      <i data-lucide="truck" style="width: 11px; height: 11px; color: var(--accent-coral);"></i> Sovereign Tow
+                    </div>
+                    <div style="font-size: 9.5px; color: var(--text-secondary); margin-top: 2px;">AA Approved · ETA ~14m</div>
+                    <a href="tel:0800212555" style="display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: var(--accent-coral); text-decoration: none; margin-top: 4px;">
+                      <i data-lucide="phone-call" style="width: 10px; height: 10px;"></i> 0800 212 555
+                    </a>
+                  </div>
+                  <div style="background: var(--bg-card-subtle); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--border-soft);">
+                    <div style="font-size: 11px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 4px;">
+                      <i data-lucide="shield" style="width: 11px; height: 11px; color: #2563eb;"></i> JHB Central SAPS
+                    </div>
+                    <div style="font-size: 9.5px; color: var(--text-secondary); margin-top: 2px;">Police Station · 0.8 km</div>
+                    <a href="tel:0114977000" style="display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; color: #2563eb; text-decoration: none; margin-top: 4px;">
+                      <i data-lucide="phone" style="width: 10px; height: 10px;"></i> 011 497 7000
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="banner-neutral-info">
+                <i
+                  data-lucide="shield-check"
+                  style="width: 15px; height: 15px"
+                ></i>
+                <span
+                  >Coordinates recorded at the scene protect against disputed
+                  collision locations when recovering damages from third-party
+                  insurers.</span
+                >
+              </div>
+            </div>
+
+            <div class="intake-footer-row">
+              <button class="btn-neutral-back" onclick="goToStep(1)">
+                <i
+                  data-lucide="arrow-left"
+                  style="width: 13px; height: 13px"
+                ></i>
+                Back
+              </button>
+              <button class="btn-coral-action" onclick="goToStep(3)">
+                <span>Next: Scene Evidence</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 14px; height: 14px"
+                ></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 3: SCENE EVIDENCE -->
+          <div id="stepView3" class="step-view-container" style="display: none">
+            <div class="intake-header-block">
+              <span class="card-kicker-coral"
+                ><i data-lucide="camera" style="width: 13px; height: 13px"></i>
+                Step 3 · Scene Evidence</span
+              >
+              <h1 class="intake-h1" id="step3Heading">
+                Capture the scene before leaving.
+              </h1>
+              <p class="intake-p" id="step3Sub">
+                Only take photographs when safe. Tap any photo card to simulate
+                capture.
+              </p>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-top: 10px;
+              "
+            >
+              <span
+                style="
+                  font-size: 12px;
+                  font-weight: 700;
+                  color: var(--text-primary);
+                "
+                id="evidenceCountLabel"
+                >Evidence: 7 of 8 captured</span
+              >
+              <button
+                class="btn-neutral-back"
+                style="height: 32px; font-size: 11px; padding: 0 12px"
+                onclick="snapAllEvidenceDemo()"
+              >
+                Capture All (Demo)
+              </button>
+            </div>
+
+            <div
+              class="evidence-check-grid"
+              id="evidenceGridEl"
+              style="margin-top: 6px"
+            >
+              <!-- Rendered dynamically -->
+            </div>
+
+            <div class="intake-footer-row">
+              <button class="btn-neutral-back" onclick="goToStep(2)">
+                <i
+                  data-lucide="arrow-left"
+                  style="width: 13px; height: 13px"
+                ></i>
+                Back
+              </button>
+              <button class="btn-coral-action" onclick="goToStep(4)">
+                <span>Next: People & Vehicles</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 14px; height: 14px"
+                ></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 4: PEOPLE & VEHICLES -->
+          <div id="stepView4" class="step-view-container" style="display: none">
+            <div class="intake-header-block">
+              <span class="card-kicker-coral"
+                ><i data-lucide="users" style="width: 13px; height: 13px"></i>
+                Step 4 · Involved Parties</span
+              >
+              <h1 class="intake-h1" id="step4Heading">Who was involved?</h1>
+              <p class="intake-p" id="step4Sub">
+                Your insured vehicle is linked to policy RS-48192. Capture the
+                other driver's details below.
+              </p>
+            </div>
+
+            <div class="interactive-fields-flow" style="margin-top: 14px">
+              <!-- Your Vehicle Summary Card -->
+              <div
+                style="
+                  background: var(--bg-card-subtle);
+                  border-radius: var(--radius-subcard);
+                  padding: 12px 16px;
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 6px;
+                  "
+                >
+                  <span
+                    style="
+                      font-size: 10.5px;
+                      font-weight: 800;
+                      color: var(--accent-coral);
+                      text-transform: uppercase;
+                    "
+                    >Your Vehicle (Party 1)</span
+                  >
+                  <span class="pill-mode-tag" style="background: #ffffff"
+                    >INSURED POLICY</span
+                  >
+                </div>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 8px;
+                  "
+                >
+                  <div>
+                    <div style="font-size: 9.5px; color: var(--text-secondary)">
+                      Registration
+                    </div>
+                    <div
+                      style="
+                        font-size: 12.5px;
+                        font-weight: 700;
+                        color: var(--text-primary);
+                      "
+                    >
+                      JHB 482 GP
+                    </div>
+                  </div>
+                  <div>
+                    <div style="font-size: 9.5px; color: var(--text-secondary)">
+                      Driver Name
+                    </div>
+                    <div
+                      style="
+                        font-size: 12.5px;
+                        font-weight: 700;
+                        color: var(--text-primary);
+                      "
+                    >
+                      Latoya Matai
+                    </div>
+                  </div>
+                  <div>
+                    <div style="font-size: 9.5px; color: var(--text-secondary)">
+                      Vehicle Model
+                    </div>
+                    <div
+                      style="
+                        font-size: 12.5px;
+                        font-weight: 700;
+                        color: var(--text-primary);
+                      "
+                    >
+                      Audi A3 Sportback
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Other Vehicle Input Card -->
+              <div
+                style="
+                  background: var(--bg-card-subtle);
+                  border-radius: var(--radius-subcard);
+                  padding: 14px 16px;
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 8px;
+                  "
+                >
+                  <span
+                    style="
+                      font-size: 10.5px;
+                      font-weight: 800;
+                      color: var(--text-primary);
+                      text-transform: uppercase;
+                    "
+                    >Other Vehicle (Party 2)</span
+                  >
+                  <span style="font-size: 10px; color: var(--text-secondary)"
+                    >Third Party</span
+                  >
+                </div>
+
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 8px;
+                  "
+                >
+                  <div>
+                    <label
+                      class="field-title"
+                      style="
+                        font-size: 10.5px;
+                        display: block;
+                        margin-bottom: 3px;
+                      "
+                      >Registration Plate</label
+                    >
+                    <input
+                      type="text"
+                      class="input-box-clean"
+                      id="tpRegInput"
+                      value="CA 123 456"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="field-title"
+                      style="
+                        font-size: 10.5px;
+                        display: block;
+                        margin-bottom: 3px;
+                      "
+                      >Driver Full Name</label
+                    >
+                    <input
+                      type="text"
+                      class="input-box-clean"
+                      id="tpNameInput"
+                      value="Thabo Ndlovu"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="field-title"
+                      style="
+                        font-size: 10.5px;
+                        display: block;
+                        margin-bottom: 3px;
+                      "
+                      >Mobile Contact</label
+                    >
+                    <input
+                      type="text"
+                      class="input-box-clean"
+                      id="tpPhoneInput"
+                      value="082 555 9182"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="field-title"
+                      style="
+                        font-size: 10.5px;
+                        display: block;
+                        margin-bottom: 3px;
+                      "
+                      >SA ID Number (Optional)</label
+                    >
+                    <input
+                      type="text"
+                      class="input-box-clean"
+                      id="tpIdInput"
+                      value="880412 5029 084"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="field-title"
+                      style="
+                        font-size: 10.5px;
+                        display: block;
+                        margin-bottom: 3px;
+                      "
+                      >Vehicle Make</label
+                    >
+                    <input
+                      type="text"
+                      class="input-box-clean"
+                      id="tpMakeInput"
+                      value="Volkswagen"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="field-title"
+                      style="
+                        font-size: 10.5px;
+                        display: block;
+                        margin-bottom: 3px;
+                      "
+                      >Vehicle Model</label
+                    >
+                    <input
+                      type="text"
+                      class="input-box-clean"
+                      id="tpModelInput"
+                      value="Polo 1.4 TSI"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="btn-neutral-back"
+                style="align-self: flex-start; height: 34px; font-size: 11px"
+                onclick="alert('Additional third party vehicle form attached.')"
+              >
+                <i data-lucide="plus" style="width: 12px; height: 12px"></i> Add
+                another vehicle
+              </button>
+            </div>
+
+            <div class="intake-footer-row">
+              <button class="btn-neutral-back" onclick="goToStep(3)">
+                <i
+                  data-lucide="arrow-left"
+                  style="width: 13px; height: 13px"
+                ></i>
+                Back
+              </button>
+              <button class="btn-coral-action" onclick="goToStep(5)">
+                <span>Next: Witnesses & Insurer</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 14px; height: 14px"
+                ></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 5: WITNESSES & OTHER PARTY INSURANCE -->
+          <div id="stepView5" class="step-view-container" style="display: none">
+            <div class="intake-header-block">
+              <span class="card-kicker-coral"
+                ><i
+                  data-lucide="user-check"
+                  style="width: 13px; height: 13px"
+                ></i>
+                Step 5 · Corroboration</span
+              >
+              <h1 class="intake-h1" id="step5Heading">
+                Witnesses & Insurance Details
+              </h1>
+              <p class="intake-p" id="step5Sub">
+                Independent witnesses and the other driver's policy prevent
+                drawn-out claim disputes.
+              </p>
+            </div>
+
+            <div class="interactive-fields-flow" style="margin-top: 14px">
+              <div class="form-row-group">
+                <div class="field-label-group">
+                  <span class="field-title">Did anyone see what happened?</span>
+                </div>
+                <div class="tiles-selection-row">
+                  <div
+                    class="tile-opt-btn active"
+                    onclick="handleWitnessChoice(this, 'yes')"
+                  >
+                    <div class="tile-icon-bubble">
+                      <i
+                        data-lucide="eye"
+                        style="width: 14px; height: 14px"
+                      ></i>
+                    </div>
+                    <div class="tile-text-wrap">
+                      <span class="tile-main-label">Yes, witness present</span>
+                      <span class="tile-sub-label">Details captured</span>
+                    </div>
+                  </div>
+                  <div
+                    class="tile-opt-btn"
+                    onclick="handleWitnessChoice(this, 'no')"
+                  >
+                    <div class="tile-icon-bubble">
+                      <i
+                        data-lucide="eye-off"
+                        style="width: 14px; height: 14px"
+                      ></i>
+                    </div>
+                    <div class="tile-text-wrap">
+                      <span class="tile-main-label">No witnesses</span>
+                      <span class="tile-sub-label">Direct collision only</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Witness Data & Voice Note -->
+              <div
+                id="witnessDetailsContainer"
+                style="
+                  background: var(--bg-card-subtle);
+                  border-radius: var(--radius-subcard);
+                  padding: 12px 16px;
+                "
+              >
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 8px;
+                  "
+                >
+                  <div>
+                    <label
+                      class="field-title"
+                      style="
+                        font-size: 10.5px;
+                        display: block;
+                        margin-bottom: 3px;
+                      "
+                      >Witness Name</label
+                    >
+                    <input
+                      type="text"
+                      class="input-box-clean"
+                      id="witnessNameEl"
+                      value="Kagiso Sithole"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="field-title"
+                      style="
+                        font-size: 10.5px;
+                        display: block;
+                        margin-bottom: 3px;
+                      "
+                      >Mobile Phone</label
+                    >
+                    <input
+                      type="text"
+                      class="input-box-clean"
+                      id="witnessPhoneEl"
+                      value="083 410 8291"
+                    />
+                  </div>
+                </div>
+
+                <div
+                  style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-top: 10px;
+                    padding-top: 8px;
+                    border-top: 1px solid #ece7de;
+                  "
+                >
+                  <div style="display: flex; align-items: center; gap: 8px">
+                    <button
+                      type="button"
+                      class="btn-record-voice"
+                      id="btnWitnessAudio"
+                      onclick="triggerWitnessVoiceSim()"
+                    >
+                      <i
+                        data-lucide="mic"
+                        style="width: 13px; height: 13px"
+                      ></i>
+                      <span id="witnessAudioBtnLabel"
+                        >Record witness voice note</span
+                      >
+                    </button>
+                    <span
+                      id="witnessAudioStatusText"
+                      style="
+                        font-size: 11px;
+                        font-weight: 600;
+                        color: var(--text-secondary);
+                      "
+                      >Witness voice note · 00:23 ✓</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Other Driver Insurance -->
+              <div
+                style="
+                  background: var(--bg-card-subtle);
+                  border-radius: var(--radius-subcard);
+                  padding: 12px 16px;
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 8px;
+                  "
+                >
+                  <span class="field-title"
+                    >Other driver's insurance information</span
+                  >
+                  <button
+                    type="button"
+                    class="btn-neutral-back"
+                    style="height: 24px; font-size: 9.5px; padding: 0 8px"
+                    onclick="toggleUnavailableInsurance()"
+                  >
+                    I don't have this
+                  </button>
+                </div>
+
+                <div
+                  id="tpInsuranceInputsRow"
+                  style="
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 8px;
+                  "
+                >
+                  <div>
+                    <label
+                      class="field-title"
+                      style="
+                        font-size: 10.5px;
+                        display: block;
+                        margin-bottom: 3px;
+                      "
+                      >Insurer</label
+                    >
+                    <input
+                      type="text"
+                      class="input-box-clean"
+                      id="tpInsurerName"
+                      value="Discovery Insure"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="field-title"
+                      style="
+                        font-size: 10.5px;
+                        display: block;
+                        margin-bottom: 3px;
+                      "
+                      >Policy Reference</label
+                    >
+                    <input
+                      type="text"
+                      class="input-box-clean"
+                      id="tpPolicyNumber"
+                      value="POL-92841-ZA"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="field-title"
+                      style="
+                        font-size: 10.5px;
+                        display: block;
+                        margin-bottom: 3px;
+                      "
+                      >Contact Number</label
+                    >
+                    <input
+                      type="text"
+                      class="input-box-clean"
+                      id="tpInsContact"
+                      value="0860 756 756"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="intake-footer-row">
+              <button class="btn-neutral-back" onclick="goToStep(4)">
+                <i
+                  data-lucide="arrow-left"
+                  style="width: 13px; height: 13px"
+                ></i>
+                Back
+              </button>
+              <button class="btn-coral-action" onclick="goToStep(6)">
+                <span>Next: Statement & Sketch</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 14px; height: 14px"
+                ></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 6: STATEMENT & SKETCH -->
+          <div id="stepView6" class="step-view-container" style="display: none">
+            <div class="intake-header-block">
+              <span class="card-kicker-coral"
+                ><i data-lucide="mic" style="width: 13px; height: 13px"></i>
+                Step 6 · Statement & Sketch</span
+              >
+              <h1 class="intake-h1" id="step6Heading">
+                Tell us what happened.
+              </h1>
+              <p class="intake-p" id="step6Sub">
+                Record your statement by voice or type directly. Both the audio
+                file and verified written transcription are stored.
+              </p>
+            </div>
+
+            <div class="interactive-fields-flow" style="margin-top: 14px">
+              <!-- Voice Suite -->
+              <div class="voice-suite-card">
+                <div class="voice-control-bar">
+                  <div style="display: flex; align-items: center; gap: 10px">
+                    <button
+                      type="button"
+                      class="btn-record-voice"
+                      id="btnMainVoiceRecord"
+                      onclick="toggleMainVoiceRecording()"
+                    >
+                      <i
+                        data-lucide="mic"
+                        style="width: 14px; height: 14px"
+                      ></i>
+                      <span id="btnMainVoiceLabel">Re-record Statement</span>
+                    </button>
+                    <div class="soundwave-visualiser" id="soundwaveBars">
+                      <span class="soundwave-bar"></span>
+                      <span class="soundwave-bar"></span>
+                      <span class="soundwave-bar"></span>
+                      <span class="soundwave-bar"></span>
+                      <span class="soundwave-bar"></span>
+                    </div>
+                  </div>
+                  <span
+                    style="
+                      font-size: 11.5px;
+                      font-weight: 700;
+                      color: var(--text-primary);
+                    "
+                    id="voiceDurationEl"
+                    >Recorded: 00:38 ✓</span
+                  >
+                </div>
+
+                <div>
+                  <label
+                    class="field-title"
+                    style="display: block; margin-bottom: 4px"
+                    >Written Statement Transcription
+                    <span class="field-subtext"
+                      >Editable verbatim text</span
+                    ></label
+                  >
+                  <textarea
+                    class="textarea-box-clean"
+                    id="statementTranscriptText"
+                  >
+I was driving south on Commissioner Street when the other vehicle changed lanes into the passenger side of my car without indicating.</textarea
+                  >
+                </div>
+
+                <label
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 11.5px;
+                    font-weight: 600;
+                    color: var(--text-primary);
+                    cursor: pointer;
+                  "
+                >
+                  <input
+                    type="checkbox"
+                    id="confirmStatementCheckbox"
+                    checked
+                    onchange="recalculateCompleteness()"
+                    style="
+                      width: 15px;
+                      height: 15px;
+                      accent-color: var(--accent-coral);
+                    "
+                  />
+                  <span
+                    >This statement accurately reflects what I said and
+                    observed.</span
+                  >
+                </label>
+              </div>
+
+              <!-- Sketch Canvas -->
+              <div class="sketch-master-suite">
+                <div class="sketch-header-row">
+                  <div class="sketch-tools-group">
+                    <span
+                      style="
+                        font-size: 11px;
+                        font-weight: 700;
+                        color: var(--text-primary);
+                      "
+                      >Accident Sketch:</span
+                    >
+                    <button
+                      type="button"
+                      class="sketch-tool-btn active"
+                      id="btnToolStreet"
+                      onclick="setSketchTool('line')"
+                    >
+                      Draw Street
+                    </button>
+                    <button
+                      type="button"
+                      class="sketch-tool-btn"
+                      id="btnToolCarA"
+                      onclick="setSketchTool('carA')"
+                    >
+                      Car A (You)
+                    </button>
+                    <button
+                      type="button"
+                      class="sketch-tool-btn"
+                      id="btnToolCarB"
+                      onclick="setSketchTool('carB')"
+                    >
+                      Car B (Polo)
+                    </button>
+                    <button
+                      type="button"
+                      class="sketch-tool-btn"
+                      id="btnToolArrow"
+                      onclick="setSketchTool('arrow')"
+                    >
+                      Collision Arrow
+                    </button>
+                  </div>
+                  <div style="display: flex; gap: 6px">
+                    <button
+                      type="button"
+                      class="sketch-tool-btn"
+                      onclick="clearSketchCanvas()"
+                    >
+                      Clear
+                    </button>
+                    <button
+                      type="button"
+                      class="sketch-tool-btn"
+                      onclick="drawDemoAccidentSketch()"
+                    >
+                      Load Example
+                    </button>
+                  </div>
+                </div>
+
+                <div class="canvas-viewport-box">
+                  <canvas id="sketchCanvas" width="600" height="170"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="intake-footer-row">
+              <button class="btn-neutral-back" onclick="goToStep(5)">
+                <i
+                  data-lucide="arrow-left"
+                  style="width: 13px; height: 13px"
+                ></i>
+                Back
+              </button>
+              <button class="btn-coral-action" onclick="goToStep(7)">
+                <span>Next: Review & Save</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 14px; height: 14px"
+                ></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP 7: REVIEW & SAVE / SUBMIT -->
+          <div id="stepView7" class="step-view-container" style="display: none">
+            <div class="intake-header-block">
+              <span class="card-kicker-coral"
+                ><i
+                  data-lucide="file-check"
+                  style="width: 13px; height: 13px"
+                ></i>
+                Step 7 · Executive Review</span
+              >
+              <h1 class="intake-h1" id="step7Heading">
+                Review your accident report.
+              </h1>
+              <p class="intake-p" id="step7Sub">
+                Confirm your collision dossier before saving securely on device
+                or syncing to Royal Square.
+              </p>
+            </div>
+
+            <div class="interactive-fields-flow" style="margin-top: 14px">
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: repeat(2, 1fr);
+                  gap: 10px;
+                "
+              >
+                <div class="coord-tile">
+                  <span class="coord-label">Incident Time</span>
+                  <span class="coord-val">Today · 15:26 SAST</span>
+                  <span style="font-size: 10px; color: var(--text-secondary)"
+                    >Personal commute · No injuries</span
+                  >
+                </div>
+                <div class="coord-tile">
+                  <span class="coord-label">Location</span>
+                  <span class="coord-val">Commissioner & Sauer St</span>
+                  <span style="font-size: 10px; color: var(--text-secondary)"
+                    >-26.2041, 28.0473 (±4m)</span
+                  >
+                </div>
+                <div class="coord-tile">
+                  <span class="coord-label">Vehicles Involved</span>
+                  <span class="coord-val">2 Vehicles</span>
+                  <span style="font-size: 10px; color: var(--text-secondary)"
+                    >Audi A3 (JHB 482 GP) & VW Polo (CA 123 456)</span
+                  >
+                </div>
+                <div class="coord-tile">
+                  <span class="coord-label">Scene Photos</span>
+                  <span class="coord-val">7 Photos Verified</span>
+                  <span style="font-size: 10px; color: var(--text-secondary)"
+                    >Geo-tagged & timestamped</span
+                  >
+                </div>
+                <div class="coord-tile">
+                  <span class="coord-label">Statement Record</span>
+                  <span class="coord-val">Voice + Transcribed</span>
+                  <span style="font-size: 10px; color: var(--text-secondary)"
+                    >Confirmed by Latoya Matai</span
+                  >
+                </div>
+                <div class="coord-tile">
+                  <span class="coord-label">Third Party Insurer</span>
+                  <span class="coord-val">Discovery Insure</span>
+                  <span style="font-size: 10px; color: var(--text-secondary)"
+                    >Policy: POL-92841-ZA</span
+                  >
+                </div>
+              </div>
+
+              <div
+                class="banner-neutral-info"
+                style="background: #fbf4ea; color: #7b4c10"
+              >
+                <i
+                  data-lucide="info"
+                  style="color: #b46912; width: 16px; height: 16px"
+                ></i>
+                <div>
+                  <strong
+                    style="
+                      display: block;
+                      font-size: 11.5px;
+                      margin-bottom: 2px;
+                    "
+                    >Check before leaving the scene:</strong
+                  >
+                  <span style="font-size: 10.5px"
+                    >Ensure the other driver's license disc and overall
+                    intersection position are recorded. Evidence cannot be
+                    recreated once vehicles are moved.</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div class="intake-footer-row">
+              <button class="btn-neutral-back" onclick="goToStep(6)">
+                <i
+                  data-lucide="arrow-left"
+                  style="width: 13px; height: 13px"
+                ></i>
+                Back
+              </button>
+              <button
+                class="btn-coral-action"
+                id="btnFinalSubmitAction"
+                onclick="submitAccidentDossier()"
+              >
+                <span id="btnFinalSubmitLabel"
+                  >Save report securely on device →</span
+                >
+              </button>
+            </div>
+          </div>
+
+          <!-- STEP SUCCESS / DOSSIER CREATED -->
+          <div
+            id="stepViewSuccess"
+            class="step-view-container"
+            style="display: none"
+          >
+            <div class="dossier-success-block">
+              <div class="success-icon-bubble">
+                <i data-lucide="check" style="width: 28px; height: 28px"></i>
+              </div>
+              <h1 class="intake-h1" id="successMainHeading">
+                ACCIDENT REPORT SAVED
+              </h1>
+              <p class="intake-p" id="successMainSub">
+                All collision evidence has been encrypted and stored in your
+                device's local vault.
+              </p>
+            </div>
+
+            <div class="dossier-summary-card">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  padding-bottom: 8px;
+                  border-bottom: 1px solid #ece7de;
+                "
+              >
+                <div>
+                  <div
+                    style="
+                      font-size: 13px;
+                      font-weight: 800;
+                      color: var(--text-primary);
+                    "
+                  >
+                    ACCIDENT DOSSIER · CLAIM #RSF-2841
+                  </div>
+                  <div
+                    style="font-size: 10.5px; color: var(--text-secondary)"
+                    id="dossierSyncMeta"
+                  >
+                    Waiting for connection to sync
+                  </div>
+                </div>
+                <span class="pill-mode-tag" id="dossierStatusPill"
+                  >LOCAL OFFLINE VAULT</span
+                >
+              </div>
+
+              <div class="dossier-specs-grid">
+                <div class="dossier-pill-item">
+                  <i data-lucide="check-circle-2"></i> GPS Coordinates Locked
+                  (-26.2041, 28.0473)
+                </div>
+                <div class="dossier-pill-item">
+                  <i data-lucide="check-circle-2"></i> Scene Timestamp Certified
+                  (15:26 SAST)
+                </div>
+                <div class="dossier-pill-item">
+                  <i data-lucide="check-circle-2"></i> 7 Scene Photographs
+                  Stored
+                </div>
+                <div class="dossier-pill-item">
+                  <i data-lucide="check-circle-2"></i> Latoya Matai (JHB 482 GP)
+                </div>
+                <div class="dossier-pill-item">
+                  <i data-lucide="check-circle-2"></i> Thabo Ndlovu (CA 123 456)
+                </div>
+                <div class="dossier-pill-item">
+                  <i data-lucide="check-circle-2"></i> Discovery Insure Policy
+                  Attached
+                </div>
+                <div class="dossier-pill-item">
+                  <i data-lucide="check-circle-2"></i> Voice Statement (00:38) +
+                  Verbatim Text
+                </div>
+                <div class="dossier-pill-item">
+                  <i data-lucide="check-circle-2"></i> Collision Lane Sketch
+                  Diagram
+                </div>
+              </div>
+
+              <!-- Sponsor Claims Lifecycle -->
+              <div class="claims-workflow-box">
+                <div
+                  style="
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                    margin-bottom: 4px;
+                  "
+                >
+                  Royal Square Claim Lifecycle
+                </div>
+
+                <div class="timeline-step-row done">
+                  <div class="timeline-dot">
+                    <i
+                      data-lucide="check"
+                      style="width: 10px; height: 10px"
+                    ></i>
+                  </div>
+                  <div>
+                    <div class="timeline-content-title">Incident Submitted</div>
+                    <div class="timeline-content-sub">
+                      Today · Scene evidence dossier generated
+                    </div>
+                  </div>
+                </div>
+
+                <div class="timeline-step-row done">
+                  <div class="timeline-dot">
+                    <i
+                      data-lucide="check"
+                      style="width: 10px; height: 10px"
+                    ></i>
+                  </div>
+                  <div>
+                    <div class="timeline-content-title">Evidence Received</div>
+                    <div class="timeline-content-sub">8 items safely saved</div>
+                  </div>
+                </div>
+
+                <div class="timeline-step-row current">
+                  <div class="timeline-dot"></div>
+                  <div>
+                    <div class="timeline-content-title">
+                      Royal Square Review
+                    </div>
+                    <div class="timeline-content-sub">
+                      Claims Handler: Thabo Mokoena · Insurer: Santam
+                    </div>
+                  </div>
+                </div>
+
+                <div class="timeline-step-row">
+                  <div class="timeline-dot"></div>
+                  <div>
+                    <div class="timeline-content-title">
+                      Claim Registration & Police Case Link
+                    </div>
+                    <div class="timeline-content-sub">
+                      Add official SAPS Accident Report within 48h
+                    </div>
+                  </div>
+                </div>
+
+                <div class="timeline-step-row">
+                  <div class="timeline-dot"></div>
+                  <div>
+                    <div class="timeline-content-title">
+                      Vehicle Assessment & Repair Authorisation
+                    </div>
+                    <div class="timeline-content-sub">
+                      Car hire allocated & approved panel shop booking
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="intake-footer-row" style="margin-top: 14px">
+              <a href="client_ui.html" class="btn-neutral-back">
+                <i data-lucide="home" style="width: 13px; height: 13px"></i>
+                Return to Client Home
+              </a>
+              <button
+                class="btn-coral-action"
+                onclick="navigateToRequestsClaim()"
+              >
+                <span>Track Claim (#RSF-2841)</span>
+                <i
+                  data-lucide="arrow-right"
+                  style="width: 14px; height: 14px"
+                ></i>
+              </button>
+            </div>
+          </div>
+        </main>
+
+        <!-- RIGHT SIDEBAR: EVIDENCE COMPLETENESS & 48H POLICE STATUTORY -->
+        <aside class="bento-sidebar">
+          <!-- Evidence Completeness Card (Matches Financial Goals Bento) -->
+          <div class="sidebar-card">
+            <div class="completeness-topline">
+              <span class="card-kicker-coral">Evidence Completeness</span>
+              <span class="pill-mode-tag">Before Leaving</span>
+            </div>
+
+            <div class="completeness-score-row">
+              <span class="score-number" id="completenessScoreEl">92%</span>
+              <span class="score-label">Scene Dossier Ready</span>
+            </div>
+
+            <div class="concentric-bar-track">
+              <div
+                class="concentric-bar-fill"
+                id="completenessBarEl"
+                style="width: 92%"
+              ></div>
+            </div>
+
+            <div class="completeness-checklist">
+              <div class="checklist-row done">
+                <span style="display: flex; align-items: center; gap: 6px"
+                  ><i data-lucide="check" style="width: 12px; height: 12px"></i>
+                  Location Coordinates</span
+                >
+                <span>Locked</span>
+              </div>
+              <div class="checklist-row done">
+                <span style="display: flex; align-items: center; gap: 6px"
+                  ><i data-lucide="check" style="width: 12px; height: 12px"></i>
+                  Incident Timestamp</span
+                >
+                <span>15:26</span>
+              </div>
+              <div class="checklist-row done">
+                <span style="display: flex; align-items: center; gap: 6px"
+                  ><i data-lucide="check" style="width: 12px; height: 12px"></i>
+                  Scene Photos</span
+                >
+                <span id="sidebarPhotosCount">7 of 8</span>
+              </div>
+              <div class="checklist-row done">
+                <span style="display: flex; align-items: center; gap: 6px"
+                  ><i data-lucide="check" style="width: 12px; height: 12px"></i>
+                  Vehicle & Driver Details</span
+                >
+                <span>Complete</span>
+              </div>
+              <div class="checklist-row done">
+                <span style="display: flex; align-items: center; gap: 6px"
+                  ><i data-lucide="check" style="width: 12px; height: 12px"></i>
+                  Other Driver Info</span
+                >
+                <span>Captured</span>
+              </div>
+              <div class="checklist-row done">
+                <span style="display: flex; align-items: center; gap: 6px"
+                  ><i data-lucide="check" style="width: 12px; height: 12px"></i>
+                  Other Party Insurance</span
+                >
+                <span>Discovery</span>
+              </div>
+              <div class="checklist-row done" id="rowCheckStatement">
+                <span style="display: flex; align-items: center; gap: 6px"
+                  ><i data-lucide="check" style="width: 12px; height: 12px"></i>
+                  Voice Statement</span
+                >
+                <span>Verified</span>
+              </div>
+              <div class="checklist-row done" id="rowCheckSketch">
+                <span style="display: flex; align-items: center; gap: 6px"
+                  ><i data-lucide="check" style="width: 12px; height: 12px"></i>
+                  Collision Sketch</span
+                >
+                <span>Drawn</span>
+              </div>
+              <div class="checklist-row missing" id="rowCheckWitness">
+                <span style="display: flex; align-items: center; gap: 6px"
+                  ><i
+                    data-lucide="circle-dashed"
+                    style="width: 12px; height: 12px"
+                  ></i>
+                  Witness Corroboration</span
+                >
+                <span>Optional</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- EMERGENCY ASSISTANCE: NEAREST HOSPITAL & APPROVED TOW TRUCK -->
+          <div class="emergency-dispatch-card" id="sidebarEmergencyCard">
+            <div class="emergency-badge-row">
+              <span class="statutory-title" style="display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="life-buoy" style="width: 14px; height: 14px; color: var(--accent-coral);"></i>
+                Emergency Assistance &amp; Recovery
+              </span>
+              <span class="badge-emergency-live">24/7 Priority</span>
+            </div>
+
+            <!-- Nearest Emergency Hospital -->
+            <div class="emergency-sub-block">
+              <div class="emergency-facility-title">
+                <span style="display: flex; align-items: center; gap: 5px;">
+                  <i data-lucide="cross" style="width: 13px; height: 13px; color: #dc2626;"></i>
+                  Netcare Milpark Hospital
+                </span>
+                <span style="font-size: 9px; color: #16a34a; font-weight: 700; background: #dcfce7; padding: 1px 6px; border-radius: 4px;">Level 1 Trauma</span>
+              </div>
+              <div class="emergency-facility-meta">
+                <span>2.4 km from scene · 9 Guild Rd, Parktown</span>
+              </div>
+              <div class="emergency-btn-row">
+                <a href="tel:0114805600" class="btn-emergency-action btn-emergency-call">
+                  <i data-lucide="phone" style="width: 11px; height: 11px;"></i> Call ER (011 480 5600)
+                </a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Netcare+Milpark+Hospital" target="_blank" rel="noopener" class="btn-emergency-action btn-emergency-nav">
+                  <i data-lucide="navigation" style="width: 11px; height: 11px;"></i> Route (Maps)
+                </a>
+              </div>
+            </div>
+
+            <!-- Approved Sovereign Tow Truck Recovery -->
+            <div class="emergency-sub-block">
+              <div class="emergency-facility-title">
+                <span style="display: flex; align-items: center; gap: 5px;">
+                  <i data-lucide="truck" style="width: 13px; height: 13px; color: var(--accent-coral);"></i>
+                  Royal Square Roadside
+                </span>
+                <span style="font-size: 9px; color: #15803d; font-weight: 700; background: #dcfce7; padding: 1px 6px; border-radius: 4px;">AA SA Approved</span>
+              </div>
+              <div class="emergency-facility-meta" id="towStatusText">
+                <span>Authorised flatbed recovery · ETA ~14 mins</span>
+              </div>
+              <div class="emergency-btn-row">
+                <a href="tel:0800212555" class="btn-emergency-action btn-emergency-nav" style="flex: 0 0 auto;">
+                  <i data-lucide="phone-call" style="width: 11px; height: 11px;"></i> 0800 212 555
+                </a>
+                <button type="button" class="btn-emergency-action btn-tow-dispatch" id="btnTowDispatch" onclick="requestTowDispatch()">
+                  <i data-lucide="send" style="width: 11px; height: 11px;"></i> Dispatch Tow
+                </button>
+              </div>
+            </div>
+
+            <!-- Anti-Pirate Tow Truck Warning -->
+            <div class="anti-pirate-tow-notice">
+              <i data-lucide="alert-triangle" style="width: 13px; height: 13px; color: #b45309; flex-shrink: 0; margin-top: 1px;"></i>
+              <span><strong>Anti-Pirate Tow Alert:</strong> Never allow uninvited breakdown trucks to hook your car. Only authorize Royal Square / AA verified dispatchers to avoid illegal impound release fees.</span>
+            </div>
+          </div>
+
+          <!-- 48-Hour Police Statutory Notice -->
+          <div class="statutory-card">
+            <div class="statutory-badge-row">
+              <span class="statutory-title"
+                ><i
+                  data-lucide="clock"
+                  style="width: 13px; height: 13px; vertical-align: middle"
+                ></i>
+                Police Report Reminder</span
+              >
+              <span class="badge-statutory">Within 48h</span>
+            </div>
+
+            <p class="statutory-desc">
+              In South Africa, collisions involving injuries or third parties
+              must be logged at any SAPS station within 48 hours to obtain an
+              official Accident Report number.
+            </p>
+
+            <div class="statutory-input-box">
+              <span class="statutory-label">SAPS Case / OAR Number</span>
+              <input
+                type="text"
+                class="statutory-input"
+                placeholder="e.g. MAS 482/09/2026 (Optional now)"
+                id="sidebarPoliceInput"
+              />
+              <span
+                style="
+                  font-size: 9.5px;
+                  color: var(--text-secondary);
+                  margin-top: 2px;
+                "
+                >Status:
+                <strong
+                  >Not yet added · You can link this later in Requests</strong
+                ></span
+              >
+            </div>
+          </div>
+
+          <!-- Scene Safety Protocols Micro-Card -->
+          <div class="safety-tips-card">
+            <div
+              style="
+                font-size: 11px;
+                font-weight: 700;
+                color: var(--text-primary);
+                text-transform: uppercase;
+              "
+            >
+              Scene Safety Reminders
+            </div>
+            <div class="safety-item-bullet">
+              <i data-lucide="shield"></i>
+              <span
+                >Stay safely behind roadside barriers away from moving
+                traffic.</span
+              >
+            </div>
+            <div class="safety-item-bullet">
+              <i data-lucide="alert-triangle"></i>
+              <span
+                >Do not sign unofficial admission of guilt notes at the
+                scene.</span
+              >
+            </div>
+            <div class="safety-item-bullet">
+              <i data-lucide="map-pin"></i>
+              <span
+                >Keep hazard lights illuminated and place warning triangles 45m
+                back.</span
+              >
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Toast Notification Pill -->
+    <div class="toast-pill" id="actionToastEl">
+      <i
+        data-lucide="check"
+        style="width: 14px; height: 14px; color: var(--accent-coral)"
+      ></i>
+      <span id="toastMsgContent">Notification</span>
+    </div>
+
+    <!-- ====================================================================
+       SCRIPTS: LOGIC ENGINE & CANVAS
+       ==================================================================== -->
+    <script>
+      // System State
+      let isOnlineState = false; // Starts offline conceptually for scene capture
+      let isSimpleModeState = false;
+      let activeStepNumber = 1;
+      let sketchCurrentTool = "line";
+
+      // Mock Evidence Items
+      const sceneEvidenceData = [
+        {
+          id: 1,
+          title: "Overall accident scene",
+          meta: "Both vehicles in position",
+          captured: true,
+          img: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=100&auto=format&fit=crop&q=80",
+        },
+        {
+          id: 2,
+          title: "Direction of travel",
+          meta: "Looking south down Commissioner",
+          captured: true,
+          img: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=100&auto=format&fit=crop&q=80",
+        },
+        {
+          id: 3,
+          title: "Road & intersection marks",
+          meta: "Lane lines & road divider",
+          captured: true,
+          img: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=100&auto=format&fit=crop&q=80",
+        },
+        {
+          id: 4,
+          title: "Damage to your vehicle",
+          meta: "Point of impact & body panel damage",
+          captured: true,
+          img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=100&auto=format&fit=crop&q=80",
+        },
+        {
+          id: 5,
+          title: "Damage to other vehicle",
+          meta: "Point of impact & exterior damage",
+          captured: true,
+          img: "https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?w=100&auto=format&fit=crop&q=80",
+        },
+        {
+          id: 6,
+          title: "Registration licence plates",
+          meta: "Involved vehicle licence plates",
+          captured: true,
+          img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=100&auto=format&fit=crop&q=80",
+        },
+        {
+          id: 7,
+          title: "Windscreen licence discs",
+          meta: "Both vehicles current expiry",
+          captured: true,
+          img: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?w=100&auto=format&fit=crop&q=80",
+        },
+        {
+          id: 8,
+          title: "Traffic signal lights",
+          meta: "Signal cycle visibility",
+          captured: false,
+          img: null,
+        },
+      ];
+
+      window.addEventListener("DOMContentLoaded", () => {
+        lucide.createIcons();
+        renderSceneEvidenceGrid();
+        initSketchBoard();
+        updateNetworkPillDisplay();
+      });
+
+      // 1. Evidence List Renderer
+      function renderSceneEvidenceGrid() {
+        const container = document.getElementById("evidenceGridEl");
+        if (!container) return;
+        container.innerHTML = "";
+
+        let capturedSum = 0;
+        sceneEvidenceData.forEach((item) => {
+          if (item.captured) capturedSum++;
+          const card = document.createElement("div");
+          card.className = `evidence-tile-card ${item.captured ? "done" : ""}`;
+          card.onclick = () => toggleEvidenceCard(item.id);
+
+          card.innerHTML = `
+          <div class="evidence-tile-left">
+            <div class="evidence-thumb-wrap">
+              ${item.captured && item.img ? `<img src="${item.img}" alt="Thumb" />` : `<i data-lucide="camera" style="width: 18px; height: 18px;"></i>`}
+            </div>
+            <div>
+              <div class="evidence-tile-title">${item.title}</div>
+              <div class="evidence-tile-meta">${item.captured ? item.meta : "Tap to simulate photo snap"}</div>
+            </div>
+          </div>
+          <span class="badge-evidence-status ${item.captured ? "verified" : "pending"}">
+            ${item.captured ? "Captured ✓" : "Snap photo"}
+          </span>
+        `;
+          container.appendChild(card);
+        });
+
+        const countEl = document.getElementById("evidenceCountLabel");
+        if (countEl)
+          countEl.textContent = `Evidence: ${capturedSum} of ${sceneEvidenceData.length} captured`;
+
+        const sidebarCount = document.getElementById("sidebarPhotosCount");
+        if (sidebarCount)
+          sidebarCount.textContent = `${capturedSum} of ${sceneEvidenceData.length}`;
+
+        lucide.createIcons();
+      }
+
+      function toggleEvidenceCard(id) {
+        const item = sceneEvidenceData.find((i) => i.id === id);
+        if (item) {
+          item.captured = !item.captured;
+          if (item.captured && !item.img) {
+            item.img =
+              "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=100&auto=format&fit=crop&q=80";
+            item.meta = "Verified scene photograph";
+          }
+          renderSceneEvidenceGrid();
+          recalculateCompleteness();
+          showFeedbackToast(`Updated: ${item.title}`);
+        }
+      }
+
+      function snapAllEvidenceDemo() {
+        sceneEvidenceData.forEach((i) => {
+          i.captured = true;
+          if (!i.img)
+            i.img =
+              "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=100&auto=format&fit=crop&q=80";
+        });
+        renderSceneEvidenceGrid();
+        recalculateCompleteness();
+        showFeedbackToast("All 8 scene photos verified!");
+      }
+
+      // 2. Step Navigation
+      function goToStep(stepNum) {
+        activeStepNumber = stepNum;
+
+        for (let i = 1; i <= 7; i++) {
+          const view = document.getElementById(`stepView${i}`);
+          const pill = document.getElementById(`stepPill${i}`);
+          if (view) view.style.display = i === stepNum ? "block" : "none";
+          if (pill) {
+            pill.classList.remove("active");
+            if (i === stepNum) pill.classList.add("active");
+            if (i < stepNum) pill.classList.add("done");
+            else pill.classList.remove("done");
+          }
+        }
+
+        const successView = document.getElementById("stepViewSuccess");
+        if (successView) successView.style.display = "none";
+
+        const progressTag = document.getElementById("stepProgressTag");
+        if (progressTag) progressTag.textContent = `Step ${stepNum} of 7`;
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        lucide.createIcons();
+      }
+
+      function jumpToStep(stepNum) {
+        goToStep(stepNum);
+      }
+
+      // 3. Online/Offline Network Simulation
+      function toggleOnlineSimulation() {
+        isOnlineState = !isOnlineState;
+        updateNetworkPillDisplay();
+
+        if (isOnlineState) {
+          showFeedbackToast(
+            "Connection restored · Ready to sync claim dossier",
+          );
+        } else {
+          showFeedbackToast("Offline Mode active · Local storage enabled");
+        }
+      }
+
+      function updateNetworkPillDisplay() {
+        const pill = document.getElementById("connectionStatusPill");
+        const label = document.getElementById("connectionPillLabel");
+        const btnLabel = document.getElementById("btnSimNetworkLabel");
+        const submitBtnLabel = document.getElementById("btnFinalSubmitLabel");
+
+        if (isOnlineState) {
+          pill.classList.remove("offline");
+          pill.classList.add("online");
+          label.textContent = "ONLINE · Cloud Sync Ready";
+          btnLabel.textContent = "Simulate Offline";
+          if (submitBtnLabel)
+            submitBtnLabel.textContent = "Submit accident report →";
+        } else {
+          pill.classList.remove("online");
+          pill.classList.add("offline");
+          label.textContent = "OFFLINE · Saved on this device";
+          btnLabel.textContent = "Simulate Online";
+          if (submitBtnLabel)
+            submitBtnLabel.textContent = "Save report securely on device →";
+        }
+        lucide.createIcons();
+      }
+
+      // 4. Submission Engine
+      function submitAccidentDossier() {
+        for (let i = 1; i <= 7; i++) {
+          const v = document.getElementById(`stepView${i}`);
+          if (v) v.style.display = "none";
+        }
+
+        const successView = document.getElementById("stepViewSuccess");
+        successView.style.display = "block";
+
+        const heading = document.getElementById("successMainHeading");
+        const sub = document.getElementById("successMainSub");
+        const meta = document.getElementById("dossierSyncMeta");
+        const badge = document.getElementById("dossierStatusPill");
+
+        try {
+          const localDossier = {
+            claimId: "RSF-2841",
+            client: "Latoya Matai",
+            location: "-26.2041, 28.0473 (Commissioner St)",
+            vehicles: ["JHB 482 GP", "CA 123 456"],
+            photosCount: 7,
+            thirdPartyInsurer: "Discovery Insure",
+            savedAt: new Date().toISOString(),
+          };
+          localStorage.setItem(
+            "rs_accident_RSF2841",
+            JSON.stringify(localDossier),
+          );
+        } catch (e) {
+          console.log("Local storage active:", e);
+        }
+
+        if (isOnlineState) {
+          heading.textContent = "ACCIDENT REPORT SENT";
+          sub.textContent =
+            "Case #RSF-2841 is received and ready for Royal Square claims handler review.";
+          meta.textContent =
+            "Claim status: Ready for Royal Square review (Santam)";
+          badge.textContent = "CLOUD SYNCED ✓";
+          badge.style.background = "var(--status-green-soft)";
+          badge.style.color = "var(--status-green)";
+        } else {
+          heading.textContent = "ACCIDENT REPORT SAVED";
+          sub.textContent =
+            "Your accident evidence is secure on this device. No information will be lost if you leave.";
+          meta.textContent =
+            "Status: Waiting for connection · 8 items safely saved";
+          badge.textContent = "SAVED ON DEVICE";
+          badge.style.background = "var(--accent-coral-soft)";
+          badge.style.color = "var(--accent-coral)";
+        }
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        lucide.createIcons();
+      }
+
+      function navigateToRequestsClaim() {
+        showFeedbackToast("Opening Claim #RSF-2841 in Client Requests...");
+        setTimeout(() => {
+          window.location.href = "requests.html?claim=RSF-2841";
+        }, 700);
+      }
+
+      // 5. Voice Simulation
+      let isMainRecording = false;
+      let mainVoiceSeconds = 0;
+      let mainVoiceTimer = null;
+
+      function toggleMainVoiceRecording() {
+        const btn = document.getElementById("btnMainVoiceRecord");
+        const label = document.getElementById("btnMainVoiceLabel");
+        const wave = document.getElementById("soundwaveBars");
+        const duration = document.getElementById("voiceDurationEl");
+        const transcript = document.getElementById("statementTranscriptText");
+
+        isMainRecording = !isMainRecording;
+
+        if (isMainRecording) {
+          btn.classList.add("recording");
+          wave.classList.add("pulsing");
+          label.textContent = "Stop Recording";
+          mainVoiceSeconds = 0;
+          duration.textContent = "Recording: 00:00";
+
+          mainVoiceTimer = setInterval(() => {
+            mainVoiceSeconds++;
+            const fmt =
+              mainVoiceSeconds < 10 ? `0${mainVoiceSeconds}` : mainVoiceSeconds;
+            duration.textContent = `Recording: 00:${fmt}`;
+          }, 1000);
+        } else {
+          btn.classList.remove("recording");
+          wave.classList.remove("pulsing");
+          clearInterval(mainVoiceTimer);
+          label.textContent = "Re-record Statement";
+          duration.textContent = `Recorded: 00:${mainVoiceSeconds < 10 ? "0" + mainVoiceSeconds : mainVoiceSeconds} ✓`;
+          transcript.value =
+            "I was driving south on Commissioner Street when the other vehicle changed lanes into the passenger side of my car without indicating.";
+          showFeedbackToast("Voice statement recorded and transcribed");
+          recalculateCompleteness();
+        }
+        lucide.createIcons();
+      }
+
+      function triggerWitnessVoiceSim() {
+        const label = document.getElementById("witnessAudioBtnLabel");
+        const status = document.getElementById("witnessAudioStatusText");
+        label.textContent = "Recording...";
+
+        setTimeout(() => {
+          label.textContent = "Play Audio";
+          status.textContent = "Witness voice note · 00:23 ✓";
+          status.style.color = "var(--status-green)";
+          showFeedbackToast("Witness audio note saved");
+          recalculateCompleteness();
+        }, 1400);
+      }
+
+      // 6. Geolocation Simulation
+      function simulateGpsLock() {
+        const label = document.getElementById("btnGpsLabel");
+        label.textContent = "Acquiring RTK GPS...";
+
+        setTimeout(() => {
+          document.getElementById("latDisplay").textContent = "-26.2041° S";
+          document.getElementById("longDisplay").textContent = "28.0473° E";
+          document.getElementById("accuracyDisplay").textContent =
+            "±4 meters (High)";
+          document.getElementById("gpsTimeDisplay").textContent =
+            "15:26:44 SAST";
+          label.textContent = "Location Verified ✓";
+          showFeedbackToast("High-accuracy coordinates verified");
+        }, 900);
+      }
+
+      function promptManualLocation() {
+        const loc = prompt(
+          "Enter nearest street or landmark:",
+          "Commissioner Street & Sauer Street, Johannesburg",
+        );
+        if (loc) {
+          document.getElementById("streetInputEl").value = loc;
+          showFeedbackToast("Manual landmark updated");
+        }
+      }
+
+      // 7. Interactive Selection Tiles
+      function selectTile(btn) {
+        const siblings = btn.parentElement.querySelectorAll(".tile-opt-btn");
+        siblings.forEach((s) => s.classList.remove("active"));
+        btn.classList.add("active");
+      }
+
+      function handleInjuryOption(btn, val) {
+        selectTile(btn);
+        const alertBox = document.getElementById("injuryEmergencyAlert");
+        if (alertBox) {
+          alertBox.style.display = (val === "yes" || val === "unsure") ? "flex" : "none";
+          if (window.lucide) window.lucide.createIcons();
+        }
+      }
+
+      function requestTowDispatch() {
+        const btn = document.getElementById("btnTowDispatch");
+        const statusEl = document.getElementById("towStatusText");
+        if (btn) {
+          btn.innerHTML = `<i data-lucide="check" style="width: 11px; height: 11px;"></i> Dispatched!`;
+          btn.style.background = "#15803d";
+          btn.disabled = true;
+        }
+        if (statusEl) {
+          statusEl.innerHTML = `<span style="color: #15803d; font-weight: 700;">White Isuzu Flatbed #RS-442 · Driver Sipho en route (ETA 12m)</span>`;
+        }
+        showFeedbackToast("Authorised Tow Dispatched: Ref #TOW-8842 (AA SA Verified)");
+        if (window.lucide) window.lucide.createIcons();
+      }
+
+      function handleWitnessChoice(btn, val) {
+        selectTile(btn);
+        const container = document.getElementById("witnessDetailsContainer");
+        if (container)
+          container.style.display = val === "yes" ? "block" : "none";
+        recalculateCompleteness();
+      }
+
+      function toggleUnavailableInsurance() {
+        const row = document.getElementById("tpInsuranceInputsRow");
+        if (row.style.opacity === "0.35") {
+          row.style.opacity = "1";
+          row.style.pointerEvents = "all";
+        } else {
+          row.style.opacity = "0.35";
+          row.style.pointerEvents = "none";
+          showFeedbackToast("Marked: Third party insurance unavailable");
+        }
+      }
+
+      // 8. Completeness Calculator
+      function recalculateCompleteness() {
+        let score = 76;
+        const stmtCheck = document.getElementById("confirmStatementCheckbox");
+        if (stmtCheck && stmtCheck.checked) score += 10;
+
+        const witness = document.getElementById("witnessNameEl");
+        if (witness && witness.value.trim().length > 0) score += 6;
+
+        score = Math.min(100, score);
+        const scoreEl = document.getElementById("completenessScoreEl");
+        const barEl = document.getElementById("completenessBarEl");
+        if (scoreEl) scoreEl.textContent = `${score}%`;
+        if (barEl) barEl.style.width = `${score}%`;
+      }
+
+      // 9. Sketch Canvas
+      function initSketchBoard() {
+        const canvas = document.getElementById("sketchCanvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        let isDrawing = false;
+
+        drawDemoAccidentSketch();
+
+        canvas.addEventListener("mousedown", (e) => {
+          isDrawing = true;
+          const rect = canvas.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+
+          if (sketchCurrentTool === "line") {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+          } else if (sketchCurrentTool === "carA") {
+            drawVehicleStamp(ctx, x, y, "#E85D3F", "Car A (You)");
+          } else if (sketchCurrentTool === "carB") {
+            drawVehicleStamp(ctx, x, y, "#181716", "Car B (Polo)");
+          } else if (sketchCurrentTool === "arrow") {
+            drawVectorArrow(ctx, x, y);
+          }
+        });
+
+        canvas.addEventListener("mousemove", (e) => {
+          if (!isDrawing || sketchCurrentTool !== "line") return;
+          const rect = canvas.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          ctx.lineTo(x, y);
+          ctx.strokeStyle = "#87837C";
+          ctx.lineWidth = 2.5;
+          ctx.lineCap = "round";
+          ctx.stroke();
+        });
+
+        canvas.addEventListener("mouseup", () => {
+          isDrawing = false;
+        });
+        canvas.addEventListener("mouseleave", () => {
+          isDrawing = false;
+        });
+      }
+
+      function setSketchTool(tool) {
+        sketchCurrentTool = tool;
+        ["btnToolStreet", "btnToolCarA", "btnToolCarB", "btnToolArrow"].forEach(
+          (id) => {
+            const b = document.getElementById(id);
+            if (b) b.classList.remove("active");
+          },
+        );
+
+        if (tool === "line")
+          document.getElementById("btnToolStreet").classList.add("active");
+        if (tool === "carA")
+          document.getElementById("btnToolCarA").classList.add("active");
+        if (tool === "carB")
+          document.getElementById("btnToolCarB").classList.add("active");
+        if (tool === "arrow")
+          document.getElementById("btnToolArrow").classList.add("active");
+      }
+
+      function drawVehicleStamp(ctx, x, y, color, title) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.roundRect(x - 26, y - 14, 52, 28, 6);
+        ctx.fill();
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "bold 9px Plus Jakarta Sans, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(title, x, y + 3);
+      }
+
+      function drawVectorArrow(ctx, x, y) {
+        ctx.strokeStyle = "#E85D3F";
+        ctx.lineWidth = 2.2;
+        ctx.beginPath();
+        ctx.moveTo(x - 24, y);
+        ctx.lineTo(x + 24, y);
+        ctx.lineTo(x + 14, y - 6);
+        ctx.moveTo(x + 24, y);
+        ctx.lineTo(x + 14, y + 6);
+        ctx.stroke();
+      }
+
+      function clearSketchCanvas() {
+        const canvas = document.getElementById("sketchCanvas");
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      function drawDemoAccidentSketch() {
+        const canvas = document.getElementById("sketchCanvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = "#E2DDD2";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([8, 6]);
+        ctx.beginPath();
+        ctx.moveTo(20, 85);
+        ctx.lineTo(580, 85);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        drawVehicleStamp(ctx, 220, 110, "#E85D3F", "Car A (You)");
+        drawVehicleStamp(ctx, 340, 80, "#181716", "Car B (Polo)");
+        drawVectorArrow(ctx, 310, 80);
+      }
+
+      // 10. Simple Mode
+      function toggleSimpleMode() {
+        isSimpleModeState = !isSimpleModeState;
+        document.body.classList.toggle("simple-mode", isSimpleModeState);
+
+        const toggleBtn = document.getElementById("simpleToggleBtn");
+        const label = document.getElementById("simpleLabelText");
+
+        if (isSimpleModeState) {
+          toggleBtn.classList.add("active");
+          label.textContent = "Simple: ON";
+
+          document.getElementById("stepPillLabel1").textContent = "Safety";
+          document.getElementById("stepPillLabel2").textContent = "Where";
+          document.getElementById("stepPillLabel3").textContent = "Photos";
+          document.getElementById("stepPillLabel4").textContent = "Parties";
+          document.getElementById("stepPillLabel5").textContent = "Witnesses";
+          document.getElementById("stepPillLabel6").textContent = "Statement";
+          document.getElementById("stepPillLabel7").textContent = "Save";
+
+          document.getElementById("step1Heading").textContent =
+            "Are you in a safe area?";
+          document.getElementById("step2Heading").textContent =
+            "Where did it happen?";
+          document.getElementById("step3Heading").textContent =
+            "Take photos of the scene";
+          document.getElementById("step4Heading").textContent =
+            "Who was involved?";
+          document.getElementById("step6Heading").textContent =
+            "Tell us what happened";
+          document.getElementById("step7Heading").textContent =
+            "Check everything before saving";
+
+          showFeedbackToast("Simple Mode Enabled · Focused plain language");
+        } else {
+          toggleBtn.classList.remove("active");
+          label.textContent = "Simple Mode";
+
+          document.getElementById("stepPillLabel1").textContent =
+            "Safety & Incident";
+          document.getElementById("stepPillLabel2").textContent = "Location";
+          document.getElementById("stepPillLabel3").textContent =
+            "Scene Evidence";
+          document.getElementById("stepPillLabel4").textContent =
+            "People & Vehicles";
+          document.getElementById("stepPillLabel5").textContent =
+            "Witnesses & Insurer";
+          document.getElementById("stepPillLabel6").textContent =
+            "Statement & Sketch";
+          document.getElementById("stepPillLabel7").textContent =
+            "Review & Save";
+
+          document.getElementById("step1Heading").textContent =
+            "First, tell us what happened.";
+          document.getElementById("step2Heading").textContent =
+            "Where did it happen?";
+          document.getElementById("step3Heading").textContent =
+            "Capture the scene before leaving.";
+          document.getElementById("step4Heading").textContent =
+            "Who was involved?";
+          document.getElementById("step6Heading").textContent =
+            "Tell us what happened.";
+          document.getElementById("step7Heading").textContent =
+            "Review your accident report.";
+
+          showFeedbackToast("Detailed Mode Enabled · Full portal metadata");
+        }
+        lucide.createIcons();
+      }
+
+      function showFeedbackToast(msg) {
+        const toast = document.getElementById("actionToastEl");
+        const content = document.getElementById("toastMsgContent");
+        content.textContent = msg;
+        toast.classList.add("active");
+        setTimeout(() => {
+          toast.classList.remove("active");
+        }, 2500);
+      }
+    </script>
+  </body>
+</html>

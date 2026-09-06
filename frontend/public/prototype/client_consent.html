@@ -1,0 +1,2205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Consent to Obtain Information — Royal Square</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Caveat:wght@600&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons CDN -->
+  <script src="./lucide-local.js"></script>
+
+  <style>
+    /* ==========================================================================
+       1. SYSTEM TOKENS (ORGANIC, BORDERLESS LUXURY FINTECH)
+       Matches Royal Square approved design system
+       ========================================================================== */
+    :root {
+      --bg-page: #F4F3EE;                 /* Warm creamy neutral canvas */
+      --bg-card: #FFFFFF;                 /* Crisp white surface */
+      --bg-card-subtle: #FAF9F5;          /* Tone-on-tone sub-card surface */
+      --bg-card-hover: #F6F4EE;
+      
+      --text-primary: #171615;            /* Deep near-black */
+      --text-secondary: #87837C;          /* Warm muted neutral */
+      --text-subtle: #ABA69E;             /* Light caption neutral */
+      
+      --accent-coral: #E85D3F;            /* Signature terracotta coral */
+      --accent-coral-hover: #D84F31;
+      --accent-coral-soft: #FDF0ED;       /* Pale coral pill tint */
+      --accent-coral-glow: rgba(232, 93, 63, 0.20);
+      
+      --status-green: #2B7A48;
+      --status-green-soft: #EDF7F1;
+      --status-amber: #B57914;
+      --status-amber-soft: #FEF8EC;
+      
+      --radius-card: 24px;
+      --radius-subcard: 16px;
+      --radius-pill: 9999px;
+      
+      /* Multi-layered soft ambient shadows */
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.02), 0 1px 3px rgba(0, 0, 0, 0.015);
+      --shadow-hover: 0 12px 34px rgba(0, 0, 0, 0.04), 0 2px 6px rgba(0, 0, 0, 0.02);
+      --shadow-button: 0 2px 8px rgba(0, 0, 0, 0.025);
+      --shadow-doc: 0 12px 48px rgba(23, 22, 21, 0.08), 0 2px 8px rgba(23, 22, 21, 0.03);
+      
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-legal: 'Georgia', 'Times New Roman', serif;
+      --font-script: 'Caveat', cursive;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 28px 36px;
+      position: relative;
+    }
+
+    button, input {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    .app-viewport {
+      width: 100%;
+      max-width: 1440px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ==========================================================================
+       2. FOCUSED WORKFLOW TOP BAR
+       ========================================================================== */
+    .top-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      height: 48px;
+    }
+
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-back {
+      height: 40px;
+      padding: 0 16px 0 12px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-size: 11.5px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow-button);
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-back:hover {
+      background: #FAF9F6;
+      transform: translateY(-1px);
+    }
+
+    .top-context-center {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-title-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-card);
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      box-shadow: var(--shadow-button);
+    }
+
+    .form-badge-step {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .form-name-text {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .top-right-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Simple Mode Pill Toggle (matches client_ui.html) */
+    .mode-toggle-pill {
+      height: 40px;
+      background: var(--bg-card);
+      border-radius: var(--radius-pill);
+      padding: 3px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-button);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-toggle-pill.active {
+      background: var(--accent-coral-soft);
+    }
+
+    .mode-toggle-pill.active .mode-icon {
+      color: var(--accent-coral);
+    }
+
+    .mode-label-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .toggle-switch-track {
+      width: 24px;
+      height: 14px;
+      border-radius: var(--radius-pill);
+      background: #E5E1D7;
+      position: relative;
+      transition: background 0.2s ease;
+    }
+
+    .mode-toggle-pill.active .toggle-switch-track {
+      background: var(--accent-coral);
+    }
+
+    .toggle-switch-thumb {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .mode-toggle-pill.active .toggle-switch-thumb {
+      transform: translateX(10px);
+    }
+
+    .btn-secondary-pill {
+      height: 40px;
+      padding: 0 15px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-size: 11.5px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: var(--shadow-button);
+      transition: all 0.15s ease;
+    }
+
+    .btn-secondary-pill:hover {
+      background: #FAF9F6;
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       3. MAIN TWO-COLUMN WORKFLOW
+       Left (~60%): Official A4 Document Preview
+       Right (~40%): Guided Completion Panel
+       ========================================================================== */
+    .workflow-layout {
+      display: grid;
+      grid-template-columns: 1.35fr 0.95fr; /* 59% / 41% */
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* --------------------------------------------------------------------------
+       OFFICIAL A4 DOCUMENT CONTAINER (LEFT)
+       Formal, structured, authentic legal document appearance
+       -------------------------------------------------------------------------- */
+    .document-viewport {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .doc-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 2px 6px;
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .doc-status-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--status-green);
+    }
+
+    .document-paper {
+      background: #FFFFFF;
+      border-radius: 12px;
+      box-shadow: var(--shadow-doc);
+      padding: 44px 50px 48px;
+      position: relative;
+      color: #1A1A18;
+      font-family: var(--font-legal);
+      line-height: 1.5;
+      font-size: 12.8px;
+      transition: all 0.3s ease;
+    }
+
+    /* Letterhead */
+    .doc-letterhead {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #171615;
+      padding-bottom: 18px;
+      margin-bottom: 22px;
+      font-family: var(--font-main);
+    }
+
+    .brand-mark-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .doc-logo-square {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: #171615;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: -0.5px;
+    }
+
+    .doc-firm-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .doc-firm-name {
+      font-size: 14.5px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      color: #171615;
+      text-transform: uppercase;
+    }
+
+    .doc-firm-sub {
+      font-size: 10.5px;
+      color: #55524E;
+      margin-top: 1px;
+    }
+
+    .doc-reg-details {
+      text-align: right;
+      font-size: 9.5px;
+      line-height: 1.4;
+      color: #6A665F;
+    }
+
+    /* Document Title & Step Banner */
+    .doc-title-block {
+      text-align: center;
+      margin: 18px 0 24px;
+      font-family: var(--font-main);
+    }
+
+    .doc-step-kicker {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--accent-coral);
+      margin-bottom: 6px;
+    }
+
+    .doc-main-heading {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      color: #171615;
+      text-transform: uppercase;
+    }
+
+    .doc-mandate-subtitle {
+      font-size: 11px;
+      font-weight: 600;
+      color: #6A665F;
+      margin-top: 4px;
+      letter-spacing: 0.2px;
+    }
+
+    /* Client & Adviser Data Table */
+    .doc-data-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      background: #FAF8F5;
+      border: 1px solid #EAE5DC;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 22px;
+      font-family: var(--font-main);
+      font-size: 11.5px;
+    }
+
+    .doc-field-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .doc-field-lbl {
+      font-size: 9.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      color: #7A756D;
+    }
+
+    .doc-field-val {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #171615;
+    }
+
+    .doc-field-val.highlighted {
+      color: var(--accent-coral);
+    }
+
+    /* Legal Clauses Text */
+    .legal-content-body {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-align: justify;
+      color: #262422;
+      border-bottom: 1px solid #EAE5DC;
+      padding-bottom: 20px;
+      margin-bottom: 22px;
+      transition: background 0.3s ease;
+    }
+
+    .legal-content-body.highlight-focus {
+      background: rgba(232, 93, 63, 0.04);
+      outline: 2px dashed var(--accent-coral);
+      outline-offset: 8px;
+      border-radius: 8px;
+    }
+
+    .legal-clause {
+      margin-bottom: 2px;
+    }
+
+    .legal-clause-num {
+      font-weight: 700;
+      font-family: var(--font-main);
+      font-size: 12px;
+      color: #171615;
+      margin-right: 4px;
+    }
+
+    .legal-clause p {
+      display: inline;
+    }
+
+    /* Signature & Execution Block */
+    .doc-signature-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      font-family: var(--font-main);
+      margin-top: 10px;
+    }
+
+    .sig-column {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .sig-box-target {
+      height: 72px;
+      border-bottom: 1.5px solid #171615;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .sig-empty-placeholder {
+      font-size: 10px;
+      color: #ABA69E;
+      font-style: italic;
+      font-family: var(--font-legal);
+    }
+
+    .sig-rendered-img {
+      max-height: 64px;
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    .sig-rendered-typed {
+      font-family: var(--font-script);
+      font-size: 34px;
+      color: #171615;
+      line-height: 1;
+    }
+
+    .sig-meta-line {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #171615;
+    }
+
+    .sig-sub-line {
+      font-size: 9.5px;
+      color: #7A756D;
+      margin-top: 2px;
+    }
+
+    .verified-execution-stamp {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--status-green);
+      background: var(--status-green-soft);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 6px;
+      width: fit-content;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .verified-execution-stamp.visible {
+      opacity: 1;
+    }
+
+    /* Formal Footer */
+    .doc-footer {
+      border-top: 1px solid #EAE5DC;
+      margin-top: 24px;
+      padding-top: 12px;
+      font-family: var(--font-main);
+      font-size: 8.5px;
+      color: #8E8A83;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* --------------------------------------------------------------------------
+       GUIDED COMPLETION PANEL (RIGHT)
+       Warm, clean, supportive fintech workflow
+       -------------------------------------------------------------------------- */
+    .guided-panel {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      padding: 26px 28px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: sticky;
+      top: 16px;
+    }
+
+    /* Form Progress & Reusable Data Banner */
+    .progress-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .progress-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .progress-kicker {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+    }
+
+    .progress-count {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-coral);
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 6px;
+      border-radius: var(--radius-pill);
+      background: #EFECE6;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent-coral);
+      border-radius: var(--radius-pill);
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      width: 75%;
+    }
+
+    /* ENTER ONCE VISUAL PROOF BADGE */
+    .enter-once-card {
+      background: var(--bg-card-subtle);
+      border-radius: var(--radius-subcard);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .enter-once-top {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .enter-once-top i {
+      color: var(--status-green);
+    }
+
+    .enter-once-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .pill-reused {
+      font-size: 9.5px;
+      font-weight: 600;
+      background: #EAE6DD;
+      color: var(--text-primary);
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .enter-once-copy {
+      font-size: 10px;
+      color: var(--text-secondary);
+      font-style: italic;
+    }
+
+    /* Step Sections inside Guided Panel */
+    .guided-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .step-card {
+      background: var(--bg-card-subtle);
+      border-radius: var(--radius-subcard);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .step-card.active-step {
+      background: #FFFFFF;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+    }
+
+    .step-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .step-label-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-badge-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #171615;
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-card.completed .step-badge-num {
+      background: var(--status-green);
+    }
+
+    .step-card-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* 1. Personal Information Data Box */
+    .verified-data-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: #FFFFFF;
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .verified-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+    }
+
+    .verified-row-label {
+      color: var(--text-secondary);
+    }
+
+    .verified-row-val {
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .verified-row-val i.tick {
+      color: var(--status-green);
+      width: 12px;
+      height: 12px;
+    }
+
+    .edit-verified-link {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--accent-coral);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      margin-top: 2px;
+    }
+
+    .edit-verified-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Checkbox & Helper Guide Styles */
+    .client-friendly-guide {
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    .btn-scroll-doc {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--accent-coral);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      align-self: flex-start;
+      margin-top: 2px;
+    }
+
+    .btn-scroll-doc:hover {
+      text-decoration: underline;
+    }
+
+    .confirmation-checkbox-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #FFFFFF;
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .confirmation-checkbox-wrap:hover {
+      background: #FCFBF8;
+    }
+
+    .confirmation-checkbox-wrap input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      accent-color: var(--accent-coral);
+      cursor: pointer;
+    }
+
+    .checkbox-text {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.35;
+      user-select: none;
+    }
+
+    /* 4. Signature Capture Section */
+    .signature-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .sig-tab-btn {
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: #EAE6DD;
+      color: var(--text-secondary);
+      transition: all 0.15s ease;
+    }
+
+    .sig-tab-btn.active {
+      background: var(--text-primary);
+      color: #FFFFFF;
+    }
+
+    .canvas-container {
+      background: #FFFFFF;
+      border-radius: 12px;
+      border: 1.5px dashed #D9D4C7;
+      overflow: hidden;
+      position: relative;
+      touch-action: none;
+    }
+
+    .canvas-container.has-drawn {
+      border-style: solid;
+      border-color: var(--accent-coral);
+    }
+
+    #sigCanvas {
+      display: block;
+      width: 100%;
+      height: 110px;
+      cursor: crosshair;
+    }
+
+    .type-signature-box {
+      display: none;
+      padding: 14px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      border: 1.5px solid #EAE5DC;
+    }
+
+    .type-signature-box input {
+      width: 100%;
+      height: 38px;
+      font-family: var(--font-script);
+      font-size: 26px;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      background: transparent;
+    }
+
+    .signature-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+    }
+
+    .btn-sig-subtle {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-sig-subtle:hover {
+      color: var(--accent-coral);
+    }
+
+    .btn-apply-sig {
+      font-size: 11px;
+      font-weight: 700;
+      background: #171615;
+      color: #FFFFFF;
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+      transition: opacity 0.15s;
+    }
+
+    .btn-apply-sig:hover {
+      opacity: 0.88;
+    }
+
+    .signer-metadata-tag {
+      font-size: 10px;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+      padding-top: 4px;
+      border-top: 1px solid #EAE5DC;
+    }
+
+    /* Validation Inline Error Banner */
+    .inline-error-banner {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: #FDF0ED;
+      color: var(--accent-coral);
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+
+    .inline-error-banner.visible {
+      display: flex;
+    }
+
+    /* Primary Finalise CTA */
+    .btn-coral-finalise {
+      height: 48px;
+      border-radius: var(--radius-pill);
+      background-color: var(--accent-coral);
+      color: #FFFFFF;
+      font-size: 13.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px var(--accent-coral-glow);
+      transition: all 0.15s ease;
+      width: 100%;
+    }
+
+    .btn-coral-finalise:hover {
+      background-color: var(--accent-coral-hover);
+      transform: translateY(-1px);
+    }
+
+    /* AUDIT PREVIEW ACCORDION */
+    .audit-preview-box {
+      border-top: 1px solid #EAE5DC;
+      padding-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .audit-toggle-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .audit-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .audit-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10.5px;
+      color: var(--text-secondary);
+    }
+
+    .audit-item-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .audit-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #ABA69E;
+    }
+
+    .audit-item.active .audit-dot {
+      background: var(--status-green);
+    }
+
+    .audit-time {
+      font-family: monospace;
+      font-size: 10px;
+    }
+
+    /* ==========================================================================
+       4. SUCCESS STATE VIEW (REPLACES OR OVERLAYS GUIDED PANEL)
+       ========================================================================== */
+    .success-view-card {
+      display: none;
+      flex-direction: column;
+      gap: 18px;
+      animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .success-view-card.visible {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .success-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-form-complete {
+      background: var(--status-green-soft);
+      color: var(--status-green);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .success-heading {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+
+    .success-summary-card {
+      background: var(--bg-card-subtle);
+      border-radius: var(--radius-subcard);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+    }
+
+    .summary-label {
+      color: var(--text-secondary);
+    }
+
+    .summary-val {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .what-next-box {
+      background: #FAF8F5;
+      border-left: 3px solid var(--accent-coral);
+      border-radius: 4px 12px 12px 4px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .what-next-title {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .what-next-desc {
+      font-size: 11px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    .success-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .btn-view-final-doc {
+      height: 42px;
+      border-radius: var(--radius-pill);
+      background: #171615;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: opacity 0.15s;
+    }
+
+    .btn-view-final-doc:hover {
+      opacity: 0.9;
+    }
+
+    .success-row-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-success-subtle {
+      height: 38px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card-subtle);
+      color: var(--text-primary);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: background 0.15s;
+    }
+
+    .btn-success-subtle:hover {
+      background: #EFECE6;
+    }
+
+    /* ==========================================================================
+       5. SIMPLE MODE STATE (CLEAN REDUCTION)
+       ========================================================================== */
+    body.simple-mode .enter-once-copy,
+    body.simple-mode .audit-preview-box,
+    body.simple-mode .doc-reg-details,
+    body.simple-mode .client-role-extra {
+      display: none !important;
+    }
+
+    body.simple-mode .progress-count {
+      font-size: 10px;
+    }
+
+    /* Floating Feedback Toast */
+    .toast-pill {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #181716;
+      color: #FFFFFF;
+      padding: 8px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 11.5px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast-pill.active {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* ==========================================================================
+       6. CLEAN PRINT MEDIA STYLING
+       Hide app header, guided panel, buttons, navigation
+       Print ONLY the official completed A4 document!
+       ========================================================================== */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 12mm 15mm;
+      }
+
+      body {
+        background: #FFFFFF !important;
+        color: #000000 !important;
+        padding: 0 !important;
+      }
+
+      .top-header,
+      .guided-panel,
+      .doc-status-bar,
+      .toast-pill,
+      .btn-back,
+      .mode-toggle-pill,
+      .top-right-actions {
+        display: none !important;
+      }
+
+      .app-viewport {
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+
+      .workflow-layout {
+        display: block !important;
+      }
+
+      .document-viewport {
+        width: 100% !important;
+      }
+
+      .document-paper {
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        font-size: 11.5pt !important;
+        line-height: 1.45 !important;
+      }
+
+      .legal-content-body.highlight-focus {
+        outline: none !important;
+        background: transparent !important;
+      }
+    }
+
+    /* Responsive fallbacks */
+    @media (max-width: 1024px) {
+      .workflow-layout {
+        grid-template-columns: 1fr;
+      }
+      .guided-panel {
+        position: static;
+      }
+      body {
+        padding: 14px 16px 28px;
+      }
+      .document-paper {
+        padding: 30px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-viewport">
+
+    <!-- ====================================================================
+         1. TOP BAR (FOCUSED WORKFLOW MODE)
+         ==================================================================== -->
+    <header class="top-header">
+      <!-- Left: Back to Documents -->
+      <div class="top-left">
+        <a href="javascript:void(0)" class="btn-back" onclick="handleBackToDocuments()">
+          <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i>
+          <span>Back to Documents</span>
+        </a>
+      </div>
+
+      <!-- Center: Context Title -->
+      <div class="top-context-center">
+        <div class="form-title-pill">
+          <span class="form-badge-step">Step 1 of 6</span>
+          <span class="form-name-text">Client Consent to Obtain Information</span>
+        </div>
+      </div>
+
+      <!-- Right: Draft, Print Preview, Simple Mode Toggle -->
+      <div class="top-right-actions">
+        <!-- Simple Mode Pill -->
+        <button class="mode-toggle-pill" id="simpleModeToggle" onclick="toggleSimpleMode()" title="Toggle Simple View">
+          <i data-lucide="sliders-horizontal" class="mode-icon" style="width: 13px; height: 13px;"></i>
+          <span class="mode-label-text" id="modeLabel">Simple Mode</span>
+          <div class="toggle-switch-track">
+            <div class="toggle-switch-thumb"></div>
+          </div>
+        </button>
+
+        <button class="btn-secondary-pill" onclick="saveDraft()">
+          <i data-lucide="bookmark" style="width: 13px; height: 13px;"></i>
+          <span>Save draft</span>
+        </button>
+
+        <button class="btn-secondary-pill" onclick="window.print()">
+          <i data-lucide="printer" style="width: 13px; height: 13px;"></i>
+          <span>Print preview</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         2. MAIN TWO-COLUMN WORKFLOW: 60% DOCUMENT / 40% GUIDED PANEL
+         ==================================================================== -->
+    <main class="workflow-layout">
+
+      <!-- ================================================================
+           LEFT COLUMN: OFFICIAL A4 DOCUMENT PREVIEW
+           Preserves authentic Royal Square branding & legal text verbatim
+           ================================================================ -->
+      <section class="document-viewport" aria-label="Official Document Preview">
+        <div class="doc-status-bar">
+          <div class="doc-status-tag">
+            <span class="live-dot"></span>
+            <span>Live Document Preview · A4 Statutory Record</span>
+          </div>
+          <div id="docLiveTimestamp" style="font-size: 10px;">Autosynced with verified client data</div>
+        </div>
+
+        <article class="document-paper" id="officialDocumentA4">
+          <!-- Official Letterhead -->
+          <header class="doc-letterhead">
+            <div class="brand-mark-block">
+              <div class="doc-logo-square"><img src="./royal-square-logo.png" alt="Royal Square" style="width: 100%; height: 100%; display: block; object-fit: cover;" /></div>
+              <div class="doc-firm-details">
+                <div class="doc-firm-name">Royal Square Financial</div>
+                <div class="doc-firm-sub">Authorized Financial Services Provider · FSP License 29370</div>
+              </div>
+            </div>
+            <div class="doc-reg-details">
+              Block B, Sandton Gate, 25 Minerva Ave<br />
+              Sandton, Johannesburg, 2196<br />
+              compliance@royalsquare.co.za · +27 (0)11 884 9200
+            </div>
+          </header>
+
+          <!-- Document Title & Step 1 Classification -->
+          <div class="doc-title-block">
+            <div class="doc-step-kicker">Step 1 of the Six-Step Financial Planning Process</div>
+            <h1 class="doc-main-heading">CLIENT CONSENT TO OBTAIN INFORMATION</h1>
+            <div class="doc-mandate-subtitle">Mandate in terms of the Financial Advisory and Intermediary Services Act (Act No. 37 of 2002)</div>
+          </div>
+
+          <!-- Client & Advisory Practice Identification -->
+          <div class="doc-data-grid">
+            <div class="doc-field-row">
+              <span class="doc-field-lbl">Full Name of Client</span>
+              <span class="doc-field-val" id="docClientName">Latoya Matai</span>
+            </div>
+            <div class="doc-field-row">
+              <span class="doc-field-lbl">Identity / Registration Number</span>
+              <span class="doc-field-val" id="docClientId">920412 0184 087</span>
+            </div>
+            <div class="doc-field-row">
+              <span class="doc-field-lbl">Appointed Financial Planner</span>
+              <span class="doc-field-val">Qiniso Ntuli (CFP®)</span>
+            </div>
+            <div class="doc-field-row">
+              <span class="doc-field-lbl">Financial Services Provider</span>
+              <span class="doc-field-val">Royal Square Financial (Pty) Ltd (FSP 29370)</span>
+            </div>
+          </div>
+
+          <!-- Official Legal Body (Source of Truth - Preserved verbatim) -->
+          <div class="legal-content-body" id="legalWordingContainer">
+            <div class="legal-clause">
+              <span class="legal-clause-num">1. Authority to Request and Obtain Information:</span>
+              <p>
+                I/We, the undersigned client, hereby nominate, constitute, and appoint Royal Square Financial (Pty) Ltd (FSP License No. 29370) and its authorized representative, <strong>Qiniso Ntuli</strong>, with full legal power and authority to act on my behalf to request, obtain, inspect, receive, and review all relevant information, documentation, policy schedules, investment summaries, retirement annuity records, employee benefit statements, medical scheme details, and tax certificates pertaining to my financial portfolio.
+              </p>
+            </div>
+
+            <div class="legal-clause">
+              <span class="legal-clause-num">2. Direction to Financial Institutions:</span>
+              <p>
+                I hereby instruct and direct all registered long-term insurers, short-term insurers, collective investment scheme management companies, banks, retirement fund administrators, and administrative financial services providers to furnish Royal Square Financial with all requested information, fund values, surrender values, historical premium schedules, and contractual conditions as they may reasonably require in execution of this mandate.
+              </p>
+            </div>
+
+            <div class="legal-clause">
+              <span class="legal-clause-num">3. Purpose of this Mandate:</span>
+              <p>
+                This consent is granted specifically for the purpose of enabling Royal Square Financial to perform a comprehensive financial needs analysis, risk profiling, and holistic financial planning review in terms of Section 8 of the General Code of Conduct under the Financial Advisory and Intermediary Services Act (FAIS Act, No. 37 of 2002). This represents <strong>Step 1 of the Six-Step Financial Planning Process</strong>.
+              </p>
+            </div>
+
+            <div class="legal-clause">
+              <span class="legal-clause-num">4. Explicit Limitation of Authority:</span>
+              <p>
+                This consent constitutes an informational authority only. <strong>It does not authorize Royal Square Financial or its representatives to alter, amend, switch, encumber, surrender, or cancel any existing policy, investment, or contract without my separate, explicit, subsequent written instruction.</strong>
+              </p>
+            </div>
+
+            <div class="legal-clause">
+              <span class="legal-clause-num">5. Protection of Personal Information (POPIA):</span>
+              <p>
+                Royal Square Financial undertakes to treat all personal and financial data obtained under this mandate with the highest standard of confidentiality, in strict compliance with the Protection of Personal Information Act (POPIA, Act No. 4 of 2013) and FAIS regulatory requirements.
+              </p>
+            </div>
+
+            <div class="legal-clause">
+              <span class="legal-clause-num">6. Validity of Electronic Copy:</span>
+              <p>
+                An electronic copy, digital transmission, or verified facsimile of this executed consent shall be deemed valid, binding, and enforceable as the original document by all financial institutions.
+              </p>
+            </div>
+          </div>
+
+          <!-- Signature & Execution Section -->
+          <div class="doc-signature-block">
+            <!-- Client Signature -->
+            <div class="sig-column">
+              <div class="sig-box-target" id="docSignatureBox">
+                <span class="sig-empty-placeholder" id="sigPlaceholderText">Signature required · Complete on right panel</span>
+                <img id="docRenderedSigImg" class="sig-rendered-img" style="display: none;" alt="Client Signature" />
+                <span id="docRenderedTypedSig" class="sig-rendered-typed" style="display: none;"></span>
+              </div>
+              <div class="sig-meta-line" id="docClientSignerName">Latoya Matai</div>
+              <div class="sig-sub-line">Client Signature · Signed at Sandton</div>
+              <div class="sig-sub-line">Date: <span id="docSignDate">05 September 2026</span></div>
+              <div class="verified-execution-stamp" id="docVerifiedStamp">
+                <i data-lucide="check-circle" style="width: 10px; height: 10px;"></i>
+                <span>Digitally Authenticated · Verified Client</span>
+              </div>
+            </div>
+
+            <!-- Adviser Counter-Acknowledgement -->
+            <div class="sig-column">
+              <div class="sig-box-target">
+                <!-- Qiniso Ntuli's practice signature -->
+                <svg viewBox="0 0 160 48" width="130" height="38" style="opacity: 0.85;">
+                  <path d="M 12 32 C 28 8, 42 6, 48 24 C 52 38, 70 36, 82 20 C 90 8, 105 14, 118 28 C 126 36, 142 22, 148 18" fill="none" stroke="#171615" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M 38 18 L 140 18" fill="none" stroke="#171615" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+                </svg>
+              </div>
+              <div class="sig-meta-line">Qiniso Ntuli (CFP®)</div>
+              <div class="sig-sub-line">Key Individual & Authorized Representative</div>
+              <div class="sig-sub-line">For Royal Square Financial (Pty) Ltd</div>
+            </div>
+          </div>
+
+          <!-- Formal Legal Footer -->
+          <footer class="doc-footer">
+            <span>Doc Ref: RSF-CONSENT-2026-0905-LM</span>
+            <span>Royal Square Financial (Pty) Ltd · FSP License 29370 · Reg 2017/384912/07</span>
+            <span>Page 1 of 1</span>
+          </footer>
+        </article>
+      </section>
+
+      <!-- ================================================================
+           RIGHT COLUMN: GUIDED COMPLETION PANEL
+           Follows approved client portal aesthetic: warm cream, white, coral
+           ================================================================ -->
+      <aside class="guided-panel" id="guidedPanelContainer">
+
+        <!-- Active Workflow Panel -->
+        <div id="activeWorkflowView" style="display: flex; flex-direction: column; gap: 18px;">
+          
+          <!-- Progress Tracker Header -->
+          <div class="progress-header">
+            <div class="progress-title-row">
+              <span class="progress-kicker">Form Progress</span>
+              <span class="progress-count" id="progressCountLabel">3 of 4 complete</span>
+            </div>
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+          </div>
+
+          <!-- ENTER ONCE VISUAL PROOF MOMENT -->
+          <div class="enter-once-card">
+            <div class="enter-once-top">
+              <i data-lucide="shield-check" style="width: 16px; height: 16px;"></i>
+              <span>4 fields reused from your verified profile</span>
+            </div>
+            <div class="enter-once-chips">
+              <span class="pill-reused">Name ✓</span>
+              <span class="pill-reused">ID ✓</span>
+              <span class="pill-reused">Adviser ✓</span>
+              <span class="pill-reused">Date ✓</span>
+            </div>
+            <div class="enter-once-copy">
+              "You only complete what Royal Square doesn't already know."
+            </div>
+          </div>
+
+          <!-- Guided Steps Container -->
+          <div class="guided-steps">
+
+            <!-- 1. PERSONAL INFORMATION (PREFILLED) -->
+            <div class="step-card completed" id="step1Card">
+              <div class="step-card-head">
+                <div class="step-label-group">
+                  <span class="step-badge-num">1</span>
+                  <span class="step-card-title">Personal Information</span>
+                </div>
+                <span style="font-size: 9.5px; font-weight: 700; color: var(--status-green); display: flex; align-items: center; gap: 3px;">
+                  <i data-lucide="check" style="width: 11px; height: 11px;"></i> Verified
+                </span>
+              </div>
+
+              <div class="verified-data-box">
+                <div class="verified-row">
+                  <span class="verified-row-label">Full name</span>
+                  <span class="verified-row-val">
+                    Latoya Matai
+                    <i data-lucide="check-circle-2" class="tick"></i>
+                  </span>
+                </div>
+                <div class="verified-row">
+                  <span class="verified-row-label">Identity number</span>
+                  <span class="verified-row-val">
+                    <span id="maskedIdDisplay">•••••••••••••</span>
+                    <button onclick="toggleMaskedId()" style="color: var(--text-subtle); display: flex; align-items: center;" title="Reveal / hide ID">
+                      <i data-lucide="eye" id="eyeIcon" style="width: 12px; height: 12px;"></i>
+                    </button>
+                    <i data-lucide="check-circle-2" class="tick"></i>
+                  </span>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 9.5px; color: var(--text-subtle);">Pulled from your verified Royal Square profile.</span>
+                <span class="edit-verified-link" onclick="handleEditVerifiedDetails()">
+                  <i data-lucide="external-link" style="width: 10px; height: 10px;"></i>
+                  Edit verified details
+                </span>
+              </div>
+            </div>
+
+            <!-- 2. REVIEW CONSENT -->
+            <div class="step-card active-step" id="step2Card">
+              <div class="step-card-head">
+                <div class="step-label-group">
+                  <span class="step-badge-num">2</span>
+                  <span class="step-card-title">Review your consent</span>
+                </div>
+              </div>
+
+              <p class="client-friendly-guide">
+                This form allows Royal Square Financial to obtain relevant financial information needed to provide financial advice.
+              </p>
+
+              <button class="btn-scroll-doc" onclick="scrollToLegalWording()">
+                <i data-lucide="file-search" style="width: 12px; height: 12px;"></i>
+                <span>Open / scroll official wording</span>
+              </button>
+
+              <label class="confirmation-checkbox-wrap">
+                <input type="checkbox" id="chkReviewConsent" onchange="handleConsentCheckChange()" />
+                <span class="checkbox-text">I have reviewed the consent document.</span>
+              </label>
+            </div>
+
+            <!-- 3. CONFIRM AUTHORITY -->
+            <div class="step-card active-step" id="step3Card">
+              <div class="step-card-head">
+                <div class="step-label-group">
+                  <span class="step-badge-num">3</span>
+                  <span class="step-card-title">Confirm authority</span>
+                </div>
+              </div>
+
+              <p class="client-friendly-guide">
+                You are authorising Royal Square Financial to obtain relevant information from financial institutions for the purpose described in the official consent.
+              </p>
+
+              <label class="confirmation-checkbox-wrap">
+                <input type="checkbox" id="chkConfirmAuthority" onchange="handleAuthorityCheckChange()" />
+                <span class="checkbox-text">I confirm that I want to give this consent.</span>
+              </label>
+            </div>
+
+            <!-- 4. SIGNATURE AREA -->
+            <div class="step-card active-step" id="step4Card">
+              <div class="step-card-head">
+                <div class="step-label-group">
+                  <span class="step-badge-num">4</span>
+                  <span class="step-card-title">Sign the form</span>
+                </div>
+                <span id="sigReadyTag" style="font-size: 9.5px; font-weight: 700; color: var(--status-green); display: none; align-items: center; gap: 3px;">
+                  <i data-lucide="check" style="width: 11px; height: 11px;"></i> Signature ready
+                </span>
+              </div>
+
+              <!-- Signature Type Switcher -->
+              <div class="signature-tabs">
+                <button class="sig-tab-btn active" id="tabDraw" onclick="setSignatureMode('draw')">Draw signature</button>
+                <button class="sig-tab-btn" id="tabType" onclick="setSignatureMode('type')">Type my name</button>
+              </div>
+
+              <!-- Canvas for Drawing -->
+              <div class="canvas-container" id="canvasWrap">
+                <canvas id="sigCanvas"></canvas>
+              </div>
+
+              <!-- Fallback Typed Input -->
+              <div class="type-signature-box" id="typeSigWrap">
+                <input type="text" id="typeSigInput" value="Latoya Matai" oninput="handleTypedSignatureInput()" placeholder="Type your full name..." />
+              </div>
+
+              <div class="signature-actions">
+                <button class="btn-sig-subtle" onclick="clearSignature()">
+                  <i data-lucide="rotate-ccw" style="width: 11px; height: 11px;"></i>
+                  <span>Clear</span>
+                </button>
+                <button class="btn-apply-sig" onclick="applySignature()">
+                  <span>Use signature</span>
+                </button>
+              </div>
+
+              <div class="signer-metadata-tag">
+                <span>Signed by: <strong>Latoya Matai</strong></span>
+                <span>Date: <strong>05 September 2026</strong></span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Inline Calm Error Banner (No alert()!) -->
+          <div class="inline-error-banner" id="inlineValidationBanner">
+            <i data-lucide="alert-circle" style="width: 15px; height: 15px; flex-shrink: 0;"></i>
+            <span id="validationErrorText">Please review the consent document and draw your signature before finalising.</span>
+          </div>
+
+          <!-- Primary Sign & Finalise CTA -->
+          <button class="btn-coral-finalise" id="btnFinalise" onclick="handleFinaliseSubmission()">
+            <span>Sign & Finalise</span>
+            <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+          </button>
+
+          <!-- Audit Activity Preview -->
+          <div class="audit-preview-box">
+            <div class="audit-toggle-header" onclick="toggleAuditTrail()">
+              <span>Activity & Compliance Trail</span>
+              <i data-lucide="chevron-down" id="auditChevron" style="width: 12px; height: 12px;"></i>
+            </div>
+            <div class="audit-list" id="auditList">
+              <div class="audit-item active">
+                <div class="audit-item-left">
+                  <span class="audit-dot"></span>
+                  <span>Profile information prefilled</span>
+                </div>
+                <span class="audit-time">15:42</span>
+              </div>
+              <div class="audit-item" id="auditConsentItem">
+                <div class="audit-item-left">
+                  <span class="audit-dot"></span>
+                  <span>Consent reviewed</span>
+                </div>
+                <span class="audit-time" id="auditConsentTime">—</span>
+              </div>
+              <div class="audit-item" id="auditConfirmItem">
+                <div class="audit-item-left">
+                  <span class="audit-dot"></span>
+                  <span>Client confirmation recorded</span>
+                </div>
+                <span class="audit-time" id="auditConfirmTime">—</span>
+              </div>
+              <div class="audit-item" id="auditSignatureItem">
+                <div class="audit-item-left">
+                  <span class="audit-dot"></span>
+                  <span>Signature captured</span>
+                </div>
+                <span class="audit-time" id="auditSigTime">—</span>
+              </div>
+              <div class="audit-item" id="auditFinalItem">
+                <div class="audit-item-left">
+                  <span class="audit-dot"></span>
+                  <span>Final document generated</span>
+                </div>
+                <span class="audit-time" id="auditFinalTime">—</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================================================================
+             SUCCESS STATE VIEW (TRANSITIONS AFTER FINALISING)
+             ================================================================ -->
+        <div class="success-view-card" id="successCardView">
+          <div class="success-badge-row">
+            <span class="badge-form-complete">
+              <i data-lucide="check-circle-2" style="width: 12px; height: 12px;"></i>
+              <span>FORM COMPLETE</span>
+            </span>
+          </div>
+
+          <div>
+            <h2 class="success-heading">Consent successfully signed & recorded</h2>
+            <p style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">
+              Your official authorization has been bound to your Royal Square client record.
+            </p>
+          </div>
+
+          <div class="success-summary-card">
+            <div class="summary-row">
+              <span class="summary-label">Document</span>
+              <span class="summary-val">Client Consent to Obtain Information</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Signed by</span>
+              <span class="summary-val">Latoya Matai</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Date</span>
+              <span class="summary-val">05 Sep 2026</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Status</span>
+              <span class="summary-val" style="color: var(--status-green);">Signed & Active</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Record Hash</span>
+              <span class="summary-val" style="font-family: monospace; font-size: 10px;">RSF-SHA256-29370-LM</span>
+            </div>
+          </div>
+
+          <div class="what-next-box">
+            <div class="what-next-title">What happens next?</div>
+            <div class="what-next-desc">
+              Royal Square can now continue the financial-information collection step of your planning process.
+            </div>
+          </div>
+
+          <div class="success-actions">
+            <button class="btn-view-final-doc" onclick="focusDocumentPreview()">
+              <i data-lucide="file-check" style="width: 14px; height: 14px;"></i>
+              <span>View final document</span>
+            </button>
+            <div class="success-row-actions">
+              <button class="btn-success-subtle" onclick="window.print()">
+                <i data-lucide="printer" style="width: 13px; height: 13px;"></i>
+                <span>Print</span>
+              </button>
+              <button class="btn-success-subtle" onclick="downloadCopy()">
+                <i data-lucide="download" style="width: 13px; height: 13px;"></i>
+                <span>Download copy</span>
+              </button>
+            </div>
+            <button class="btn-back" style="width: 100%; justify-content: center; margin-top: 4px;" onclick="handleBackToDocuments()">
+              <span>Return to Documents</span>
+            </button>
+          </div>
+        </div>
+
+      </aside>
+
+    </main>
+
+  </div>
+
+  <!-- Toast Notification Pill -->
+  <div class="toast-pill" id="actionToast">
+    <i data-lucide="check" style="width: 14px; height: 14px; color: var(--accent-coral);"></i>
+    <span id="toastMessageText">Action completed</span>
+  </div>
+
+  <!-- ====================================================================
+       VANILLA JAVASCRIPT LOGIC ENGINE
+       Zero React / Zero external frameworks
+       ==================================================================== -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Application State
+    const state = {
+      clientName: "Latoya Matai",
+      clientIdFull: "920412 0184 087",
+      isIdMasked: true,
+      hasReviewedConsent: false,
+      hasConfirmedAuthority: false,
+      signatureMode: "draw", // 'draw' | 'type'
+      hasSignature: false,
+      signatureDataUrl: null,
+      typedSignatureName: "Latoya Matai",
+      isFinalised: false,
+      isSimpleMode: false
+    };
+
+    // Canvas Setup
+    const canvas = document.getElementById("sigCanvas");
+    const ctx = canvas.getContext("2d");
+    let isDrawing = false;
+    let hasDrawnStrokes = false;
+
+    function resizeCanvas() {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+      ctx.lineWidth = 2.2;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = "#171615";
+    }
+
+    // Call after load & layout
+    window.addEventListener("load", () => {
+      resizeCanvas();
+      updateFormProgress();
+    });
+    window.addEventListener("resize", () => {
+      // Re-render if signature already captured
+      if (!state.hasSignature) {
+        resizeCanvas();
+      }
+    });
+
+    // Drawing Event Handlers (Mouse & Touch)
+    function getCanvasCoordinates(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: clientX - rect.left,
+        y: clientY - rect.top
+      };
+    }
+
+    function startDrawing(e) {
+      if (e.target !== canvas) return;
+      isDrawing = true;
+      const pos = getCanvasCoordinates(e);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+      hasDrawnStrokes = true;
+      document.getElementById("canvasWrap").classList.add("has-drawn");
+    }
+
+    function drawStroke(e) {
+      if (!isDrawing) return;
+      e.preventDefault();
+      const pos = getCanvasCoordinates(e);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+    }
+
+    function stopDrawing() {
+      if (!isDrawing) return;
+      isDrawing = false;
+      ctx.closePath();
+      // Auto-apply to live document preview
+      applyDrawnSignatureLive();
+    }
+
+    // Canvas Listeners
+    canvas.addEventListener("mousedown", startDrawing);
+    canvas.addEventListener("mousemove", drawStroke);
+    canvas.addEventListener("mouseup", stopDrawing);
+    canvas.addEventListener("mouseleave", stopDrawing);
+
+    canvas.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      startDrawing(e);
+    }, { passive: false });
+    canvas.addEventListener("touchmove", (e) => {
+      e.preventDefault();
+      drawStroke(e);
+    }, { passive: false });
+    canvas.addEventListener("touchend", stopDrawing);
+
+    // Apply Drawn Signature Live to Document
+    function applyDrawnSignatureLive() {
+      if (!hasDrawnStrokes) return;
+      const dataUrl = canvas.toDataURL("image/png");
+      state.hasSignature = true;
+      state.signatureDataUrl = dataUrl;
+
+      // Update Official Document Preview
+      const placeholder = document.getElementById("sigPlaceholderText");
+      const img = document.getElementById("docRenderedSigImg");
+      const typed = document.getElementById("docRenderedTypedSig");
+
+      placeholder.style.display = "none";
+      typed.style.display = "none";
+      img.src = dataUrl;
+      img.style.display = "block";
+
+      // Show indicator
+      document.getElementById("sigReadyTag").style.display = "inline-flex";
+      recordAuditTime("auditSignatureItem", "auditSigTime");
+      updateFormProgress();
+    }
+
+    // Switch Signature Mode (Draw vs Type)
+    function setSignatureMode(mode) {
+      state.signatureMode = mode;
+      const tabDraw = document.getElementById("tabDraw");
+      const tabType = document.getElementById("tabType");
+      const canvasWrap = document.getElementById("canvasWrap");
+      const typeSigWrap = document.getElementById("typeSigWrap");
+
+      if (mode === "draw") {
+        tabDraw.classList.add("active");
+        tabType.classList.remove("active");
+        canvasWrap.style.display = "block";
+        typeSigWrap.style.display = "none";
+        if (hasDrawnStrokes) {
+          applyDrawnSignatureLive();
+        }
+      } else {
+        tabType.classList.add("active");
+        tabDraw.classList.remove("active");
+        canvasWrap.style.display = "none";
+        typeSigWrap.style.display = "block";
+        applyTypedSignatureLive();
+      }
+    }
+
+    function handleTypedSignatureInput() {
+      state.typedSignatureName = document.getElementById("typeSigInput").value.trim();
+      applyTypedSignatureLive();
+    }
+
+    function applyTypedSignatureLive() {
+      const val = state.typedSignatureName || state.clientName;
+      state.hasSignature = !!val;
+
+      const placeholder = document.getElementById("sigPlaceholderText");
+      const img = document.getElementById("docRenderedSigImg");
+      const typed = document.getElementById("docRenderedTypedSig");
+
+      placeholder.style.display = "none";
+      img.style.display = "none";
+      typed.textContent = val;
+      typed.style.display = "inline-block";
+
+      document.getElementById("sigReadyTag").style.display = "inline-flex";
+      recordAuditTime("auditSignatureItem", "auditSigTime");
+      updateFormProgress();
+    }
+
+    function clearSignature() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      hasDrawnStrokes = false;
+      state.hasSignature = false;
+      state.signatureDataUrl = null;
+      document.getElementById("canvasWrap").classList.remove("has-drawn");
+
+      const placeholder = document.getElementById("sigPlaceholderText");
+      const img = document.getElementById("docRenderedSigImg");
+      const typed = document.getElementById("docRenderedTypedSig");
+
+      img.style.display = "none";
+      img.src = "";
+      typed.style.display = "none";
+      placeholder.style.display = "block";
+      document.getElementById("sigReadyTag").style.display = "none";
+
+      updateFormProgress();
+      showToast("Signature cleared");
+    }
+
+    function applySignature() {
+      if (state.signatureMode === "draw") {
+        if (!hasDrawnStrokes) {
+          showToast("Please draw a signature first");
+          return;
+        }
+        applyDrawnSignatureLive();
+        showToast("Drawn signature applied to document");
+      } else {
+        applyTypedSignatureLive();
+        showToast("Typed signature applied to document");
+      }
+    }
+
+    // Toggle Masked ID
+    function toggleMaskedId() {
+      state.isIdMasked = !state.isIdMasked;
+      const display = document.getElementById("maskedIdDisplay");
+      const icon = document.getElementById("eyeIcon");
+      if (state.isIdMasked) {
+        display.textContent = "•••••••••••••";
+        icon.setAttribute("data-lucide", "eye");
+      } else {
+        display.textContent = state.clientIdFull;
+        icon.setAttribute("data-lucide", "eye-off");
+      }
+      lucide.createIcons();
+    }
+
+    function handleEditVerifiedDetails() {
+      showToast("Verified details are locked by FICA. Contact Qiniso Ntuli to request updates.");
+    }
+
+    // Checkbox Interactions
+    function handleConsentCheckChange() {
+      const chk = document.getElementById("chkReviewConsent");
+      state.hasReviewedConsent = chk.checked;
+      const step2 = document.getElementById("step2Card");
+      if (chk.checked) {
+        step2.classList.add("completed");
+        recordAuditTime("auditConsentItem", "auditConsentTime");
+      } else {
+        step2.classList.remove("completed");
+      }
+      hideInlineError();
+      updateFormProgress();
+    }
+
+    function handleAuthorityCheckChange() {
+      const chk = document.getElementById("chkConfirmAuthority");
+      state.hasConfirmedAuthority = chk.checked;
+      const step3 = document.getElementById("step3Card");
+      if (chk.checked) {
+        step3.classList.add("completed");
+        recordAuditTime("auditConfirmItem", "auditConfirmTime");
+      } else {
+        step3.classList.remove("completed");
+      }
+      hideInlineError();
+      updateFormProgress();
+    }
+
+    // Scroll To Legal Text with Visual Cue
+    function scrollToLegalWording() {
+      const target = document.getElementById("legalWordingContainer");
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth", block: "center" });
+        target.classList.add("highlight-focus");
+        setTimeout(() => {
+          target.classList.remove("highlight-focus");
+        }, 2200);
+      }
+    }
+
+    // Update Progress Calculation
+    function updateFormProgress() {
+      // 4 Total Steps:
+      // 1: Personal info (already complete)
+      // 2: Reviewed consent
+      // 3: Confirmed authority
+      // 4: Signature provided
+      let completedCount = 1; // Step 1 prefilled
+      if (state.hasReviewedConsent) completedCount++;
+      if (state.hasConfirmedAuthority) completedCount++;
+      if (state.hasSignature) completedCount++;
+
+      const pct = (completedCount / 4) * 100;
+      document.getElementById("progressBarFill").style.width = `${pct}%`;
+      document.getElementById("progressCountLabel").textContent = `${completedCount} of 4 complete`;
+    }
+
+    // Audit Log Timestamp Helper
+    function recordAuditTime(itemId, timeSpanId) {
+      const el = document.getElementById(itemId);
+      const span = document.getElementById(timeSpanId);
+      if (el && span) {
+        el.classList.add("active");
+        if (span.textContent === "—") {
+          const now = new Date();
+          const hh = String(now.getHours()).padStart(2, '0');
+          const mm = String(now.getMinutes()).padStart(2, '0');
+          span.textContent = `${hh}:${mm}`;
+        }
+      }
+    }
+
+    function toggleAuditTrail() {
+      const list = document.getElementById("auditList");
+      const chevron = document.getElementById("auditChevron");
+      if (list.style.display === "none") {
+        list.style.display = "flex";
+        chevron.style.transform = "rotate(0deg)";
+      } else {
+        list.style.display = "none";
+        chevron.style.transform = "rotate(-90deg)";
+      }
+    }
+
+    // Validation and Finalise Submission
+    function handleFinaliseSubmission() {
+      const errorBanner = document.getElementById("inlineValidationBanner");
+      const errorText = document.getElementById("validationErrorText");
+
+      // Validate Requirements
+      if (!state.clientName || !state.clientIdFull) {
+        showInlineError("Client profile information is missing. Please refresh.");
+        return;
+      }
+      if (!state.hasReviewedConsent) {
+        showInlineError("Please check the box confirming you have reviewed the consent document.");
+        document.getElementById("chkReviewConsent").focus();
+        return;
+      }
+      if (!state.hasConfirmedAuthority) {
+        showInlineError("Please check the box confirming you want to give this authority.");
+        document.getElementById("chkConfirmAuthority").focus();
+        return;
+      }
+      if (!state.hasSignature) {
+        showInlineError("Please draw or type your signature before finalising.");
+        document.getElementById("step4Card").scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+
+      // Success Transition
+      hideInlineError();
+      state.isFinalised = true;
+
+      // Update Official Document Execution Stamp
+      document.getElementById("docVerifiedStamp").classList.add("visible");
+      recordAuditTime("auditFinalItem", "auditFinalTime");
+
+      // Switch Guided Panel to Success State
+      document.getElementById("activeWorkflowView").style.display = "none";
+      document.getElementById("successCardView").classList.add("visible");
+
+      showToast("Document successfully signed & finalized!");
+    }
+
+    function showInlineError(msg) {
+      const errorBanner = document.getElementById("inlineValidationBanner");
+      const errorText = document.getElementById("validationErrorText");
+      errorText.textContent = msg;
+      errorBanner.classList.add("visible");
+      errorBanner.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function hideInlineError() {
+      document.getElementById("inlineValidationBanner").classList.remove("visible");
+    }
+
+    // Success View Helper Actions
+    function focusDocumentPreview() {
+      document.getElementById("officialDocumentA4").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function downloadCopy() {
+      showToast("Generating PDF record... Select 'Save as PDF' in the print dialog.");
+      setTimeout(() => {
+        window.print();
+      }, 500);
+    }
+
+    function handleBackToDocuments() {
+      if (confirm("Return to Documents & Forms library?")) {
+        window.history.length > 1 ? window.history.back() : window.close();
+      }
+    }
+
+    function saveDraft() {
+      showToast("Draft progress saved to your Royal Square account.");
+    }
+
+    // Simple Mode Toggle
+    function toggleSimpleMode() {
+      state.isSimpleMode = !state.isSimpleMode;
+      document.body.classList.toggle("simple-mode", state.isSimpleMode);
+
+      const pill = document.getElementById("simpleModeToggle");
+      const label = document.getElementById("modeLabel");
+
+      if (state.isSimpleMode) {
+        pill.classList.add("active");
+        label.textContent = "Simple Mode: ON";
+        showToast("Simple Mode enabled · Focused signing view");
+      } else {
+        pill.classList.remove("active");
+        label.textContent = "Simple Mode";
+        showToast("Standard Mode enabled · Full regulatory view");
+      }
+      lucide.createIcons();
+    }
+
+    // Toast Engine
+    function showToast(msg) {
+      const toast = document.getElementById("actionToast");
+      document.getElementById("toastMessageText").textContent = msg;
+      toast.classList.add("active");
+      setTimeout(() => {
+        toast.classList.remove("active");
+      }, 2600);
+    }
+  </script>
+</body>
+</html>

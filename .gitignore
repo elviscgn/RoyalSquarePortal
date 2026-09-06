@@ -89,3 +89,21 @@ Thumbs.db
 *.log
 storage/
 *.pdf
+
+# --- Frontend package manager artifacts ---
+.pnpm-store/
+frontend/node_modules/
+
+# --- Local design/source archives (never publish) ---
+/sauce/
+/prototype/
+/protoype-adviser/
+
+# Original source documents are retained locally until sanitized demo fixtures exist.
+/frontend/public/demo-assets/documents/
+
+# Unrouted/superseded frontend prototypes retained only as local references.
+/frontend/public/admin-reimagined.html
+/frontend/public/admin-reimagined-assets/
+/frontend/public/prototype/client_change_bank.html
+/frontend/public/login-hero.jpg

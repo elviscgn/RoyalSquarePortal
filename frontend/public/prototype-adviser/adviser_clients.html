@@ -1,0 +1,3119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Royal Square — Clients | Relationship Operations</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* ==========================================================================
+       1. SYSTEM DESIGN TOKENS (ROYAL SQUARE ADVISER FAMILY)
+       ========================================================================== */
+    :root {
+      --bg-page: #F4F3EE;                 /* Warm creamy neutral canvas */
+      --bg-card: #FFFFFF;                 /* Pure white surface */
+      --bg-card-subtle: #FAF9F5;          /* Tone-on-tone nested surface */
+      --bg-card-hover: #F6F4EE;
+      --border-subtle: rgba(23, 22, 21, 0.045);
+      --border-card: rgba(23, 22, 21, 0.06);
+
+      --text-primary: #171615;            /* Deep obsidian neutral */
+      --text-secondary: #87837C;          /* Warm muted neutral */
+      --text-subtle: #ABA69E;             /* Muted caption neutral */
+
+      --accent-coral: #E85D3F;            /* Signature terracotta coral */
+      --accent-coral-hover: #D84F31;
+      --accent-coral-soft: #FDF0ED;       /* Pale coral tint */
+      --accent-coral-glow: rgba(232, 93, 63, 0.16);
+
+      --status-green: #2B7A48;
+      --status-green-soft: #EDF7F1;
+
+      --status-amber: #B86B14;
+      --status-amber-soft: #FEF6EB;
+
+      --status-blue: #236599;
+      --status-blue-soft: #EDF5FB;
+
+      --status-purple: #6B4E9B;
+      --status-purple-soft: #F5F1FA;
+
+      --radius-card: 22px;
+      --radius-subcard: 14px;
+      --radius-pill: 9999px;
+
+      --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.018), 0 1px 3px rgba(0, 0, 0, 0.012);
+      --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.042), 0 2px 6px rgba(0, 0, 0, 0.02);
+      --shadow-button: 0 2px 8px rgba(0, 0, 0, 0.03);
+      --shadow-modal: 0 24px 60px rgba(23, 22, 21, 0.18), 0 4px 16px rgba(0, 0, 0, 0.06);
+
+      --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --sidebar-width: 236px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Fixed body layout: removed display:flex conflict with position:fixed sidebar */
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: var(--font-main);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      width: 100%;
+    }
+
+    button, input, select {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: transparent;
+    }
+
+    /* ==========================================================================
+       2. SLIM PERSISTENT LEFT SIDEBAR
+       ========================================================================== */
+    .app-sidebar {
+      width: var(--sidebar-width);
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: var(--bg-page);
+      padding: 24px 18px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      z-index: 100;
+      border-right: 1px solid rgba(23, 22, 21, 0.035);
+    }
+
+    .sidebar-top {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-left: 6px;
+      text-decoration: none;
+    }
+
+    .brand-logo-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: #171615;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      letter-spacing: -0.5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+      flex-shrink: 0;
+    }
+
+    .brand-titles {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .brand-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    .brand-subtitle {
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .nav-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .nav-header {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-subtle);
+      padding: 8px 10px 4px 10px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 12px;
+      border-radius: var(--radius-pill);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .nav-link.active {
+      color: var(--text-primary);
+      background: var(--bg-card);
+      box-shadow: var(--shadow-button);
+      font-weight: 700;
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 3px;
+      width: 4px;
+      height: 16px;
+      border-radius: 99px;
+      background-color: var(--accent-coral);
+    }
+
+    .nav-item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-badge-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+    }
+
+    /* Sidebar Footer Adviser Card */
+    .sidebar-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .adviser-sidebar-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius-subcard);
+      background: var(--bg-card);
+      box-shadow: var(--shadow-button);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .adviser-sidebar-card:hover {
+      transform: translateY(-1px);
+    }
+
+    .adviser-avatar-wrap {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .adviser-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .online-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--status-green);
+      border: 1.5px solid #FFFFFF;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+
+    .adviser-info {
+      line-height: 1.2;
+      overflow: hidden;
+    }
+
+    .adviser-name {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .adviser-role-sub {
+      font-size: 9.5px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ==========================================================================
+       3. MAIN VIEWPORT (CALCULATED TO FIT PRECISELY WITHOUT OVERFLOW)
+       ========================================================================== */
+    .app-viewport {
+      margin-left: var(--sidebar-width);
+      width: calc(100% - var(--sidebar-width));
+      min-width: 0; /* Prevents grid children from stretching beyond viewport */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 24px 32px 48px;
+      box-sizing: border-box;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      height: 44px;
+      margin-bottom: 22px;
+      width: 100%;
+    }
+
+    .breadcrumb-cluster {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .breadcrumb-pill {
+      background: var(--bg-card);
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      font-weight: 600;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-button);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .system-status-indicator {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--status-green);
+    }
+
+    .top-actions-cluster {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .top-date-pill {
+      height: 40px;
+      background: var(--bg-card);
+      padding: 0 16px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-button);
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+
+    .live-clock-digits {
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .sast-badge {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--accent-coral);
+      background: var(--accent-coral-soft);
+      padding: 2px 6px;
+      border-radius: var(--radius-pill);
+    }
+
+    .btn-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      box-shadow: var(--shadow-button);
+      transition: all 0.15s ease;
+      position: relative;
+    }
+
+    .btn-circle:hover {
+      background: #FAF9F6;
+      transform: translateY(-1px);
+    }
+
+    .notif-dot {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-coral);
+      border: 1.5px solid #FFFFFF;
+    }
+
+    /* ==========================================================================
+       4. PAGE INTRO HEADER
+       ========================================================================== */
+    .page-intro {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+      width: 100%;
+    }
+
+    .intro-text-cluster {
+      line-height: 1.22;
+    }
+
+    .eyebrow-tag {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--accent-coral);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .intro-heading {
+      font-size: 25px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+    }
+
+    .intro-supporting {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 5px;
+      font-weight: 400;
+    }
+
+    .intro-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .summary-badge-pill {
+      background: var(--bg-card);
+      border-radius: var(--radius-pill);
+      padding: 8px 16px;
+      box-shadow: var(--shadow-button);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .summary-badge-pill strong {
+      color: var(--text-primary);
+    }
+
+    .summary-badge-attention {
+      color: var(--accent-coral);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-coral-add {
+      height: 42px;
+      padding: 0 18px;
+      border-radius: var(--radius-pill);
+      background-color: var(--accent-coral);
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px var(--accent-coral-glow);
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn-coral-add:hover {
+      background-color: var(--accent-coral-hover);
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       5. ASYMMETRIC TOP SUMMARY (minmax(0, 1fr) PREVENTS CUT-OFF)
+       ========================================================================== */
+    .summary-bento-strip {
+      display: grid;
+      grid-template-columns: minmax(220px, 1.35fr) repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 22px;
+      width: 100%;
+    }
+
+    .summary-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-subcard);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-card);
+      padding: 15px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      cursor: pointer;
+      min-width: 0;
+    }
+
+    .summary-card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .summary-card.primary-block {
+      background: linear-gradient(135deg, #FFFFFF 60%, #FAF8F2 100%);
+      border-left: 3px solid var(--text-primary);
+      padding: 15px 18px;
+    }
+
+    .primary-client-lead {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .summary-big-num {
+      font-size: 36px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .summary-label-block {
+      line-height: 1.2;
+    }
+
+    .summary-label-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .summary-sub-caption {
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+
+    .primary-proportion-bar {
+      margin-top: 10px;
+      width: 100%;
+      height: 6px;
+      border-radius: 99px;
+      background: #ECE7DD;
+      overflow: hidden;
+      display: flex;
+    }
+
+    .bar-seg-quiet { width: 95.1%; background: #2B7A48; }
+    .bar-seg-action { width: 4.9%; background: var(--accent-coral); }
+
+    .primary-footer-note {
+      font-size: 9.5px;
+      color: var(--text-subtle);
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .widget-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .widget-tag-kicker {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-subtle);
+    }
+
+    .widget-stat-num {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      line-height: 1.1;
+      color: var(--text-primary);
+    }
+
+    .widget-foot-caption {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-top: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-attention {
+      border-bottom: 3px solid var(--accent-coral);
+    }
+    .card-attention .widget-stat-num {
+      color: var(--accent-coral);
+    }
+
+    .card-compliance {
+      border-bottom: 3px solid var(--status-purple);
+    }
+    .card-compliance .widget-stat-num {
+      color: var(--status-purple);
+    }
+
+    /* ==========================================================================
+       6. SEARCH, FILTER PILLS & VIEW CONTROLS
+       ========================================================================== */
+    .controls-cluster {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 18px;
+      width: 100%;
+    }
+
+    .search-and-sort-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .search-box-pill {
+      position: relative;
+      flex: 1;
+      max-width: 520px;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 42px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-pill);
+      padding: 0 42px 0 18px;
+      font-size: 12px;
+      color: var(--text-primary);
+      outline: none;
+      box-shadow: var(--shadow-button);
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      border-color: rgba(232, 93, 63, 0.4);
+      box-shadow: 0 4px 18px var(--accent-coral-glow);
+      background: #FFFFFF;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-subtle);
+    }
+
+    .search-icon-fixed {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-subtle);
+      pointer-events: none;
+    }
+
+    .right-filter-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .sort-dropdown-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-card);
+      padding: 0 14px;
+      height: 42px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-button);
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .sort-select {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .btn-overflow-quiet {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-button);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .btn-overflow-quiet:hover {
+      color: var(--text-primary);
+      background: #FAF9F6;
+    }
+
+    /* Filter Tabs & Segments (wrapping enabled to prevent horizontal blowout) */
+    .filter-tabs-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .filter-pills-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-button);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .filter-pill:hover {
+      background: #FAF9F6;
+      color: var(--text-primary);
+    }
+
+    .filter-pill.active {
+      background: var(--text-primary);
+      color: #FFFFFF;
+      border-color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .filter-pill.active .pill-count-num {
+      background: rgba(255, 255, 255, 0.22);
+      color: #FFFFFF;
+    }
+
+    .pill-count-num {
+      font-size: 9.5px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card-subtle);
+      color: var(--text-secondary);
+    }
+
+    .segment-selector-cluster {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .segment-tag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      color: var(--text-subtle);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .segment-tag:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .segment-tag.active {
+      color: var(--text-primary);
+      font-weight: 800;
+      background: #EFECE5;
+    }
+
+    /* ==========================================================================
+       7. SECTION: NEEDS ATTENTION HIGHLIGHT
+       ========================================================================== */
+    .section-surfaced-exceptions {
+      margin-bottom: 24px;
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      border: 1px solid rgba(232, 93, 63, 0.18);
+      box-shadow: var(--shadow-card);
+      padding: 18px 20px 16px;
+      width: 100%;
+    }
+
+    .surfaced-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+
+    .surfaced-kicker-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .surfaced-kicker {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--accent-coral);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .surfaced-subtext {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .exceptions-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      width: 100%;
+    }
+
+    .exception-card {
+      background: var(--bg-card-subtle);
+      border-radius: var(--radius-subcard);
+      padding: 12px 14px;
+      border: 1px solid rgba(23, 22, 21, 0.04);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+    }
+
+    .exception-card:hover {
+      background: #FFFFFF;
+      border-color: rgba(232, 93, 63, 0.35);
+      box-shadow: 0 4px 16px rgba(232, 93, 63, 0.08);
+      transform: translateY(-1px);
+    }
+
+    .exc-top-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .exc-name-wrap {
+      line-height: 1.2;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .exc-client-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .exc-client-seg {
+      font-size: 9.5px;
+      color: var(--text-subtle);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .exc-state-badge {
+      font-size: 8.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      padding: 2px 6px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .exc-badge-coral {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+    }
+
+    .exc-badge-amber {
+      background: var(--status-amber-soft);
+      color: var(--status-amber);
+    }
+
+    .exc-badge-purple {
+      background: var(--status-purple-soft);
+      color: var(--status-purple);
+    }
+
+    .exc-badge-green {
+      background: var(--status-green-soft);
+      color: var(--status-green);
+    }
+
+    .exc-reason {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .exc-footer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 8px;
+      border-top: 1px solid rgba(23, 22, 21, 0.04);
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+
+    .exc-action-link {
+      font-weight: 700;
+      color: var(--accent-coral);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      white-space: nowrap;
+    }
+
+    /* ==========================================================================
+       8. MAIN RELATIONSHIP STREAM / CLIENT TABLE
+       ========================================================================== */
+    .client-list-container {
+      background: var(--bg-card);
+      border-radius: var(--radius-card);
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-card);
+      overflow-x: auto;
+      width: 100%;
+    }
+
+    .list-header-row {
+      display: grid;
+      grid-template-columns: minmax(180px, 2.2fr) minmax(130px, 1.4fr) minmax(70px, 0.9fr) minmax(110px, 1.2fr) minmax(80px, 0.9fr) minmax(150px, 1.6fr) 100px;
+      padding: 12px 20px;
+      background: var(--bg-card-subtle);
+      border-bottom: 1px solid var(--border-subtle);
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-subtle);
+      align-items: center;
+      gap: 8px;
+      min-width: 860px;
+    }
+
+    .client-rows-stream {
+      display: flex;
+      flex-direction: column;
+      min-width: 860px;
+    }
+
+    .client-row {
+      display: grid;
+      grid-template-columns: minmax(180px, 2.2fr) minmax(130px, 1.4fr) minmax(70px, 0.9fr) minmax(110px, 1.2fr) minmax(80px, 0.9fr) minmax(150px, 1.6fr) 100px;
+      padding: 13px 20px;
+      align-items: center;
+      border-bottom: 1px solid rgba(23, 22, 21, 0.035);
+      transition: all 0.15s ease;
+      cursor: pointer;
+      position: relative;
+      gap: 8px;
+    }
+
+    .client-row:last-child {
+      border-bottom: none;
+    }
+
+    .client-row:hover {
+      background: #FAF8F2;
+    }
+
+    .client-row.has-exception {
+      background: #FFFFFF;
+    }
+
+    .client-row.has-exception::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 3.5px;
+      border-radius: 0 4px 4px 0;
+      background: var(--accent-coral);
+    }
+
+    .client-row.is-quiet {
+      opacity: 0.88;
+    }
+
+    .client-row.is-quiet:hover {
+      opacity: 1;
+      background: #FAF9F5;
+    }
+
+    /* Column 1: Client Identity */
+    .col-identity {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .client-avatar-chip {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      background: var(--bg-card-subtle);
+      border: 1px solid rgba(23, 22, 21, 0.05);
+      color: var(--text-primary);
+      font-weight: 700;
+      font-size: 11.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .avatar-has-attention {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+      border-color: rgba(232, 93, 63, 0.2);
+    }
+
+    .client-text-block {
+      line-height: 1.25;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .client-name-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .client-fullname {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .client-tag-seg {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: #ECE9DF;
+      color: var(--text-primary);
+      flex-shrink: 0;
+    }
+
+    .tag-premier {
+      background: #171615;
+      color: #FFFFFF;
+    }
+
+    .client-sub-meta {
+      font-size: 10px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .household-badge {
+      font-size: 9px;
+      color: var(--status-blue);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    /* Column 2: Relationship State */
+    .col-state {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .state-badge-pill {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      width: fit-content;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .state-needs-adviser {
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+    }
+
+    .state-waiting {
+      background: var(--status-amber-soft);
+      color: var(--status-amber);
+    }
+
+    .state-compliance {
+      background: var(--status-purple-soft);
+      color: var(--status-purple);
+    }
+
+    .state-review-due {
+      background: #FEF3EB;
+      color: #D35400;
+    }
+
+    .state-uptodate {
+      background: var(--status-green-soft);
+      color: var(--status-green);
+    }
+
+    .state-caption-sub {
+      font-size: 9px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Column 3: Active Cases */
+    .col-cases {
+      font-size: 11px;
+      min-width: 0;
+    }
+
+    .cases-pill-btn {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-card-subtle);
+      color: var(--text-primary);
+      border: 1px solid rgba(23, 22, 21, 0.05);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .cases-pill-btn.has-cases {
+      background: #FFFFFF;
+      box-shadow: var(--shadow-button);
+      color: var(--text-primary);
+    }
+
+    .cases-zero {
+      color: var(--text-subtle);
+      font-size: 11px;
+      padding-left: 6px;
+    }
+
+    /* Column 4: Next Review */
+    .col-review {
+      font-size: 11px;
+      line-height: 1.2;
+      min-width: 0;
+    }
+
+    .review-date-str {
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .review-date-str.due-today {
+      color: var(--accent-coral);
+    }
+
+    .review-timing-sub {
+      font-size: 9px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    /* Column 5: Compliance */
+    .col-compliance {
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .comp-pill {
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .comp-current {
+      background: var(--status-green-soft);
+      color: var(--status-green);
+    }
+
+    .comp-issue {
+      background: var(--status-purple-soft);
+      color: var(--status-purple);
+    }
+
+    /* Column 6: Last Activity */
+    .col-activity {
+      font-size: 10.5px;
+      color: var(--text-secondary);
+      line-height: 1.25;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .activity-text-main {
+      color: var(--text-primary);
+      font-weight: 500;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .activity-time-ago {
+      font-size: 9px;
+      color: var(--text-subtle);
+    }
+
+    /* Column 7: Action CTA */
+    .col-action {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .btn-row-open {
+      height: 30px;
+      padding: 0 10px;
+      border-radius: var(--radius-pill);
+      background: #FFFFFF;
+      border: 1px solid rgba(23, 22, 21, 0.08);
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: var(--shadow-button);
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .client-row:hover .btn-row-open {
+      background: var(--accent-coral);
+      color: #FFFFFF;
+      border-color: transparent;
+      box-shadow: 0 4px 12px var(--accent-coral-glow);
+    }
+
+    /* Empty State */
+    .empty-state-card {
+      padding: 48px 24px;
+      text-align: center;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .empty-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--bg-card-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--status-green);
+      margin-bottom: 6px;
+    }
+
+    .empty-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .empty-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      max-width: 380px;
+      line-height: 1.4;
+    }
+
+    /* ==========================================================================
+       9. LATERAL CLIENT PREVIEW DRAWER
+       ========================================================================== */
+    .drawer-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(23, 22, 21, 0.38);
+      backdrop-filter: blur(4px);
+      z-index: 500;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .preview-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 480px;
+      height: 100vh;
+      background: #FFFFFF;
+      box-shadow: -8px 0 36px rgba(0,0,0,0.12);
+      z-index: 600;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 26px 28px;
+      overflow-y: auto;
+    }
+
+    .preview-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(23, 22, 21, 0.06);
+    }
+
+    .drawer-close-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--bg-card-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+      transition: background 0.15s;
+    }
+
+    .drawer-close-btn:hover {
+      background: #ECE8DE;
+    }
+
+    .drawer-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .drawer-profile-lead {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .drawer-avatar-big {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      background: var(--accent-coral-soft);
+      color: var(--accent-coral);
+      font-size: 15px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid rgba(232, 93, 63, 0.15);
+    }
+
+    .drawer-title-group {
+      line-height: 1.25;
+    }
+
+    .drawer-client-name {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .drawer-meta-line {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .position-pill-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: var(--bg-card-subtle);
+      padding: 12px 14px;
+      border-radius: var(--radius-subcard);
+      border: 1px solid rgba(23, 22, 21, 0.04);
+    }
+
+    .position-cell {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .position-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-subtle);
+      letter-spacing: 0.4px;
+    }
+
+    .position-value {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-top: 3px;
+    }
+
+    .drawer-card-box {
+      background: var(--bg-card-subtle);
+      border-radius: var(--radius-subcard);
+      padding: 13px;
+      border: 1px solid rgba(23, 22, 21, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .drawer-section-title {
+      font-size: 9.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .drawer-work-item {
+      background: #FFFFFF;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(23, 22, 21, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      transition: border 0.15s;
+    }
+
+    .drawer-work-item:hover {
+      border-color: rgba(232, 93, 63, 0.3);
+    }
+
+    .work-item-name {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .work-item-status {
+      font-size: 9.5px;
+      font-weight: 600;
+      color: var(--accent-coral);
+    }
+
+    .drawer-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .compliance-check-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 10.5px;
+    }
+
+    .comp-check-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-secondary);
+    }
+
+    .comp-check-row strong {
+      color: var(--status-green);
+      font-size: 9.5px;
+    }
+
+    .drawer-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .drawer-activity-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 10.5px;
+      line-height: 1.3;
+    }
+
+    .activity-bullet {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent-coral);
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .drawer-footer-cluster {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(23, 22, 21, 0.06);
+    }
+
+    .btn-drawer-primary {
+      height: 42px;
+      background: var(--accent-coral);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 12px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px var(--accent-coral-glow);
+      transition: background 0.15s;
+    }
+
+    .btn-drawer-primary:hover {
+      background: var(--accent-coral-hover);
+    }
+
+    .drawer-secondary-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-drawer-subtle {
+      height: 36px;
+      background: var(--bg-card-subtle);
+      border: 1px solid rgba(23, 22, 21, 0.06);
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+
+    .btn-drawer-subtle:hover {
+      background: #ECE8DE;
+    }
+
+    /* ==========================================================================
+       10. ADD CLIENT MODAL
+       ========================================================================== */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(23, 22, 21, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .add-client-card {
+      background: #FFFFFF;
+      width: 440px;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-modal);
+      padding: 26px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transform: translateY(12px);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-backdrop.open .add-client-card {
+      transform: translateY(0);
+    }
+
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .form-group-cluster {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .input-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .input-field-group label {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-secondary);
+    }
+
+    .modal-text-input, .modal-select {
+      height: 40px;
+      background: var(--bg-card-subtle);
+      border: 1px solid rgba(23, 22, 21, 0.08);
+      border-radius: 10px;
+      padding: 0 12px;
+      font-size: 12px;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    .modal-text-input:focus, .modal-select:focus {
+      border-color: var(--accent-coral);
+      background: #FFFFFF;
+    }
+
+    .modal-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    /* Global Toast Notification */
+    .toast-pill {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #171615;
+      color: #FFFFFF;
+      padding: 9px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toast-pill.active {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Responsive adjustments for mid-size displays */
+    @media (max-width: 1200px) {
+      .exceptions-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .summary-bento-strip {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      .summary-card.primary-block {
+        grid-column: span 3;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ====================================================================
+       1. SLIM PERSISTENT LEFT SIDEBAR
+       ==================================================================== -->
+  <aside class="app-sidebar">
+    <div class="sidebar-top">
+      <a href="adviser_ui.html" class="sidebar-brand">
+        <div class="brand-logo-mark" style="overflow: hidden; background: #fff;"><img src="/royal-square-logo.png" alt="Royal Square" style="width: 100%; height: 100%; display: block; object-fit: cover; transform: scale(1.6);" /></div>
+        <div class="brand-titles">
+          <span class="brand-title">Royal Square</span>
+          <span class="brand-subtitle">Adviser Workspace</span>
+        </div>
+      </a>
+
+      <nav class="nav-section">
+        <span class="nav-header">Workspace</span>
+        <a href="adviser_ui.html" class="nav-link">
+          <div class="nav-item-left">
+            <i data-lucide="layout-dashboard" style="width: 15px; height: 15px;"></i>
+            <span>Home</span>
+          </div>
+          <span class="nav-badge-pill">6</span>
+        </a>
+        <a href="adviser_ui.html#inbox" class="nav-link" onclick="showToast('Opening Triage Inbox (108 items)...')">
+          <div class="nav-item-left">
+            <i data-lucide="inbox" style="width: 15px; height: 15px;"></i>
+            <span>Inbox</span>
+          </div>
+        </a>
+        <a href="#clients" class="nav-link active">
+          <div class="nav-item-left">
+            <i data-lucide="users" style="width: 15px; height: 15px;"></i>
+            <span>Clients</span>
+          </div>
+          <span class="nav-badge-pill">12</span>
+        </a>
+        <a href="adviser_ui.html#cases" class="nav-link" onclick="showToast('Navigating to Case Management...')">
+          <div class="nav-item-left">
+            <i data-lucide="briefcase" style="width: 15px; height: 15px;"></i>
+            <span>Cases</span>
+          </div>
+        </a>
+        <a href="adviser_ui.html#reviews" class="nav-link" onclick="showToast('Opening Annual Reviews Schedule...')">
+          <div class="nav-item-left">
+            <i data-lucide="calendar-check" style="width: 15px; height: 15px;"></i>
+            <span>Reviews</span>
+          </div>
+          <span style="font-size: 9.5px; font-weight: 700; color: var(--text-subtle);">7</span>
+        </a>
+        <a href="adviser_ui.html#documents" class="nav-link" onclick="showToast('Opening Document Vault...')">
+          <div class="nav-item-left">
+            <i data-lucide="file-text" style="width: 15px; height: 15px;"></i>
+            <span>Documents</span>
+          </div>
+        </a>
+      </nav>
+
+      <nav class="nav-section">
+        <span class="nav-header">Governance</span>
+        <a href="#compliance" class="nav-link" onclick="filterByState('compliance')">
+          <div class="nav-item-left">
+            <i data-lucide="shield-alert" style="width: 15px; height: 15px;"></i>
+            <span>Compliance</span>
+          </div>
+          <span style="font-size: 9.5px; font-weight: 800; color: var(--status-purple);">3</span>
+        </a>
+        <a href="#integrations" class="nav-link" onclick="showToast('Provider Feeds: Allan Gray, Momentum, Discovery Active')">
+          <div class="nav-item-left">
+            <i data-lucide="cpu" style="width: 15px; height: 15px;"></i>
+            <span>Integrations</span>
+          </div>
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="adviser-sidebar-card" onclick="showToast('Qiniso Ntuli · FSP 48192 · Royal Square Financial')">
+        <div class="adviser-avatar-wrap">
+          <img src="/qiniso-ntuli.png" alt="Qiniso Ntuli" class="adviser-avatar" />
+          <span class="online-indicator" title="Practice Online"></span>
+        </div>
+        <div class="adviser-info">
+          <div class="adviser-name">Qiniso Ntuli</div>
+          <div class="adviser-role-sub">
+            <span>CFP® · Adviser</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ====================================================================
+       2. MAIN VIEWPORT
+       ==================================================================== -->
+  <main class="app-viewport">
+
+    <!-- Top Status Bar -->
+    <header class="top-bar">
+      <div class="breadcrumb-cluster">
+        <div class="breadcrumb-pill">
+          <span class="system-status-indicator"></span>
+          <span>Command Centre · Relationship Operations</span>
+        </div>
+        <span>/</span>
+        <span style="font-weight: 600; color: var(--text-primary);">Clients</span>
+      </div>
+
+      <div class="top-actions-cluster">
+        <div class="top-date-pill">
+          <i data-lucide="clock" style="width: 13px; height: 13px; color: var(--text-secondary);"></i>
+          <span class="live-clock-digits" id="liveAdviserClock">14:12</span>
+          <span class="sast-badge">SAST</span>
+        </div>
+
+        <button class="btn-circle" aria-label="Notifications" onclick="showToast('12 client relationships currently require attention.')">
+          <i data-lucide="bell" style="width: 15px; height: 15px;"></i>
+          <span class="notif-dot"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Intro Header -->
+    <section class="page-intro">
+      <div class="intro-text-cluster">
+        <span class="eyebrow-tag">Clients</span>
+        <h1 class="intro-heading">Your client relationships, at a glance.</h1>
+        <p class="intro-supporting">See who needs attention, what is underway and where each relationship stands.</p>
+      </div>
+
+      <div class="intro-actions">
+        <div class="summary-badge-pill">
+          <span><strong>248</strong> clients</span>
+          <span style="color: #E0DDD5;">•</span>
+          <span class="summary-badge-attention">
+            <i data-lucide="alert-circle" style="width: 12px; height: 12px;"></i>
+            <span>12 need attention</span>
+          </span>
+        </div>
+
+        <button class="btn-coral-add" onclick="openAddClientModal()">
+          <i data-lucide="user-plus" style="width: 14px; height: 14px;"></i>
+          <span>Add client</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Asymmetric Top Summary Widgets -->
+    <section class="summary-bento-strip">
+      <div class="summary-card primary-block" onclick="filterByState('all')">
+        <div>
+          <div class="primary-client-lead">
+            <span class="summary-big-num" id="statTotalClients">248</span>
+            <div class="summary-label-block">
+              <div class="summary-label-title">Total clients</div>
+              <div class="summary-sub-caption">236 running smoothly</div>
+            </div>
+          </div>
+          <div class="primary-proportion-bar">
+            <div class="bar-seg-quiet" title="236 Up to date"></div>
+            <div class="bar-seg-action" title="12 Need attention"></div>
+          </div>
+        </div>
+        <div class="primary-footer-note">
+          <span>95% in good standing</span>
+          <span style="color: var(--accent-coral); font-weight: 700;">12 flagged</span>
+        </div>
+      </div>
+
+      <div class="summary-card card-attention" onclick="filterByState('attention')">
+        <div class="widget-top-row">
+          <span class="widget-tag-kicker">Priority</span>
+          <i data-lucide="flame" style="width: 13px; height: 13px; color: var(--accent-coral);"></i>
+        </div>
+        <div>
+          <div class="widget-stat-num">12</div>
+          <div class="widget-foot-caption">Need attention</div>
+        </div>
+      </div>
+
+      <div class="summary-card" onclick="filterByState('cases')">
+        <div class="widget-top-row">
+          <span class="widget-tag-kicker">Workflows</span>
+          <i data-lucide="briefcase" style="width: 13px; height: 13px; color: var(--text-secondary);"></i>
+        </div>
+        <div>
+          <div class="widget-stat-num">19</div>
+          <div class="widget-foot-caption">Active cases</div>
+        </div>
+      </div>
+
+      <div class="summary-card" onclick="filterByState('reviews')">
+        <div class="widget-top-row">
+          <span class="widget-tag-kicker">Schedule</span>
+          <i data-lucide="calendar" style="width: 13px; height: 13px; color: var(--text-secondary);"></i>
+        </div>
+        <div>
+          <div class="widget-stat-num">7</div>
+          <div class="widget-foot-caption">Reviews this week</div>
+        </div>
+      </div>
+
+      <div class="summary-card card-compliance" onclick="filterByState('compliance')">
+        <div class="widget-top-row">
+          <span class="widget-tag-kicker" style="color: var(--status-purple);">Governance</span>
+          <i data-lucide="shield-alert" style="width: 13px; height: 13px; color: var(--status-purple);"></i>
+        </div>
+        <div>
+          <div class="widget-stat-num">3</div>
+          <div class="widget-foot-caption" style="color: var(--status-purple);">Exceptions</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search, Filters & Segment Controls -->
+    <div class="controls-cluster">
+      <div class="search-and-sort-row">
+        <div class="search-box-pill">
+          <input 
+            type="text" 
+            id="clientSearchInput" 
+            class="search-input" 
+            placeholder="Search clients, ID reference, case or product..." 
+            oninput="handleClientSearch(this.value)"
+          />
+          <i data-lucide="search" class="search-icon-fixed" style="width: 15px; height: 15px;"></i>
+        </div>
+
+        <div class="right-filter-tools">
+          <div class="sort-dropdown-wrap">
+            <span>Sort by:</span>
+            <select class="sort-select" id="sortSelect" onchange="applySorting(this.value)">
+              <option value="activity">Last activity</option>
+              <option value="name">Name (A-Z)</option>
+              <option value="review">Review date</option>
+            </select>
+          </div>
+
+          <button class="btn-overflow-quiet" title="Export client list" onclick="showToast('Exporting client relationship operations ledger (CSV)...')">
+            <i data-lucide="download" style="width: 15px; height: 15px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-tabs-bar">
+        <div class="filter-pills-group">
+          <button class="filter-pill active" data-filter="all" onclick="setFilter('all', this)">
+            <span>All</span>
+            <span class="pill-count-num" id="countAll">248</span>
+          </button>
+          <button class="filter-pill" data-filter="attention" onclick="setFilter('attention', this)">
+            <span>Needs attention</span>
+            <span class="pill-count-num" style="color: var(--accent-coral); background: var(--accent-coral-soft);" id="countAttention">12</span>
+          </button>
+          <button class="filter-pill" data-filter="cases" onclick="setFilter('cases', this)">
+            <span>Active cases</span>
+            <span class="pill-count-num" id="countCases">19</span>
+          </button>
+          <button class="filter-pill" data-filter="reviews" onclick="setFilter('reviews', this)">
+            <span>Reviews due</span>
+            <span class="pill-count-num" id="countReviews">7</span>
+          </button>
+          <button class="filter-pill" data-filter="compliance" onclick="setFilter('compliance', this)">
+            <span>Compliance</span>
+            <span class="pill-count-num" style="color: var(--status-purple); background: var(--status-purple-soft);" id="countCompliance">3</span>
+          </button>
+          <button class="filter-pill" data-filter="recent" onclick="setFilter('recent', this)">
+            <span>Recently active</span>
+          </button>
+        </div>
+
+        <div class="segment-selector-cluster">
+          <span style="font-size: 10px; font-weight: 700; color: var(--text-subtle); text-transform: uppercase;">Segment:</span>
+          <button class="segment-tag active" onclick="setSegment('all', this)">All</button>
+          <button class="segment-tag" onclick="setSegment('Premier', this)">Premier</button>
+          <button class="segment-tag" onclick="setSegment('Private Client', this)">Private Client</button>
+          <button class="segment-tag" onclick="setSegment('Household', this)">Household</button>
+          <button class="segment-tag" onclick="setSegment('Retirement', this)">Retirement</button>
+          <button class="segment-tag" onclick="setSegment('Business Owner', this)">Business</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================================================================
+         SECTION: NEEDS ATTENTION (SURFACED EXCEPTIONS FIRST)
+         ================================================================== -->
+    <section class="section-surfaced-exceptions" id="surfacedSection">
+      <div class="surfaced-header">
+        <div class="surfaced-kicker-wrap">
+          <span class="surfaced-kicker">
+            <i data-lucide="zap" style="width: 12px; height: 12px;"></i>
+            <span>Needs Attention First</span>
+          </span>
+          <span style="font-size: 11px; color: var(--text-subtle);">• 4 urgent exception items</span>
+        </div>
+        <span class="surfaced-subtext">The system runs the standard flows. You unblock the exceptions.</span>
+      </div>
+
+      <div class="exceptions-grid">
+        <div class="exception-card" onclick="openClientDrawer('latoya-matai')">
+          <div>
+            <div class="exc-top-row">
+              <div class="exc-name-wrap">
+                <div class="exc-client-name">Latoya Matai</div>
+                <div class="exc-client-seg">Premier · Active since 2019</div>
+              </div>
+              <span class="exc-state-badge exc-badge-coral">Needs adviser</span>
+            </div>
+            <div class="exc-reason">Banking Details Update ready for sign-off</div>
+          </div>
+          <div class="exc-footer-row">
+            <span>2 active cases</span>
+            <span class="exc-action-link">Review dossier →</span>
+          </div>
+        </div>
+
+        <div class="exception-card" onclick="openClientDrawer('sipho-dlamini')">
+          <div>
+            <div class="exc-top-row">
+              <div class="exc-name-wrap">
+                <div class="exc-client-name">Sipho Dlamini</div>
+                <div class="exc-client-seg">Private Client · Retirement focus</div>
+              </div>
+              <span class="exc-state-badge exc-badge-green">Review ready</span>
+            </div>
+            <div class="exc-reason">Annual review questionnaire completed</div>
+          </div>
+          <div class="exc-footer-row">
+            <span>Today @ 15:00</span>
+            <span class="exc-action-link">Open prep pack →</span>
+          </div>
+        </div>
+
+        <div class="exception-card" onclick="openClientDrawer('thandi-khumalo')">
+          <div>
+            <div class="exc-top-row">
+              <div class="exc-name-wrap">
+                <div class="exc-client-name">Thandi Khumalo</div>
+                <div class="exc-client-seg">Private Client · Household</div>
+              </div>
+              <span class="exc-state-badge exc-badge-amber">Provider SLA</span>
+            </div>
+            <div class="exc-reason">Motor accident claim overdue 2 days (Discovery)</div>
+          </div>
+          <div class="exc-footer-row">
+            <span>1 active case</span>
+            <span class="exc-action-link">Escalate SLA →</span>
+          </div>
+        </div>
+
+        <div class="exception-card" onclick="openClientDrawer('naledi-mokoena')">
+          <div>
+            <div class="exc-top-row">
+              <div class="exc-name-wrap">
+                <div class="exc-client-name">Naledi Mokoena</div>
+                <div class="exc-client-seg">Private Client · Investment focus</div>
+              </div>
+              <span class="exc-state-badge exc-badge-purple">Compliance</span>
+            </div>
+            <div class="exc-reason">FICA & POPIA consent requires renewal</div>
+          </div>
+          <div class="exc-footer-row">
+            <span>Review 24 Sep</span>
+            <span class="exc-action-link">Review consent →</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================================================================
+         MAIN CLIENT RELATIONSHIP LIST
+         ================================================================== -->
+    <div class="client-list-container">
+      <div class="list-header-row">
+        <span>Client / Relationship</span>
+        <span>Operational State</span>
+        <span>Cases</span>
+        <span>Next Review</span>
+        <span>Compliance</span>
+        <span>Last Activity</span>
+        <span style="text-align: right;">Action</span>
+      </div>
+
+      <div class="client-rows-stream" id="clientRowsContainer">
+        <!-- 1: Latoya Matai -->
+        <div class="client-row has-exception" 
+             data-id="latoya-matai" 
+             data-name="Latoya Matai"
+             data-state="attention" 
+             data-segment="Premier" 
+             data-has-cases="true"
+             data-review="2026-09-18" 
+             data-compliance="current"
+             onclick="openClientDrawer('latoya-matai')">
+          <div class="col-identity">
+            <div class="client-avatar-chip avatar-has-attention">LM</div>
+            <div class="client-text-block">
+              <div class="client-name-row">
+                <span class="client-fullname">Latoya Matai</span>
+                <span class="client-tag-seg tag-premier">Premier</span>
+              </div>
+              <div class="client-sub-meta">
+                <span>Private Client · ID #8504***082</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-state">
+            <span class="state-badge-pill state-needs-adviser">
+              <i data-lucide="alert-circle" style="width: 10px; height: 10px;"></i>
+              <span>Needs adviser</span>
+            </span>
+            <span class="state-caption-sub">Banking details update</span>
+          </div>
+          <div class="col-cases">
+            <span class="cases-pill-btn has-cases">2 active</span>
+          </div>
+          <div class="col-review">
+            <div class="review-date-str">18 Sep 2026</div>
+            <div class="review-timing-sub">In 13 days</div>
+          </div>
+          <div class="col-compliance">
+            <span class="comp-pill comp-current">✓ Current</span>
+          </div>
+          <div class="col-activity">
+            <span class="activity-text-main">Signed banking instruction today</span>
+            <span class="activity-time-ago">15:42 SAST</span>
+          </div>
+          <div class="col-action">
+            <button class="btn-row-open">
+              <span>Open client</span>
+              <i data-lucide="arrow-right" style="width: 11px; height: 11px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 2: Sipho Dlamini -->
+        <div class="client-row has-exception" 
+             data-id="sipho-dlamini" 
+             data-name="Sipho Dlamini"
+             data-state="reviews attention" 
+             data-segment="Retirement" 
+             data-has-cases="true"
+             data-review="2026-09-05" 
+             data-compliance="current"
+             onclick="openClientDrawer('sipho-dlamini')">
+          <div class="col-identity">
+            <div class="client-avatar-chip">SD</div>
+            <div class="client-text-block">
+              <div class="client-name-row">
+                <span class="client-fullname">Sipho Dlamini</span>
+                <span class="client-tag-seg">Retirement</span>
+              </div>
+              <div class="client-sub-meta">
+                <span>Private Client · ID #7209***088</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-state">
+            <span class="state-badge-pill state-uptodate">
+              <i data-lucide="check-circle" style="width: 10px; height: 10px;"></i>
+              <span>Review ready</span>
+            </span>
+            <span class="state-caption-sub">Questionnaire returned</span>
+          </div>
+          <div class="col-cases">
+            <span class="cases-pill-btn has-cases">1 active</span>
+          </div>
+          <div class="col-review">
+            <div class="review-date-str due-today">Today · 15:00</div>
+            <div class="review-timing-sub">Pack prepared</div>
+          </div>
+          <div class="col-compliance">
+            <span class="comp-pill comp-current">✓ Current</span>
+          </div>
+          <div class="col-activity">
+            <span class="activity-text-main">Review questionnaire completed</span>
+            <span class="activity-time-ago">Today · 11:20 SAST</span>
+          </div>
+          <div class="col-action">
+            <button class="btn-row-open">
+              <span>Open client</span>
+              <i data-lucide="arrow-right" style="width: 11px; height: 11px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3: Thandi Khumalo -->
+        <div class="client-row has-exception" 
+             data-id="thandi-khumalo" 
+             data-name="Thandi Khumalo"
+             data-state="attention cases" 
+             data-segment="Household" 
+             data-has-cases="true"
+             data-review="2026-10-12" 
+             data-compliance="current"
+             onclick="openClientDrawer('thandi-khumalo')">
+          <div class="col-identity">
+            <div class="client-avatar-chip">TK</div>
+            <div class="client-text-block">
+              <div class="client-name-row">
+                <span class="client-fullname">Thandi Khumalo</span>
+                <span class="client-tag-seg">Household</span>
+              </div>
+              <div class="client-sub-meta">
+                <span class="household-badge"><i data-lucide="users-2" style="width: 10px; height: 10px;"></i> Shared with Vusi Khumalo</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-state">
+            <span class="state-badge-pill state-waiting">
+              <i data-lucide="clock" style="width: 10px; height: 10px;"></i>
+              <span>Waiting for provider</span>
+            </span>
+            <span class="state-caption-sub">Discovery Claim SLA +2d</span>
+          </div>
+          <div class="col-cases">
+            <span class="cases-pill-btn has-cases">1 active</span>
+          </div>
+          <div class="col-review">
+            <div class="review-date-str">12 Oct 2026</div>
+            <div class="review-timing-sub">37 days left</div>
+          </div>
+          <div class="col-compliance">
+            <span class="comp-pill comp-current">✓ Current</span>
+          </div>
+          <div class="col-activity">
+            <span class="activity-text-main">Claim assessor assigned</span>
+            <span class="activity-time-ago">Yesterday · 09:14</span>
+          </div>
+          <div class="col-action">
+            <button class="btn-row-open">
+              <span>Open client</span>
+              <i data-lucide="arrow-right" style="width: 11px; height: 11px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4: Naledi Mokoena -->
+        <div class="client-row has-exception" 
+             data-id="naledi-mokoena" 
+             data-name="Naledi Mokoena"
+             data-state="attention compliance" 
+             data-segment="Private Client" 
+             data-has-cases="false"
+             data-review="2026-09-24" 
+             data-compliance="issue"
+             onclick="openClientDrawer('naledi-mokoena')">
+          <div class="col-identity">
+            <div class="client-avatar-chip">NM</div>
+            <div class="client-text-block">
+              <div class="client-name-row">
+                <span class="client-fullname">Naledi Mokoena</span>
+                <span class="client-tag-seg">Private Client</span>
+              </div>
+              <div class="client-sub-meta">
+                <span>Wealth & Investments</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-state">
+            <span class="state-badge-pill state-compliance">
+              <i data-lucide="shield-alert" style="width: 10px; height: 10px;"></i>
+              <span>Compliance attention</span>
+            </span>
+            <span class="state-caption-sub">Consent renewal due</span>
+          </div>
+          <div class="col-cases">
+            <span class="cases-zero">—</span>
+          </div>
+          <div class="col-review">
+            <div class="review-date-str">24 Sep 2026</div>
+            <div class="review-timing-sub">In 19 days</div>
+          </div>
+          <div class="col-compliance">
+            <span class="comp-pill comp-issue">! 1 issue</span>
+          </div>
+          <div class="col-activity">
+            <span class="activity-text-main">Automated FICA notice sent</span>
+            <span class="activity-time-ago">2 days ago</span>
+          </div>
+          <div class="col-action">
+            <button class="btn-row-open">
+              <span>Open client</span>
+              <i data-lucide="arrow-right" style="width: 11px; height: 11px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 5: Lerato Molefe -->
+        <div class="client-row is-quiet" 
+             data-id="lerato-molefe" 
+             data-name="Lerato Molefe"
+             data-state="uptodate" 
+             data-segment="Private Client" 
+             data-has-cases="false"
+             data-review="2026-11-14" 
+             data-compliance="current"
+             onclick="openClientDrawer('lerato-molefe')">
+          <div class="col-identity">
+            <div class="client-avatar-chip">LM</div>
+            <div class="client-text-block">
+              <div class="client-name-row">
+                <span class="client-fullname">Lerato Molefe</span>
+                <span class="client-tag-seg">Private Client</span>
+              </div>
+              <div class="client-sub-meta">
+                <span>Active since 2021 · Up to date</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-state">
+            <span class="state-badge-pill state-uptodate">
+              <i data-lucide="check" style="width: 10px; height: 10px;"></i>
+              <span>Up to date</span>
+            </span>
+          </div>
+          <div class="col-cases">
+            <span class="cases-zero">—</span>
+          </div>
+          <div class="col-review">
+            <div class="review-date-str">14 Nov 2026</div>
+            <div class="review-timing-sub">Scheduled</div>
+          </div>
+          <div class="col-compliance">
+            <span class="comp-pill comp-current">✓ Current</span>
+          </div>
+          <div class="col-activity">
+            <span class="activity-text-main">Policy document filed automatically</span>
+            <span class="activity-time-ago">3 days ago</span>
+          </div>
+          <div class="col-action">
+            <button class="btn-row-open">
+              <span>Open client</span>
+              <i data-lucide="arrow-right" style="width: 11px; height: 11px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 6: Thabo Ndlovu -->
+        <div class="client-row is-quiet" 
+             data-id="thabo-ndlovu" 
+             data-name="Thabo Ndlovu"
+             data-state="reviews cases" 
+             data-segment="Business Owner" 
+             data-has-cases="true"
+             data-review="2026-09-06" 
+             data-compliance="current"
+             onclick="openClientDrawer('thabo-ndlovu')">
+          <div class="col-identity">
+            <div class="client-avatar-chip">TN</div>
+            <div class="client-text-block">
+              <div class="client-name-row">
+                <span class="client-fullname">Thabo Ndlovu</span>
+                <span class="client-tag-seg">Business Owner</span>
+              </div>
+              <div class="client-sub-meta">
+                <span>Ndlovu Logistics CC · Commercial</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-state">
+            <span class="state-badge-pill state-review-due">
+              <i data-lucide="calendar" style="width: 10px; height: 10px;"></i>
+              <span>Review tomorrow</span>
+            </span>
+          </div>
+          <div class="col-cases">
+            <span class="cases-pill-btn has-cases">1 active</span>
+          </div>
+          <div class="col-review">
+            <div class="review-date-str">Tomorrow · 10:30</div>
+            <div class="review-timing-sub">Prep in progress</div>
+          </div>
+          <div class="col-compliance">
+            <span class="comp-pill comp-current">✓ Current</span>
+          </div>
+          <div class="col-activity">
+            <span class="activity-text-main">Key person valuation compiled</span>
+            <span class="activity-time-ago">Yesterday</span>
+          </div>
+          <div class="col-action">
+            <button class="btn-row-open">
+              <span>Open client</span>
+              <i data-lucide="arrow-right" style="width: 11px; height: 11px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 7: Willem van der Merwe -->
+        <div class="client-row is-quiet" 
+             data-id="willem-van-der-merwe" 
+             data-name="Willem van der Merwe"
+             data-state="uptodate" 
+             data-segment="Household" 
+             data-has-cases="false"
+             data-review="2026-12-04" 
+             data-compliance="current"
+             onclick="openClientDrawer('willem-van-der-merwe')">
+          <div class="col-identity">
+            <div class="client-avatar-chip">WM</div>
+            <div class="client-text-block">
+              <div class="client-name-row">
+                <span class="client-fullname">Willem van der Merwe</span>
+                <span class="client-tag-seg">Household</span>
+              </div>
+              <div class="client-sub-meta">
+                <span class="household-badge"><i data-lucide="users-2" style="width: 10px; height: 10px;"></i> Shared with Elizabeth v.d. Merwe</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-state">
+            <span class="state-badge-pill state-uptodate">
+              <i data-lucide="check" style="width: 10px; height: 10px;"></i>
+              <span>Up to date</span>
+            </span>
+          </div>
+          <div class="col-cases">
+            <span class="cases-zero">—</span>
+          </div>
+          <div class="col-review">
+            <div class="review-date-str">04 Dec 2026</div>
+            <div class="review-timing-sub">Scheduled</div>
+          </div>
+          <div class="col-compliance">
+            <span class="comp-pill comp-current">✓ Current</span>
+          </div>
+          <div class="col-activity">
+            <span class="activity-text-main">Allan Gray tax certificate archived</span>
+            <span class="activity-time-ago">4 days ago</span>
+          </div>
+          <div class="col-action">
+            <button class="btn-row-open">
+              <span>Open client</span>
+              <i data-lucide="arrow-right" style="width: 11px; height: 11px;"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- 8: Priyesh Naidoo -->
+        <div class="client-row is-quiet" 
+             data-id="priyesh-naidoo" 
+             data-name="Priyesh Naidoo"
+             data-state="uptodate cases" 
+             data-segment="Premier" 
+             data-has-cases="true"
+             data-review="2026-10-28" 
+             data-compliance="current"
+             onclick="openClientDrawer('priyesh-naidoo')">
+          <div class="col-identity">
+            <div class="client-avatar-chip">PN</div>
+            <div class="client-text-block">
+              <div class="client-name-row">
+                <span class="client-fullname">Priyesh Naidoo</span>
+                <span class="client-tag-seg tag-premier">Premier</span>
+              </div>
+              <div class="client-sub-meta">
+                <span>Offshore Trust & Equities</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-state">
+            <span class="state-badge-pill state-uptodate">
+              <i data-lucide="check" style="width: 10px; height: 10px;"></i>
+              <span>Active workflow</span>
+            </span>
+            <span class="state-caption-sub">Section 14 in transit</span>
+          </div>
+          <div class="col-cases">
+            <span class="cases-pill-btn has-cases">1 active</span>
+          </div>
+          <div class="col-review">
+            <div class="review-date-str">28 Oct 2026</div>
+            <div class="review-timing-sub">53 days left</div>
+          </div>
+          <div class="col-compliance">
+            <span class="comp-pill comp-current">✓ Current</span>
+          </div>
+          <div class="col-activity">
+            <span class="activity-text-main">Momentum transfer confirmation received</span>
+            <span class="activity-time-ago">5 days ago</span>
+          </div>
+          <div class="col-action">
+            <button class="btn-row-open">
+              <span>Open client</span>
+              <i data-lucide="arrow-right" style="width: 11px; height: 11px;"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state-card" id="emptyStateDisplay">
+        <div class="empty-icon-wrap">
+          <i data-lucide="check-check" style="width: 22px; height: 22px;"></i>
+        </div>
+        <div class="empty-title">No clients need adviser attention</div>
+        <div class="empty-desc">
+          Everything is currently waiting on clients, external providers or scheduled automated workflows.
+        </div>
+        <button class="btn-row-open" style="margin-top: 10px;" onclick="setFilter('all', document.querySelector('.filter-pill'))">
+          <span>View all 248 clients</span>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ====================================================================
+       3. LATERAL CLIENT PREVIEW DRAWER
+       ==================================================================== -->
+  <div class="drawer-backdrop" id="clientDrawerBackdrop" onclick="closeClientDrawer()"></div>
+
+  <div class="preview-drawer" id="clientDrawer">
+    <div>
+      <div class="drawer-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 10px; font-weight: 800; background: #171615; color: #FFFFFF; padding: 2px 7px; border-radius: 4px;">CLIENT DOSSIER</span>
+          <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary);" id="drawerFspRef">FSP #48192</span>
+        </div>
+        <button class="drawer-close-btn" onclick="closeClientDrawer()" aria-label="Close drawer">
+          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+
+      <div class="drawer-body">
+        <div class="drawer-profile-lead">
+          <div class="drawer-avatar-big" id="drawerAvatarBig">LM</div>
+          <div class="drawer-title-group">
+            <div class="drawer-client-name" id="drawerClientName">Latoya Matai</div>
+            <div class="drawer-meta-line" id="drawerMetaLine">
+              <span>Private Client · Premier</span>
+              <span>•</span>
+              <span>Active since 2019</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="position-pill-grid">
+          <div class="position-cell">
+            <span class="position-label">Net Worth</span>
+            <span class="position-value" id="drawerNetWorth">R2.84m</span>
+          </div>
+          <div class="position-cell">
+            <span class="position-label">Investments</span>
+            <span class="position-value" id="drawerInvestments">R1.43m</span>
+          </div>
+          <div class="position-cell">
+            <span class="position-label">Retirement</span>
+            <span class="position-value" id="drawerRetirement">R814k</span>
+          </div>
+        </div>
+
+        <div class="drawer-card-box">
+          <div class="drawer-section-title">
+            <span>Active Work (2)</span>
+            <span style="color: var(--accent-coral);">Needs Adviser</span>
+          </div>
+
+          <div class="drawer-work-item" onclick="showToast('Opening Banking Update Case #BD-2048...')">
+            <div>
+              <div class="work-item-name">Banking Details Update (#BD-2048)</div>
+              <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">FNB statement & debit order mandate verified</div>
+            </div>
+            <span class="work-item-status">Ready for review</span>
+          </div>
+
+          <div class="drawer-work-item" onclick="showToast('Opening Motor Claim #RSF-2841...')">
+            <div>
+              <div class="work-item-name">Motor Accident Claim (#RSF-2841)</div>
+              <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">Discovery Insure · Panel assessment underway</div>
+            </div>
+            <span class="work-item-status" style="color: var(--status-amber);">Waiting provider</span>
+          </div>
+        </div>
+
+        <div class="drawer-two-col">
+          <div class="drawer-card-box">
+            <div class="drawer-section-title">Upcoming</div>
+            <div style="line-height: 1.3; font-size: 11px;">
+              <div style="font-weight: 700; color: var(--text-primary);">Annual Review</div>
+              <div style="color: var(--accent-coral); font-weight: 600; font-size: 10.5px;">18 Sep 2026</div>
+              <div style="color: var(--text-subtle); font-size: 9.5px; margin-top: 6px;">Insurance valuation</div>
+              <div style="color: var(--text-secondary); font-size: 10px;">Jun 2027</div>
+            </div>
+          </div>
+
+          <div class="drawer-card-box">
+            <div class="drawer-section-title">Compliance</div>
+            <div class="compliance-check-list">
+              <div class="comp-check-row">
+                <span>Identity</span>
+                <strong>Verified</strong>
+              </div>
+              <div class="comp-check-row">
+                <span>Consent</span>
+                <strong>Active</strong>
+              </div>
+              <div class="comp-check-row">
+                <span>FICA</span>
+                <strong>Current</strong>
+              </div>
+              <div class="comp-check-row">
+                <span>FAIS</span>
+                <strong>Ack.</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="drawer-card-box">
+          <div class="drawer-section-title">Recent Activity</div>
+          <div class="drawer-timeline">
+            <div class="drawer-activity-row">
+              <div class="activity-bullet"></div>
+              <div>
+                <strong>Today · 15:42</strong> — Signed banking instruction (#BD-2048)
+              </div>
+            </div>
+            <div class="drawer-activity-row">
+              <div class="activity-bullet"></div>
+              <div>
+                <strong>Today · 15:38</strong> — Bank statement verified automatically
+              </div>
+            </div>
+            <div class="drawer-activity-row">
+              <div class="activity-bullet" style="background: var(--text-subtle);"></div>
+              <div>
+                <strong>05 Sep</strong> — Motor accident claim evidence filed (RSF-2841)
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="drawer-footer-cluster">
+      <button class="btn-drawer-primary" onclick="showToast('Navigating to full Client Detail (A4)...')">
+        <span>Open full client detail</span>
+        <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+      </button>
+
+      <div class="drawer-secondary-btns">
+        <button class="btn-drawer-subtle" onclick="showToast('Navigating to active case (#BD-2048)...')">
+          <i data-lucide="briefcase" style="width: 13px; height: 13px;"></i>
+          <span>Open active case</span>
+        </button>
+        <button class="btn-drawer-subtle" onclick="showToast('Opening secure WhatsApp / Portal chat with client...')">
+          <i data-lucide="message-square" style="width: 13px; height: 13px;"></i>
+          <span>Message client</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       4. ADD CLIENT MODAL
+       ==================================================================== -->
+  <div class="modal-backdrop" id="addClientModal" onclick="closeAddClientModal(event)">
+    <div class="add-client-card" onclick="event.stopPropagation()">
+      <div class="modal-head">
+        <span class="modal-title">Add Client Relationship</span>
+        <button class="drawer-close-btn" onclick="closeAddClientModal()">
+          <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+        </button>
+      </div>
+
+      <div class="form-group-cluster">
+        <div class="input-field-group">
+          <label>Full Legal Name</label>
+          <input type="text" id="newClientName" class="modal-text-input" placeholder="e.g. Kagiso Motsepe" />
+        </div>
+
+        <div class="input-field-group">
+          <label>SA ID / Passport Number</label>
+          <input type="text" id="newClientId" class="modal-text-input" placeholder="e.g. 880214 5029 084" />
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <div class="input-field-group">
+            <label>Mobile</label>
+            <input type="text" id="newClientPhone" class="modal-text-input" placeholder="+27 82 000 0000" />
+          </div>
+          <div class="input-field-group">
+            <label>Email</label>
+            <input type="email" id="newClientEmail" class="modal-text-input" placeholder="name@domain.co.za" />
+          </div>
+        </div>
+
+        <div class="input-field-group">
+          <label>Relationship Segment</label>
+          <select id="newClientType" class="modal-select">
+            <option value="Premier">Premier Private Client</option>
+            <option value="Private Client" selected>Private Client</option>
+            <option value="Household">Household / Family</option>
+            <option value="Retirement">Retirement Wealth</option>
+            <option value="Business Owner">Business Owner</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-drawer-subtle" style="padding: 0 16px;" onclick="closeAddClientModal()">Cancel</button>
+        <button class="btn-coral-add" style="height: 38px;" onclick="handleCreateClient()">
+          <span>Create relationship</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Global Action Toast -->
+  <div class="toast-pill" id="actionToast">
+    <i data-lucide="check-circle" style="width: 14px; height: 14px; color: var(--accent-coral);"></i>
+    <span id="toastMessage">Relationship updated</span>
+  </div>
+
+  <!-- ====================================================================
+       5. SCRIPTS
+       ==================================================================== -->
+  <script>
+    lucide.createIcons();
+
+    function updateAdviserClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const clockEl = document.getElementById('liveAdviserClock');
+      if (clockEl) clockEl.textContent = `${hours}:${minutes}`;
+    }
+    updateAdviserClock();
+    setInterval(updateAdviserClock, 1000);
+
+    let currentFilter = 'all';
+    let currentSegment = 'all';
+    let currentSearchQuery = '';
+
+    const clientDataStore = {
+      'latoya-matai': {
+        name: 'Latoya Matai',
+        initials: 'LM',
+        segment: 'Premier Private Client',
+        since: 'Active since 2019',
+        netWorth: 'R2.84m',
+        investments: 'R1.43m',
+        retirement: 'R814k',
+        activeCases: 2,
+        upcomingReview: '18 Sep 2026',
+        complianceStatus: 'Current'
+      },
+      'sipho-dlamini': {
+        name: 'Sipho Dlamini',
+        initials: 'SD',
+        segment: 'Private Client · Retirement focus',
+        since: 'Active since 2017',
+        netWorth: 'R4.18m',
+        investments: 'R920k',
+        retirement: 'R3.26m',
+        activeCases: 1,
+        upcomingReview: 'Today · 15:00 SAST',
+        complianceStatus: 'Current'
+      },
+      'thandi-khumalo': {
+        name: 'Thandi Khumalo',
+        initials: 'TK',
+        segment: 'Private Client · Household',
+        since: 'Active since 2022',
+        netWorth: 'R1.65m',
+        investments: 'R450k',
+        retirement: 'R1.20m',
+        activeCases: 1,
+        upcomingReview: '12 Oct 2026',
+        complianceStatus: 'Current'
+      },
+      'naledi-mokoena': {
+        name: 'Naledi Mokoena',
+        initials: 'NM',
+        segment: 'Private Client · Investment focus',
+        since: 'Active since 2023',
+        netWorth: 'R1.92m',
+        investments: 'R1.12m',
+        retirement: 'R800k',
+        activeCases: 0,
+        upcomingReview: '24 Sep 2026',
+        complianceStatus: 'Consent Renewal Expiring'
+      },
+      'lerato-molefe': {
+        name: 'Lerato Molefe',
+        initials: 'LM',
+        segment: 'Private Client',
+        since: 'Active since 2021',
+        netWorth: 'R1.28m',
+        investments: 'R380k',
+        retirement: 'R900k',
+        activeCases: 0,
+        upcomingReview: '14 Nov 2026',
+        complianceStatus: 'Current'
+      },
+      'thabo-ndlovu': {
+        name: 'Thabo Ndlovu',
+        initials: 'TN',
+        segment: 'Business Owner · Commercial',
+        since: 'Active since 2018',
+        netWorth: 'R8.92m',
+        investments: 'R3.40m',
+        retirement: 'R5.52m',
+        activeCases: 1,
+        upcomingReview: 'Tomorrow · 10:30 SAST',
+        complianceStatus: 'Current'
+      },
+      'willem-van-der-merwe': {
+        name: 'Willem van der Merwe',
+        initials: 'WM',
+        segment: 'Household · Family Trust',
+        since: 'Active since 2015',
+        netWorth: 'R6.35m',
+        investments: 'R2.80m',
+        retirement: 'R3.55m',
+        activeCases: 0,
+        upcomingReview: '04 Dec 2026',
+        complianceStatus: 'Current'
+      },
+      'priyesh-naidoo': {
+        name: 'Priyesh Naidoo',
+        initials: 'PN',
+        segment: 'Premier · Offshore Equities',
+        since: 'Active since 2020',
+        netWorth: 'R7.20m',
+        investments: 'R4.90m',
+        retirement: 'R2.30m',
+        activeCases: 1,
+        upcomingReview: '28 Oct 2026',
+        complianceStatus: 'Current'
+      }
+    };
+
+    function openClientDrawer(clientId) {
+      const data = clientDataStore[clientId];
+      if (!data) return;
+
+      document.getElementById('drawerClientName').textContent = data.name;
+      document.getElementById('drawerAvatarBig').textContent = data.initials;
+      document.getElementById('drawerMetaLine').textContent = `${data.segment} • ${data.since}`;
+      document.getElementById('drawerNetWorth').textContent = data.netWorth;
+      document.getElementById('drawerInvestments').textContent = data.investments;
+      document.getElementById('drawerRetirement').textContent = data.retirement;
+
+      document.getElementById('clientDrawerBackdrop').classList.add('open');
+      document.getElementById('clientDrawer').classList.add('open');
+      lucide.createIcons();
+    }
+
+    function closeClientDrawer() {
+      document.getElementById('clientDrawerBackdrop').classList.remove('open');
+      document.getElementById('clientDrawer').classList.remove('open');
+    }
+
+    function openAddClientModal() {
+      document.getElementById('addClientModal').classList.add('open');
+    }
+
+    function closeAddClientModal() {
+      document.getElementById('addClientModal').classList.remove('open');
+    }
+
+    function handleCreateClient() {
+      const name = document.getElementById('newClientName').value.trim();
+      const type = document.getElementById('newClientType').value;
+
+      if (!name) {
+        showToast('Please enter a legal client name.');
+        return;
+      }
+
+      closeAddClientModal();
+      showToast(`Client ${name} (${type}) created successfully.`);
+
+      const totalEl = document.getElementById('statTotalClients');
+      totalEl.textContent = parseInt(totalEl.textContent) + 1;
+      document.getElementById('countAll').textContent = totalEl.textContent;
+
+      document.getElementById('newClientName').value = '';
+      document.getElementById('newClientId').value = '';
+      document.getElementById('newClientPhone').value = '';
+      document.getElementById('newClientEmail').value = '';
+    }
+
+    function setFilter(filterType, element) {
+      currentFilter = filterType;
+      document.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
+      if (element) element.classList.add('active');
+      applyAllFilters();
+    }
+
+    function filterByState(filterType) {
+      const targetPill = document.querySelector(`.filter-pill[data-filter="${filterType}"]`);
+      if (targetPill) {
+        setFilter(filterType, targetPill);
+      } else if (filterType === 'all') {
+        setFilter('all', document.querySelector('.filter-pill[data-filter="all"]'));
+      }
+    }
+
+    function setSegment(segmentName, element) {
+      currentSegment = segmentName;
+      document.querySelectorAll('.segment-tag').forEach(tag => tag.classList.remove('active'));
+      element.classList.add('active');
+      applyAllFilters();
+    }
+
+    function handleClientSearch(val) {
+      currentSearchQuery = val.trim().toLowerCase();
+      applyAllFilters();
+    }
+
+    function applyAllFilters() {
+      const rows = document.querySelectorAll('#clientRowsContainer .client-row');
+      const surfacedSec = document.getElementById('surfacedSection');
+      const emptyState = document.getElementById('emptyStateDisplay');
+      let visibleCount = 0;
+
+      if (currentFilter !== 'all' && currentFilter !== 'attention') {
+        surfacedSec.style.display = 'none';
+      } else {
+        surfacedSec.style.display = 'block';
+      }
+
+      rows.forEach(row => {
+        const rowState = row.getAttribute('data-state') || '';
+        const rowSegment = row.getAttribute('data-segment') || '';
+        const rowName = (row.getAttribute('data-name') || '').toLowerCase();
+        const rowText = row.innerText.toLowerCase();
+
+        let matchesFilter = false;
+        if (currentFilter === 'all') {
+          matchesFilter = true;
+        } else if (currentFilter === 'attention' && rowState.includes('attention')) {
+          matchesFilter = true;
+        } else if (currentFilter === 'cases' && row.getAttribute('data-has-cases') === 'true') {
+          matchesFilter = true;
+        } else if (currentFilter === 'reviews' && rowState.includes('reviews')) {
+          matchesFilter = true;
+        } else if (currentFilter === 'compliance' && row.getAttribute('data-compliance') === 'issue') {
+          matchesFilter = true;
+        } else if (currentFilter === 'recent') {
+          matchesFilter = true;
+        }
+
+        let matchesSegment = (currentSegment === 'all') || (rowSegment === currentSegment);
+        let matchesSearch = (!currentSearchQuery) || (rowText.includes(currentSearchQuery) || rowName.includes(currentSearchQuery));
+
+        if (matchesFilter && matchesSegment && matchesSearch) {
+          row.style.display = 'grid';
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      if (visibleCount === 0) {
+        emptyState.style.display = 'flex';
+      } else {
+        emptyState.style.display = 'none';
+      }
+    }
+
+    function applySorting(sortType) {
+      const container = document.getElementById('clientRowsContainer');
+      const rows = Array.from(container.querySelectorAll('.client-row'));
+
+      rows.sort((a, b) => {
+        if (sortType === 'name') {
+          return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+        } else if (sortType === 'review') {
+          return a.getAttribute('data-review').localeCompare(b.getAttribute('data-review'));
+        }
+        return 0;
+      });
+
+      rows.forEach(row => container.appendChild(row));
+      showToast(`Sorted relationships by: ${sortType}`);
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('actionToast');
+      const toastMsg = document.getElementById('toastMessage');
+      toastMsg.textContent = msg;
+      toast.classList.add('active');
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, 2600);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeClientDrawer();
+        closeAddClientModal();
+      }
+    });
+  </script>
+</body>
+</html>
